@@ -1,0 +1,23 @@
+@startuml architecture
+
+cloud {
+    node scraper_vm
+    storage scraper_storage {
+        storage scraper_cache
+        storage scraper_media
+    }
+}
+cloud {
+    storage roms
+}
+
+node raspberry_pi
+
+raspberry_pi <-- scraper_vm : read
+scraper_vm <--> scraper_storage : read/write
+scraper_vm <-- roms : read
+
+raspberry_pi <.. scraper_media
+raspberry_pi <.. roms
+
+@enduml
