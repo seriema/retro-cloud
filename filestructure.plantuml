@@ -1,0 +1,80 @@
+@startuml filestructure
+
+storage roms-share {
+    folder roms as roms_roms {
+        folder "scummvm" as roms_scummvm {
+            file "bass-cd-1.2.zip"
+        }
+    }
+}
+
+storage scraper-share {
+    folder cache {
+        card "images and metadata"
+    }
+    folder output {
+        folder downloaded_media as scraper_downloadedmedia {
+            folder "scummvm" as scraper_downloadedmedia_scummvm {
+                folder screenshots {
+                    file "bass-cd-1.2.png"
+                }
+            }
+        }
+        folder gamelists as scraper_gamelists {
+            folder "scummvm" as scraper_gamelists_scummvm {
+                file "gamelist.xml"
+            }
+        }
+    }
+}
+
+node raspberry_pi {
+    folder ".emulationstation" as raspberrypi_emulationstation {
+        folder downloaded_media as raspberrypi_downloaded_media #BADA55
+        folder gamelists as raspberrypi_gamelists #BADA55
+    }
+    folder RetroPie as raspberrpi_retropie {
+        folder roms as raspberrypi_roms #BADA55
+    }
+    folder ".ssh" as raspberrypi_ssh {
+        file "id_rsa.pub" as id_rsa
+    }
+}
+
+node scraper_vm {
+    folder ".skyscraper" as scrapervm_skyscraper {
+        file "artwork.xml" as scrapervm_artwork #C0FFEE 
+        file "config.ini" as scrapervm_config #C0FFEE
+    }
+    folder ".emulationstation" as scrapervm_emulationstation {
+        folder downloaded_media as scrapervm_downloaded_media #BADA55
+        folder gamelists as scrapervm_gamelists #BADA55
+    }
+    folder "RetroPie" as scrapervm_retropie {
+        folder roms as scrapervm_roms #BADA55
+    }
+    folder ".ssh" {
+        file authorized_keys
+    }
+}
+
+node dev_computer {
+    folder ".skyscraper" as dev_skyscraper {
+        file "artwork.xml" as dev_artwork
+        file "config.ini" as dev_config
+    }
+}
+
+scrapervm_artwork <-- dev_artwork
+scrapervm_config <-- dev_config
+
+raspberrypi_gamelists <-- scrapervm_gamelists
+raspberrypi_downloaded_media <-- scrapervm_downloaded_media
+raspberrypi_roms <-- scrapervm_roms
+authorized_keys .. id_rsa
+
+scrapervm_gamelists <--> scraper_gamelists
+scrapervm_downloaded_media <--> scraper_downloadedmedia
+scrapervm_roms <-- roms_roms
+
+@enduml

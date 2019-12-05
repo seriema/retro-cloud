@@ -8,16 +8,16 @@ cloud {
     }
 }
 cloud {
-    storage roms
+    storage roms_storage
 }
 
 node raspberry_pi
 
 raspberry_pi <-- scraper_vm : read
 scraper_vm <--> scraper_storage : read/write
-scraper_vm <-- roms : read
+scraper_vm <-- roms_storage : read
 
 raspberry_pi <.. scraper_media
-raspberry_pi <.. roms
+raspberry_pi <.. roms_storage
 
 @enduml

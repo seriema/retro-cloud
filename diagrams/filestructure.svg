@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="828px" preserveAspectRatio="none" style="width:1944px;height:828px;" version="1.1" viewBox="0 0 1944 828" width="1944px" zoomAndPan="magnify"><defs><filter height="300%" id="f126ojtrowitwd" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2.0"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4.0" dy="4.0" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs><g><!--MD5=[2a3e94da7594eeb47987dfa9944b1f1b]
+cluster roms-share--><rect fill="#FFFFFF" filter="url(#f126ojtrowitwd)" height="253" rx="35" ry="35" style="stroke: #000000; stroke-width: 1.5;" width="294" x="1639" y="516"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="91" x="1740.5" y="535.9951">roms-share</text><!--MD5=[724368704ee42a399dfb2c968f2d9d7c]
+cluster roms_roms--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1671,567,1717,567,1724,589.2969,1901,589.2969,1901,737,1671,737,1671,567" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1671" x2="1724" y1="589.2969" y2="589.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="40" x="1675" y="581.9951">roms</text><!--MD5=[d4dcf26dd5110d415722840486c7680b]
+cluster roms_scummvm--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1711,618,1796,618,1803,640.2969,1869,640.2969,1869,705,1711,705,1711,618" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1711" x2="1803" y1="640.2969" y2="640.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="79" x="1715" y="632.9951">scummvm</text><!--MD5=[b96e1c8279eec87b8d60345554bf7be4]
+cluster scraper-share--><rect fill="#FFFFFF" filter="url(#f126ojtrowitwd)" height="387" rx="35" ry="35" style="stroke: #000000; stroke-width: 1.5;" width="874" x="741" y="430"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="112" x="1122" y="449.9951">scraper-share</text><!--MD5=[6e2bc53f2b489a463b0855903b315b97]
+cluster cache--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1389,625,1442,625,1449,647.2969,1591,647.2969,1591,698,1389,698,1389,625" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1389" x2="1449" y1="647.2969" y2="647.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="47" x="1393" y="639.9951">cache</text><!--MD5=[d488920694292103d4ceb8c6110bf2d3]
+cluster output--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="765,473,823,473,830,495.2969,1365,495.2969,1365,793,765,793,765,473" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="765" x2="830" y1="495.2969" y2="495.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="52" x="769" y="487.9951">output</text><!--MD5=[697b3354a9f52e8346827e836942d9ac]
+cluster scraper_downloadedmedia--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1047,524,1204,524,1211,546.2969,1333,546.2969,1333,761,1047,761,1047,524" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1047" x2="1211" y1="546.2969" y2="546.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="151" x="1051" y="538.9951">downloaded_media</text><!--MD5=[a800d42652f2ea8a7a583938cb054bf1]
+cluster scraper_downloadedmedia_scummvm--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1087,575,1172,575,1179,597.2969,1301,597.2969,1301,729,1087,729,1087,575" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1087" x2="1179" y1="597.2969" y2="597.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="79" x="1091" y="589.9951">scummvm</text><!--MD5=[000223e6bce3c8893b15940fba3a1ae1]
+cluster screenshots--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="1111,618,1216,618,1223,640.2969,1277,640.2969,1277,705,1111,705,1111,618" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1111" x2="1223" y1="640.2969" y2="640.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="99" x="1115" y="632.9951">screenshots</text><!--MD5=[564b22ef8b6d7af2d51b48a1455f591b]
+cluster scraper_gamelists--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="797,567,878,567,885,589.2969,1007,589.2969,1007,737,797,737,797,567" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="797" x2="885" y1="589.2969" y2="589.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="75" x="801" y="581.9951">gamelists</text><!--MD5=[8f3dba0732d967c0df79d309fe57a2c7]
+cluster scraper_gamelists_scummvm--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="837,618,922,618,929,640.2969,975,640.2969,975,705,837,705,837,618" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="837" x2="929" y1="640.2969" y2="640.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="79" x="841" y="632.9951">scummvm</text><!--MD5=[f92d360a1ab1165eb003422ff9636935]
+cluster raspberry_pi--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="324,34,334,24,1221,24,1221,193,1211,203,324,203,324,34" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1211" x2="1220" y1="34" y2="25"/><line style="stroke: #000000; stroke-width: 1.5;" x1="324" x2="1211" y1="34" y2="34"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1211" x2="1211" y1="34" y2="203"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="99" x="719" y="49.9951">raspberry_pi</text><!--MD5=[7d0f2ea4e36aa958ee1e59388a96fb31]
+cluster raspberrypi_emulationstation--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="702,72,844,72,851,94.2969,1197,94.2969,1197,179,702,179,702,72" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="702" x2="851" y1="94.2969" y2="94.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="136" x="706" y="86.9951">.emulationstation</text><!--MD5=[0c85290c76c084d0f3edf007d1e1ebef]
+cluster raspberrpi_retropie--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="496,72,569,72,576,94.2969,678,94.2969,678,179,496,179,496,72" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="496" x2="576" y1="94.2969" y2="94.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="67" x="500" y="86.9951">RetroPie</text><!--MD5=[cceeca3b26ee61cb6bf7b2c85632c6d2]
+cluster raspberrypi_ssh--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="348,82,387,82,394,104.2969,472,104.2969,472,169,348,169,348,82" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="348" x2="394" y1="104.2969" y2="104.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="33" x="352" y="96.9951">.ssh</text><!--MD5=[5a609c4c1f8c145238265b0a0da7c10c]
+cluster scraper_vm--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="22,237,32,227,1217,227,1217,396,1207,406,22,406,22,237" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1207" x2="1216" y1="237" y2="228"/><line style="stroke: #000000; stroke-width: 1.5;" x1="22" x2="1207" y1="237" y2="237"/><line style="stroke: #000000; stroke-width: 1.5;" x1="1207" x2="1207" y1="237" y2="406"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="91" x="570" y="252.9951">scraper_vm</text><!--MD5=[f6e243222f570263fbb26d0b3fbee5d8]
+cluster scrapervm_skyscraper--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="236,285,335,285,342,307.2969,483,307.2969,483,372,236,372,236,285" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="236" x2="342" y1="307.2969" y2="307.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="93" x="240" y="299.9951">.skyscraper</text><!--MD5=[263942b849f81fa1b444387ec239a720]
+cluster scrapervm_emulationstation--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="707,275,849,275,856,297.2969,1193,297.2969,1193,382,707,382,707,275" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="707" x2="856" y1="297.2969" y2="297.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="136" x="711" y="289.9951">.emulationstation</text><!--MD5=[9249ac726a99bf6752d1ed517b6a14bb]
+cluster scrapervm_retropie--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="507,275,580,275,587,297.2969,683,297.2969,683,382,507,382,507,275" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="507" x2="587" y1="297.2969" y2="297.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="67" x="511" y="289.9951">RetroPie</text><!--MD5=[e19b3a96f885c5eface718264468e806]
+cluster .ssh--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="46,285,85,285,92,307.2969,212,307.2969,212,372,46,372,46,285" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="46" x2="92" y1="307.2969" y2="307.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="33" x="50" y="299.9951">.ssh</text><!--MD5=[f0a1f060b665e6408f53f22e866c80cf]
+cluster dev_computer--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="212,580,222,570,507,570,507,719,497,729,212,729,212,580" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="497" x2="506" y1="580" y2="571"/><line style="stroke: #000000; stroke-width: 1.5;" x1="212" x2="497" y1="580" y2="580"/><line style="stroke: #000000; stroke-width: 1.5;" x1="497" x2="497" y1="580" y2="729"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="112" x="299.5" y="595.9951">dev_computer</text><!--MD5=[ae05f9638a69296a8b9745c947f49924]
+cluster dev_skyscraper--><polygon fill="#FFFFFF" filter="url(#f126ojtrowitwd)" points="236,618,335,618,342,640.2969,483,640.2969,483,705,236,705,236,618" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="236" x2="342" y1="640.2969" y2="640.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="93" x="240" y="632.9951">.skyscraper</text><!--MD5=[3bf1a3617778081770d07e2718291b3e]
+entity bass-cd-1.2.zip--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="1727,653,1727,689.2969,1853,689.2969,1853,663,1843,653,1727,653" style="stroke: #000000; stroke-width: 1.5;"/><path d="M1843,653 L1843,663 L1853,663 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="106" x="1737" y="675.9951">bass-cd-1.2.zip</text><!--MD5=[7fb5956482de96721c36c95f00c32677]
+entity images and metadata--><rect fill="#FEFECE" filter="url(#f126ojtrowitwd)" height="22.2969" style="stroke: #000000; stroke-width: 1.5;" width="169" x="1405.5" y="660"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="149" x="1415.5" y="675.9951">images and metadata</text><!--MD5=[57feeaf0b3adcae0b118adc8d4c3a3ad]
+entity bass-cd-1.2.png--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="1127.5,653,1127.5,689.2969,1260.5,689.2969,1260.5,663,1250.5,653,1127.5,653" style="stroke: #000000; stroke-width: 1.5;"/><path d="M1250.5,653 L1250.5,663 L1260.5,663 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="1137.5" y="675.9951">bass-cd-1.2.png</text><!--MD5=[20f115a46f3e3ec72203cc15f2657467]
+entity gamelist.xml--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="853.5,653,853.5,689.2969,958.5,689.2969,958.5,663,948.5,653,853.5,653" style="stroke: #000000; stroke-width: 1.5;"/><path d="M948.5,653 L948.5,663 L958.5,663 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="85" x="863.5" y="675.9951">gamelist.xml</text><!--MD5=[821da973449f357db0bedf6c9ef3a3f5]
+entity raspberrypi_downloaded_media--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="933,107,979,107,986,128,1181,128,1181,162.5938,933,162.5938,933,107" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="933" x2="986" y1="128" y2="128"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="134" x="943" y="147.9951">downloaded_media</text><!--MD5=[cdc6febab90fadbe7e220ea766fe44a5]
+entity raspberrypi_gamelists--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="718,107,764,107,771,128,898,128,898,162.5938,718,162.5938,718,107" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="718" x2="771" y1="128" y2="128"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="728" y="147.9951">gamelists</text><!--MD5=[3318fa35f41ae84afb7e51075789a7f6]
+entity raspberrypi_roms--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="512.5,107,558.5,107,565.5,128,661.5,128,661.5,162.5938,512.5,162.5938,512.5,107" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="512.5" x2="565.5" y1="128" y2="128"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="35" x="522.5" y="147.9951">roms</text><!--MD5=[8c486c3ff19d49538faa25b942efeec7]
+entity id_rsa--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="364.5,117,364.5,153.2969,455.5,153.2969,455.5,127,445.5,117,364.5,117" style="stroke: #000000; stroke-width: 1.5;"/><path d="M445.5,117 L445.5,127 L455.5,127 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="71" x="374.5" y="139.9951">id_rsa.pub</text><!--MD5=[5e8ebbd88ec5cc908cef6aa507f0157a]
+entity scrapervm_artwork--><polygon fill="#C0FFEE" filter="url(#f126ojtrowitwd)" points="369,320,369,356.2969,467,356.2969,467,330,457,320,369,320" style="stroke: #000000; stroke-width: 1.5;"/><path d="M457,320 L457,330 L467,330 " fill="#C0FFEE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="78" x="379" y="342.9951">artwork.xml</text><!--MD5=[b44c03154f6fbda6de28c6a8c34123f2]
+entity scrapervm_config--><polygon fill="#C0FFEE" filter="url(#f126ojtrowitwd)" points="252.5,320,252.5,356.2969,333.5,356.2969,333.5,330,323.5,320,252.5,320" style="stroke: #000000; stroke-width: 1.5;"/><path d="M323.5,320 L323.5,330 L333.5,330 " fill="#C0FFEE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="61" x="262.5" y="342.9951">config.ini</text><!--MD5=[e42f65dadf2661e95361a81bb37d0b2a]
+entity scrapervm_downloaded_media--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="933.5,310,979.5,310,986.5,331,1176.5,331,1176.5,365.5938,933.5,365.5938,933.5,310" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="933.5" x2="986.5" y1="331" y2="331"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="134" x="943.5" y="350.9951">downloaded_media</text><!--MD5=[71a14cb6f40204211de0cdd45f86000b]
+entity scrapervm_gamelists--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="723.5,310,769.5,310,776.5,331,898.5,331,898.5,365.5938,723.5,365.5938,723.5,310" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="723.5" x2="776.5" y1="331" y2="331"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="66" x="733.5" y="350.9951">gamelists</text><!--MD5=[8012f89ce711f37099a2124362857c09]
+entity scrapervm_roms--><polygon fill="#BADA55" filter="url(#f126ojtrowitwd)" points="523,310,569,310,576,331,667,331,667,365.5938,523,365.5938,523,310" style="stroke: #000000; stroke-width: 1.5;"/><line style="stroke: #000000; stroke-width: 1.5;" x1="523" x2="576" y1="331" y2="331"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="35" x="533" y="350.9951">roms</text><!--MD5=[7413c226c16d0e7ef15783e51f320594]
+entity authorized_keys--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="62.5,320,62.5,356.2969,195.5,356.2969,195.5,330,185.5,320,62.5,320" style="stroke: #000000; stroke-width: 1.5;"/><path d="M185.5,320 L185.5,330 L195.5,330 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="113" x="72.5" y="342.9951">authorized_keys</text><!--MD5=[a80282df46ff9baa1c21ab5e700831ac]
+entity dev_artwork--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="369,653,369,689.2969,467,689.2969,467,663,457,653,369,653" style="stroke: #000000; stroke-width: 1.5;"/><path d="M457,653 L457,663 L467,663 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="78" x="379" y="675.9951">artwork.xml</text><!--MD5=[c430648a80bf6f63938be0b2e67888e5]
+entity dev_config--><polygon fill="#FEFECE" filter="url(#f126ojtrowitwd)" points="252.5,653,252.5,689.2969,333.5,689.2969,333.5,663,323.5,653,252.5,653" style="stroke: #000000; stroke-width: 1.5;"/><path d="M323.5,653 L323.5,663 L333.5,663 " fill="#FEFECE" style="stroke: #000000; stroke-width: 1.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacingAndGlyphs" textLength="61" x="262.5" y="675.9951">config.ini</text><!--MD5=[3ce63ac1000966abd2ca0dcfe66c9e92]
+reverse link scrapervm_artwork to dev_artwork--><path d="M418,361.673 C418,424.106 418,597.563 418,652.842 " fill="none" id="scrapervm_artwork&lt;-dev_artwork" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="418,356.33,414,365.33,418,361.33,422,365.33,418,356.33" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[0d25dfc6ee9cea48452c92553c83e23a]
+reverse link scrapervm_config to dev_config--><path d="M293,361.673 C293,424.106 293,597.563 293,652.842 " fill="none" id="scrapervm_config&lt;-dev_config" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="293,356.33,289,365.33,293,361.33,297,365.33,293,356.33" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[5c7a4c3881f31a5a28478d5efbb6eb13]
+reverse link raspberrypi_gamelists to scrapervm_gamelists--><path d="M808.481,168.222 C809.066,207.405 810.043,272.855 810.592,309.68 " fill="none" id="raspberrypi_gamelists&lt;-scrapervm_gamelists" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="808.405,163.108,804.5392,172.1664,808.4793,168.1074,812.5383,172.0476,808.405,163.108" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[19b626fdd33ce6bbe9c669859d27794c]
+reverse link raspberrypi_downloaded_media to scrapervm_downloaded_media--><path d="M1056.68,168.222 C1056.29,207.405 1055.64,272.855 1055.27,309.68 " fill="none" id="raspberrypi_downloaded_media&lt;-scrapervm_downloaded_media" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1056.73,163.108,1052.6402,172.0676,1056.68,168.1078,1060.6398,172.1475,1056.73,163.108" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[314a5a1638a627824588dabfb3733b66]
+reverse link raspberrypi_roms to scrapervm_roms--><path d="M588.282,168.222 C589.842,207.405 592.447,272.855 593.913,309.68 " fill="none" id="raspberrypi_roms&lt;-scrapervm_roms" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="588.079,163.108,584.4396,172.2598,588.2776,168.1041,592.4333,171.942,588.079,163.108" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[762a30b10022e3a24fb180e432d841c0]
+link authorized_keys to id_rsa--><path d="M141.133,319.832 C159.389,294.98 196.064,248.714 236,219 C275.741,189.432 327.687,166.311 364.444,152.065 " fill="none" id="authorized_keys-id_rsa" style="stroke: #A80036; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><!--MD5=[fffea46bd96459031fbf7d2300d727ef]
+link scrapervm_gamelists to scraper_gamelists--><path d="M810.415,371.295 C809.6725,412.258 808.3498,485.223 807.1975,548.7825 C807.1255,552.755 807.0541,556.6907 806.9836,560.5796 C806.9484,562.524 806.9133,564.4567 806.8785,566.3765 " fill="none" id="scrapervm_gamelists-scraper_gamelists" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="806.8785,566.3765,811.041,557.4505,806.9692,561.3773,803.0423,557.3055,806.8785,566.3765" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="810.509,366.087,806.3476,375.0135,810.419,371.0862,814.3463,375.1576,810.509,366.087" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[acf13e56fc30809b15f8dd6094f82a79]
+link scrapervm_downloaded_media to scraper_downloadedmedia--><path d="M1055,371.295 C1055,391.7765 1055,420.2585 1055,451.5651 C1055,467.2183 1055,483.5778 1055,499.9963 C1055,504.101 1055,508.2093 1055,512.3112 C1055,514.3622 1055,516.4116 1055,518.4581 C1055,519.4813 1055,520.5038 1055,521.5255 C1055,522.0363 1055,522.5469 1055,523.0573 " fill="none" id="scrapervm_downloaded_media-scraper_downloadedmedia" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1055,523.0573,1059,514.0573,1055,518.0573,1051,514.0573,1055,523.0573" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="1055,366.087,1051,375.087,1055,371.087,1059,375.087,1055,366.087" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[e6221c4bc91681a7da7339175ff83c44]
+reverse link scrapervm_roms to roms_roms--><path d="M628.866,369.338 C649.779,386.007 678.073,405.066 707,414 C730.463,421.247 1571.01,407.743 1591,422 C1637.87,455.42 1659.92,516.0197 1670.2275,568.9482 C1670.3886,569.7753 1670.5467,570.6004 1670.7021,571.4235 C1670.7798,571.8351 1670.8568,572.2461 1670.9331,572.6567 " fill="none" id="scrapervm_roms&lt;-roms_roms" style="stroke: #A80036; stroke-width: 1.0;"/><polygon fill="#A80036" points="624.784,366.04,629.2708,374.8075,628.6732,369.1823,634.2984,368.5847,624.784,366.04" style="stroke: #A80036; stroke-width: 1.0;"/><!--MD5=[4581dd6d1465ba3aa7c00a563231689a]
+@startuml
+storage roms-share {
+    folder roms as roms_roms {
+        folder "scummvm" as roms_scummvm {
+            file "bass-cd-1.2.zip"
+        }
+    }
+}
+
+storage scraper-share {
+    folder cache {
+        card "images and metadata"
+    }
+    folder output {
+        folder downloaded_media as scraper_downloadedmedia {
+            folder "scummvm" as scraper_downloadedmedia_scummvm {
+                folder screenshots {
+                    file "bass-cd-1.2.png"
+                }
+            }
+        }
+        folder gamelists as scraper_gamelists {
+            folder "scummvm" as scraper_gamelists_scummvm {
+                file "gamelist.xml"
+            }
+        }
+    }
+}
+
+node raspberry_pi {
+    folder ".emulationstation" as raspberrypi_emulationstation {
+        folder downloaded_media as raspberrypi_downloaded_media #BADA55
+        folder gamelists as raspberrypi_gamelists #BADA55
+    }
+    folder RetroPie as raspberrpi_retropie {
+        folder roms as raspberrypi_roms #BADA55
+    }
+    folder ".ssh" as raspberrypi_ssh {
+        file "id_rsa.pub" as id_rsa
+    }
+}
+
+node scraper_vm {
+    folder ".skyscraper" as scrapervm_skyscraper {
+        file "artwork.xml" as scrapervm_artwork #C0FFEE 
+        file "config.ini" as scrapervm_config #C0FFEE
+    }
+    folder ".emulationstation" as scrapervm_emulationstation {
+        folder downloaded_media as scrapervm_downloaded_media #BADA55
+        folder gamelists as scrapervm_gamelists #BADA55
+    }
+    folder "RetroPie" as scrapervm_retropie {
+        folder roms as scrapervm_roms #BADA55
+    }
+    folder ".ssh" {
+        file authorized_keys
+    }
+}
+
+node dev_computer {
+    folder ".skyscraper" as dev_skyscraper {
+        file "artwork.xml" as dev_artwork
+        file "config.ini" as dev_config
+    }
+}
+
+scrapervm_artwork <- - dev_artwork
+scrapervm_config <- - dev_config
+
+raspberrypi_gamelists <- - scrapervm_gamelists
+raspberrypi_downloaded_media <- - scrapervm_downloaded_media
+raspberrypi_roms <- - scrapervm_roms
+authorized_keys .. id_rsa
+
+scrapervm_gamelists <- -> scraper_gamelists
+scrapervm_downloaded_media <- -> scraper_downloadedmedia
+scrapervm_roms <- - roms_roms
+@enduml
+
+PlantUML version 1.2019.12(Sun Nov 03 10:24:54 UTC 2019)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Java Version: 1.7.0_25-b15
+Operating System: Linux
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
