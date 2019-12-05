@@ -1,6 +1,6 @@
 @startuml filestructure
 
-storage roms-share {
+storage "roms-share" as roms_share {
     folder roms as roms_roms {
         folder "scummvm" as roms_scummvm {
             file "bass-cd-1.2.zip"
@@ -8,7 +8,7 @@ storage roms-share {
     }
 }
 
-storage scraper-share {
+storage "scraper-share" as scraper_share {
     folder cache {
         card "images and metadata"
     }
@@ -39,6 +39,9 @@ node raspberry_pi {
     folder ".ssh" as raspberrypi_ssh {
         file "id_rsa.pub" as id_rsa
     }
+    folder mount as raspberrypi_mount {
+        folder "scraper-vm" as raspberrypi_scrapervm #BADA55
+    }
 }
 
 node scraper_vm {
@@ -56,6 +59,10 @@ node scraper_vm {
     folder ".ssh" {
         file authorized_keys
     }
+    folder mount as scrapervm_mount {
+        folder "scraper-share" as scrapervm_scrapershare #BADA55
+        folder "roms-share" as scrapervm_romsshare #BADA55
+    }
 }
 
 node dev_computer {
@@ -65,16 +72,36 @@ node dev_computer {
     }
 }
 
-scrapervm_artwork <-- dev_artwork
-scrapervm_config <-- dev_config
+' DEV COMPUTER
+' files to send at setup
+dev_artwork --> scrapervm_artwork 
+dev_config --> scrapervm_config
 
-raspberrypi_gamelists <-- scrapervm_gamelists
-raspberrypi_downloaded_media <-- scrapervm_downloaded_media
-raspberrypi_roms <-- scrapervm_roms
+' RASPBERRY PI
+' relation
 authorized_keys .. id_rsa
+' mounts
+raspberrypi_scrapervm <-- scrapervm_mount
+' symlinks
+raspberrypi_gamelists -- raspberrypi_scrapervm
+raspberrypi_downloaded_media -- raspberrypi_scrapervm
+raspberrypi_roms -- raspberrypi_scrapervm
+' actual dependencies
+raspberrypi_gamelists <.. scraper_gamelists
+raspberrypi_downloaded_media <.. scraper_downloadedmedia
+raspberrypi_roms <.. roms_roms
 
-scrapervm_gamelists <--> scraper_gamelists
-scrapervm_downloaded_media <--> scraper_downloadedmedia
-scrapervm_roms <-- roms_roms
+' SCRAPER VM
+' mounts
+scrapervm_scrapershare <--> scraper_share
+scrapervm_romsshare <-- roms_share
+' symlinks
+scrapervm_gamelists -- scrapervm_scrapershare
+scrapervm_downloaded_media -- scrapervm_scrapershare
+scrapervm_roms -- scrapervm_romsshare
+' actual dependencies
+scrapervm_gamelists <..> scraper_gamelists
+scrapervm_downloaded_media <..> scraper_downloadedmedia
+scrapervm_roms <.. roms_roms
 
 @enduml
