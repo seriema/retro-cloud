@@ -46,7 +46,7 @@ node raspberry_pi {
 
 node scraper_vm {
     folder ".skyscraper" as scrapervm_skyscraper {
-        file "artwork.xml" as scrapervm_artwork #C0FFEE 
+        file "artwork.xml" as scrapervm_artwork #C0FFEE
         file "config.ini" as scrapervm_config #C0FFEE
     }
     folder ".emulationstation" as scrapervm_emulationstation {
@@ -74,7 +74,7 @@ node dev_computer {
 
 ' DEV COMPUTER
 ' files to send at setup
-dev_artwork --> scrapervm_artwork 
+dev_artwork --> scrapervm_artwork
 dev_config --> scrapervm_config
 
 ' RASPBERRY PI
