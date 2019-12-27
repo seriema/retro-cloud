@@ -16,7 +16,8 @@ $loc = "EastUS"
 # Create a resource group
 New-AzResourceGroup `
   -Name $rg `
-  -Location $loc
+  -Location $loc `
+> $null
 
 # ###################################
 # Create VMCreate virtual network resources
@@ -119,13 +120,15 @@ $sshPublicKey = cat ~/.ssh/id_rsa.pub
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
   -KeyData $sshPublicKey `
-  -Path "/home/$username/.ssh/authorized_keys"
+  -Path "/home/$username/.ssh/authorized_keys" `
+> $null
 
 # Create the VM
 New-AzVM `
   -ResourceGroupName $rg `
   -Location $loc `
-  -VM $vmConfig
+  -VM $vmConfig `
+> $null
 
 # This can't run on Linux VM's so I'll have to run the script manually from the VM, or learn more about what's possible with cloud-init.
 # $script = "https://raw.githubusercontent.com/seriema/retro-cloud/develop/vm/install-skyscraper.sh"
