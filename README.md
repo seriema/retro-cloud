@@ -30,3 +30,25 @@ An expensive and over-egineered approach to storing ROMs and their metadata whic
 1. Symlink `raspberry_pi:home/pi/mount/scraper_vm/roms` as `raspberry_pi:home/pi/RetroPie/roms`
 1. Symlink `raspberry_pi:home/pi/mount/scraper_vm/gamelists` as `raspberry_pi:home/pi/RetroPie/gamelists`
 1. Reboot `raspberry_pi`
+
+### Using scripts
+
+1. On the Raspberry Pi:
+    1. Install Powershell (sorry, it's needed to create Azure resources)
+    ```
+    wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/install-ps.sh | bash
+    ```
+    1. Start a PowerShell shell:
+    ```
+    ~/powershell/pwsh
+    ```
+    1. Install the PowerShell modules for Azure resource management
+    ```
+    $installAz = Invoke-WebRequest https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/install-az-module.ps1
+    Invoke-Expression $($installAz.Content)
+    ```
+    1. Create the Azure resources
+    ```
+    $createVm = Invoke-WebRequest https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/create-vm.ps1
+    Invoke-Expression $($createVm.Content)
+    ```
