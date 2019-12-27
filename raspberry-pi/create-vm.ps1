@@ -89,7 +89,19 @@ $nic = New-AzNetworkInterface `
   -NetworkSecurityGroupId $nsg.Id
 
 ###################################
-# Create a virtual machine
+# Create the storage account for scraping cache and boot diagnostics
+# Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only.
+$storageAccountName = ("$($prefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
+
+# Create the storage account.
+$storageAccount = New-AzStorageAccount `
+  -ResourceGroupName $rg `
+  -Location $loc `
+  -Name $storageAccountName `
+  -SkuName "Standard_LRS"
+
+###################################
+# Create the virtual machine
 
 # Define a credential object
 $username = "pi"
@@ -113,7 +125,10 @@ $vmConfig = `
     -Skus "18.04-LTS" `
     -Version "latest" | `
   Add-AzVMNetworkInterface `
-    -Id $nic.Id
+    -Id $nic.Id | `
+  Set-AzVMBootDiagnostic `
+    -Enable -ResourceGroupName $rg `
+    -StorageAccountName $storageAccountName
 
 # Configure the SSH key
 $sshPublicKey = cat ~/.ssh/id_rsa.pub
@@ -140,5 +155,5 @@ New-AzVM `
 #   -Name "Install-Skyskraper" `
 #   -VMName $vmName
 
-"VM is accessible on $($pip.IpAddress) with user '$username'."
-"Access it with: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)"
+"Storage is accessible at: $($storageAccount.Context.FileEndPoint)"
+"VM is accessible with: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)"
