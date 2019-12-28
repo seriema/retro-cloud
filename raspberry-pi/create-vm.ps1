@@ -3,14 +3,13 @@
 # Don't create new resources if there's an error
 $ErrorActionPreference = "Stop"
 
-$progressMaxCount = 5
+# Count all the uses of "ProgressHelper" in this script to calculate the progress %.
+$script:progressStepCount = ([System.Management.Automation.PsParser]::Tokenize((gc "$PSScriptRoot\$($MyInvocation.MyCommand.Name)"), [ref]$null) | where { $_.Type -eq 'Command' -and $_.Content -eq 'ProgressHelper' }).Count
+$script:progressStep = 0
 
-function Progress {
+function ProgressHelper {
   [CmdletBinding()]
   Param(
-      [Parameter(Mandatory=$True)]
-      [int]$progressStep,
-
       [Parameter(Mandatory=$True)]
       [string]$activity,
 
@@ -18,7 +17,8 @@ function Progress {
       [string]$operation
   )
 
-  $percent = (100 * $progressStep) / $progressMaxCount;
+  $script:progressStep++;
+  $percent = (100 * $script:progressStep) / $script:progressStepCount;
   Write-Progress -Activity $activity -Status $operation -PercentComplete $percent;
 }
 
@@ -28,20 +28,18 @@ $rg = "$($prefix)retro-cloud-test"
 $loc = "EastUS"
 
 ####################################
-$currentStep = 1
 $currentActivity = "Initializing"
 
-Progress $currentStep $currentActivity "Create a resource group"
+ProgressHelper $currentActivity "Creating a resource group"
 New-AzResourceGroup `
   -Name $rg `
   -Location $loc `
 > $null
 
 ####################################
-$currentStep = 2
 $currentActivity = "Create virtual network resources"
 
-Progress $currentStep $currentActivity "Create a subnet configuration"
+ProgressHelper $currentActivity "Creating a subnet configuration"
 # We will have to surpress the breaking change message from New-AzVirtualNetworkSubnetConfig due to https://stackoverflow.com/questions/59315846/powershell-azure-new-azvirtualnetworksubnetconfig-breaking-changes
 Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 $subnetConfig = New-AzVirtualNetworkSubnetConfig `
@@ -49,7 +47,7 @@ $subnetConfig = New-AzVirtualNetworkSubnetConfig `
   -AddressPrefix 192.168.1.0/24
 Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "false"
 
-Progress $currentStep $currentActivity "Create a virtual network"
+ProgressHelper $currentActivity "Creating a virtual network"
 $vnet = New-AzVirtualNetwork `
   -ResourceGroupName $rg `
   -Location $loc `
@@ -57,7 +55,7 @@ $vnet = New-AzVirtualNetwork `
   -AddressPrefix 192.168.0.0/16 `
   -Subnet $subnetConfig
 
-Progress $currentStep $currentActivity "Create a public IP address and specify a DNS name"
+ProgressHelper $currentActivity "Creating a public IP address and specifying a DNS name"
 $pip = New-AzPublicIpAddress `
   -ResourceGroupName $rg `
   -Location $loc `
@@ -65,7 +63,7 @@ $pip = New-AzPublicIpAddress `
   -IdleTimeoutInMinutes 4 `
   -Name "publicdns$(Get-Random)"
 
-Progress $currentStep $currentActivity "Create an inbound network security group rule for port 22"
+ProgressHelper $currentActivity "Creating an inbound network security group rule for port 22 (SSH)"
 $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
   -Name "networkSecurityGroupRuleSSH"  `
   -Protocol "Tcp" `
@@ -78,7 +76,7 @@ $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
   -Access "Allow"
 
 
-Progress $currentStep $currentActivity "Create an inbound network security group rule for port 80"
+ProgressHelper $currentActivity "Creating an inbound network security group rule for port 80 (web)"
 $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
   -Name "networkSecurityGroupRuleWWW"  `
   -Protocol "Tcp" `
@@ -90,14 +88,14 @@ $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
   -DestinationPortRange 80 `
   -Access "Allow"
 
-Progress $currentStep $currentActivity "Create a network security group"
+ProgressHelper $currentActivity "Creating a network security group (NSG)"
 $nsg = New-AzNetworkSecurityGroup `
   -ResourceGroupName $rg `
   -Location $loc `
   -Name "networkSecurityGroup" `
   -SecurityRules $nsgRuleSSH,$nsgRuleWeb
 
-Progress $currentStep $currentActivity "Create a virtual network card and associate with public IP address and NSG"
+ProgressHelper $currentActivity "Creating a virtual network card and associate it with the public IP address and NSG"
 $nic = New-AzNetworkInterface `
   -Name "nic" `
   -ResourceGroupName $rg  `
@@ -107,13 +105,12 @@ $nic = New-AzNetworkInterface `
   -NetworkSecurityGroupId $nsg.Id
 
 ###################################
-$currentStep = 3
 $currentActivity = "Create the storage account (for scraping cache and boot diagnostics)"
 
 # Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only.
 $storageAccountName = ("$($prefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
 
-Progress $currentStep $currentActivity "Create the storage account"
+ProgressHelper $currentActivity "Creating the storage account"
 $storageAccount = New-AzStorageAccount `
   -ResourceGroupName $rg `
   -Location $loc `
@@ -121,15 +118,14 @@ $storageAccount = New-AzStorageAccount `
   -SkuName "Standard_LRS"
 
 ###################################
-$currentStep = 4
 $currentActivity = "Create the virtual machine"
 
-Progress $currentStep $currentActivity "Define a credential object"
+ProgressHelper $currentActivity "Defining the credential object"
 $username = "pi"
 $securePassword = ConvertTo-SecureString ' ' -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
 
-Progress $currentStep $currentActivity "Create a virtual machine configuration"
+ProgressHelper $currentActivity "Creating the virtual machine configuration"
 $vmName = "VM"
 $vmConfig = `
   New-AzVMConfig `
@@ -151,12 +147,12 @@ $vmConfig = `
     -Enable -ResourceGroupName $rg `
     -StorageAccountName $storageAccountName
 
-Progress $currentStep $currentActivity "Check for existing SSH public key, otherwise create one"
+ProgressHelper $currentActivity "Checking for an existing SSH public key, otherwise creating one"
 if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
-  ssh-keygen -t rsa -b 2048
+  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '' -q
 }
 
-Progress $currentStep $currentActivity "Add SSH key to the VM's SSH authorized keys"
+ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
 $sshPublicKey = cat ~/.ssh/id_rsa.pub
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
@@ -164,7 +160,7 @@ Add-AzVMSshPublicKey `
   -Path "/home/$username/.ssh/authorized_keys" `
 > $null
 
-Progress $currentStep $currentActivity "Create the VM"
+ProgressHelper $currentActivity "Creating the virtual machine (takes a while)"
 New-AzVM `
   -ResourceGroupName $rg `
   -Location $loc `
@@ -181,7 +177,8 @@ New-AzVM `
 #   -Name "Install-Skyskraper" `
 #   -VMName $vmName
 
-Progress $progressMaxCount "Done" " "
+ProgressHelper "Done" " "
 
 "Storage is accessible at: $($storageAccount.Context.FileEndPoint)"
-"VM is accessible with: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)"
+# Running without having to manually accept is: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)
+"VM is accessible with: ssh $($username)@$($pip.IpAddress)"
