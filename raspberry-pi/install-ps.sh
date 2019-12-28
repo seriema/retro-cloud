@@ -24,6 +24,9 @@ mkdir ~/powershell
 # Unpack the tar.gz file
 tar -xvf ./powershell-6.2.0-linux-arm32.tar.gz -C ~/powershell
 
+# Remove tar ball
+rm ps.tar.gz
+
 # Start PowerShell
 # ~/powershell/pwsh
 
@@ -32,14 +35,5 @@ tar -xvf ./powershell-6.2.0-linux-arm32.tar.gz -C ~/powershell
 
 # alternatively you can run following to create a symbolic link
 sudo ln -s ~/powershell/pwsh /usr/bin/pwsh
-# Now to start PowerShell you can just run "pwsh"
 
-###################################
-# Install the Azure PowerShell module 
-
-# Install for the active user:
-Install-Module -Name Az -AllowClobber -Scope CurrentUser
-# need to trust source: "PSGallery"
-
-# Connect to Azure with a browser sign in token
-Connect-AzAccount
+'To start PowerShell run: pwsh'
