@@ -29,15 +29,9 @@ mkdir ~/powershell
 tar -xvf ./powershell-6.2.0-linux-arm32.tar.gz -C ~/powershell
 
 # Remove tar ball
-rm ps.tar.gz
+rm ./powershell-6.2.0-linux-arm32.tar.gz
 
-# Start PowerShell
-# ~/powershell/pwsh
-
-# Start PowerShell from bash with sudo to create a symbolic link
-# sudo ~/powershell/pwsh -c New-Item -ItemType SymbolicLink -Path "/usr/bin/pwsh" -Target "\$PSHOME/pwsh" -Force
-
-# alternatively you can run following to create a symbolic link
+# Create a symbolic link
 sudo ln -s ~/powershell/pwsh /usr/bin/pwsh
 
 'To start PowerShell run: pwsh'
