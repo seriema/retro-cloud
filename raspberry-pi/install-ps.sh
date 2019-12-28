@@ -1,7 +1,7 @@
 #!/bin/bash
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#raspbian
 
-if ! [ -e "pwsh" ]; then
+if [ -e ~/powershell/pwsh ]; then
     echo "PowerShell (pwsh) is already installed."
     exit 0
 fi
