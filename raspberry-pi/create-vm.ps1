@@ -116,6 +116,16 @@ $storageAccount = New-AzStorageAccount `
   -Location $loc `
   -Name $storageAccountName `
   -SkuName "Standard_LRS"
+# There has to be a better way to get the key without calling Get-AzStorageAccount (commented out version below)?
+$storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey').Line.split("=")[1]
+# $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
+
+ProgressHelper $currentActivity "Creating the file share (for the scraping cache)"
+$fileShareName = "skyscraper-cache"
+$fileShare = New-AzStorageShare `
+   -Name $fileShareName  `
+   -Context $storageAccount.Context
+$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/skyscraper-cache"
 
 ###################################
 $currentActivity = "Create the virtual machine"
@@ -167,18 +177,17 @@ New-AzVM `
   -VM $vmConfig `
 > $null
 
-# This can't run on Linux VM's so I'll have to run the script manually from the VM, or learn more about what's possible with cloud-init.
-# $script = "https://raw.githubusercontent.com/seriema/retro-cloud/develop/vm/install-skyscraper.sh"
-# Set-AzVMCustomScriptExtension `
-#   -ResourceGroupName $rg `
-#   -Location $loc `
-#   -FileUri $script `
-#   -Run install-skyscraper.sh `
-#   -Name "Install-Skyskraper" `
-#   -VMName $vmName
+ProgressHelper $currentActivity "Passing configuration variables to the .bashrc of the user $username"
+ssh "$($username)@$($pip.IpAddress)" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountName=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$($pip.IpAddress)" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 
-"Storage is accessible at: $($storageAccount.Context.FileEndPoint)"
 # Running without having to manually accept is: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)
 "VM is accessible with: ssh $($username)@$($pip.IpAddress)"
+"Continue setup in the VM. See the Readme."
