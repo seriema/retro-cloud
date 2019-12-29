@@ -37,3 +37,8 @@ An expensive and over-egineered approach to storing ROMs and their metadata whic
     ```
     wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/setup.sh | bash
     ```
+    > It will output instructions on how to connect to the VM for the next step.
+1. On the VM:
+    ```
+    wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash
+    ```
