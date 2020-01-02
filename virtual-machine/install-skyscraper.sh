@@ -13,20 +13,13 @@ wget -q -O - https://raw.githubusercontent.com/muldjord/skyscraper/master/update
 cd -
 
 echo 'Configure Skyscraper'
-# Run Skyscraper to force it to create the ~/.skyscraper folder with initial content.
-Skyscraper -v > /dev/null
+# ~/.skyscraper is created when Skyscraper runs the first time but we need it now.
+mkdir -p "$HOME/.skyscraper"
 cp .skyscraper/config.ini "$HOME/.skyscraper/config.ini"
 
-# TODO: copied from mount-share.sh
-mntPath="/mnt/$storageAccountName/$fileShareName"
-gamelists="$mntPath/output/gamelists"
-downloadedMedia="$mntPath/output/downloaded_media"
-cache="$mntPath/cache"
-# TODO: Temp roms folder
-roms="$HOME/tmp/roms"
-sed -i -e "s+RETROCLOUD_INPUTFOLDER+$roms+g" "$HOME/.skyscraper/config.ini"
-sed -i -e "s+RETROCLOUD_GAMELISTFOLDER+$gamelists+g" "$HOME/.skyscraper/config.ini"
-sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$downloadedMedia+g" "$HOME/.skyscraper/config.ini"
-sed -i -e "s+RETROCLOUD_CACHEFOLDER+$cache+g" "$HOME/.skyscraper/config.ini"
+sed -i -e "s+RETROCLOUD_INPUTFOLDER+$RETROCLOUD_ROMS+g" "$HOME/.skyscraper/config.ini"
+sed -i -e "s+RETROCLOUD_GAMELISTFOLDER+$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER+g" "$HOME/.skyscraper/config.ini"
+sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER+g" "$HOME/.skyscraper/config.ini"
+sed -i -e "s+RETROCLOUD_CACHEFOLDER+$RETROCLOUD_SKYSCRAPER_CACHEFOLDER+g" "$HOME/.skyscraper/config.ini"
 
 echo 'Done!'

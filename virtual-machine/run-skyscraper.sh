@@ -97,8 +97,12 @@ modules=(
 echo 'Create cache and generate gamelists and artwork'
 for platform in "${platforms[@]}"
 do
-    # TODO: If the are no games for this platform, skip
-    #
+    # If the are no games for this platform, skip
+    if ! [ -d "$RETROCLOUD_ROMS/$platform" ]; then
+        echo "No games found for $platform. Skipping."
+        continue
+    fi
+
     echo "Building cache for $platform"
 
     # "arcadedb" only has MAME games

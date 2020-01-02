@@ -63,6 +63,15 @@ echo 'Symlink the folders to look like emulationstation' # but this doesn't work
 ln -s "$gamelists" "$emulationstation"
 ln -s "$downloadedMedia" "$emulationstation"
 
+echo 'Add folder paths as environment variables'
+echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "#RETRO-CLOUD: The environment variables below are from virtual-machine/mount-share.sh" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER=$gamelists" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_MEDIAFOLDER=$downloadedMedia" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_CACHEFOLDER=$cache" | sudo tee -a "$HOME/.bashrc" > /dev/null
+# TODO: Mount ROMs share. Using temp roms folder until then.
+echo "export RETROCLOUD_ROMS=$HOME/tmp/roms" | sudo tee -a "$HOME/.bashrc" > /dev/null
+source ~/.bashrc
 
 echo 'Done!'
 echo "File share mounted on $mntPath"
