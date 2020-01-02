@@ -52,10 +52,12 @@ echo 'Create Skyscraper output folders to be mounted.'
 gamelists="$mntPath/output/gamelists"
 downloadedMedia="$mntPath/output/downloaded_media"
 emulationstation="$HOME/.emulationstation"
+cache="$mntPath/cache"
 
 sudo mkdir -p "$gamelists"
 sudo mkdir -p "$downloadedMedia"
 mkdir "$emulationstation"
+sudo mkdir -p "$cache"
 
 echo 'Symlink the folders to look like emulationstation' # but this doesn't work?!
 ln -s "$gamelists" "$emulationstation"
