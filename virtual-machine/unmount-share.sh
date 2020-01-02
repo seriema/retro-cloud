@@ -1,9 +1,7 @@
 mntPath="/mnt/$storageAccountName/$fileShareName"
 smbCredentialFile="/etc/smbcredentials/$storageAccountName.cred"
-emulationstation="$HOME/.emulationstation"
 
 sudo rm -r -f "$mntPath/output"
-rm -r -f "$emulationstation"
 
 sudo umount $mntPath 2> /dev/null
 
