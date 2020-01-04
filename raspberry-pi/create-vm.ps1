@@ -118,7 +118,7 @@ $storageAccount = New-AzStorageAccount `
   -Name $storageAccountName `
   -SkuName "Standard_LRS"
 # There has to be a better way to get the key without calling Get-AzStorageAccount (commented out version below)?
-$storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey').Line.split("=")[1]
+$storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey=' -SimpleMatch).Line.Replace('AccountKey=','')
 # $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
 
 ProgressHelper $currentActivity "Creating the file share (for the scraping cache)"
@@ -191,6 +191,12 @@ Add-Content ~/.bashrc ""
 Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
 Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
 Add-Content ~/.bashrc "export RETROCLOUD_VM_USER=$username"
+Add-Content ~/.bashrc '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
+Add-Content ~/.bashrc "export RETROCLOUD_FILE_SHARE_NAME=$fileShareName"
+Add-Content ~/.bashrc "export RETROCLOUD_FILE_SHARE_URL=$smbPath"
 
 ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
 ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
