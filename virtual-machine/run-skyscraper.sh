@@ -1,6 +1,11 @@
 #!/bin/bash
 # Should be in ~/.skyscraper/skyscript.sh
 
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 platforms=(
     3do
     amiga

@@ -3,6 +3,8 @@
 
 # Abort on error
 set -e
+# Error if variable is unset
+set -u
 
 echo 'Install Prerequisites'
 

@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 mntPath="/mnt/$storageAccountName/$fileShareName"
 smbCredentialFile="/etc/smbcredentials/$storageAccountName.cred"
 emulationstation="$HOME/.emulationstation"

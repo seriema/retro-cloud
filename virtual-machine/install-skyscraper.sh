@@ -1,6 +1,11 @@
 #!/bin/bash
 # https://github.com/muldjord/skyscraper#download-compile-and-install
 
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 echo 'Install Prerequisites'
 sudo apt-get update
 # This is over 500mb!

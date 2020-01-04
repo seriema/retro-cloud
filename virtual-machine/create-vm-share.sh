@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 echo "Create a shareable directory for the Raspberry Pi to mount"
 
 mkdir -p "$RETROCLOUD_SHARE/.emulationstation"
