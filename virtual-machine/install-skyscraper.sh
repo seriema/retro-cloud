@@ -6,15 +6,15 @@ set -e
 # Error if variable is unset
 set -u
 
-echo 'Install Prerequisites'
-sudo apt-get update
+echo 'Install Prerequisites (over 500mb, so it takes a while)'
+sudo apt-get update > /dev/null
 # This is over 500mb!
-sudo apt-get install build-essential qt5-default -y
+sudo apt-get install build-essential qt5-default -y > /dev/null
 
-echo 'Install Skyscraper'
+echo 'Install Skyscraper (takes a while)'
 mkdir -p "$HOME/skysource"
 cd "$HOME/skysource"
-wget -q -O - https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash
+wget -q -O - https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash > /dev/null
 cd -
 
 echo 'Configure Skyscraper'
