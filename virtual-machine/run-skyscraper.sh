@@ -1,5 +1,4 @@
 #!/bin/bash
-# Should be in ~/.skyscraper/skyscript.sh
 
 # Abort on error
 set -e

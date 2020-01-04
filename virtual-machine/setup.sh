@@ -20,6 +20,8 @@ bash mount-az-share.sh
 
 echo "SETUP: Install Skyscraper"
 bash install-skyscraper.sh
+configuredSkyscraper="$HOME/run-skyscraper.sh"
+cp run-skyscraper.sh "$configuredSkyscraper"
 
 echo "SETUP: Create share for Raspberry Pi"
 bash create-vm-share.sh
@@ -28,7 +30,9 @@ echo "SETUP: Delete ~/tmp/retro-cloud"
 cd
 rm -r "$HOME/tmp/retro-cloud"
 
+echo "SETUP: Scrape ROMS and build gamelists"
+bash "$configuredSkyscraper"
+
 echo "SETUP: Done!"
 
-echo "SETUP: Scrape ROMS and build gamelists"
-bash run-skyscraper.sh
+echo "Re-run scraping with $configuredSkyscraper"
