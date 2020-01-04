@@ -163,7 +163,8 @@ if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
 }
 
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
-$sshPublicKey = cat ~/.ssh/id_rsa.pub
+# Only take the first line in id_rsa.pub as newlines will cause $sshPublicKey to become an array.
+$sshPublicKey = cat ~/.ssh/id_rsa.pub | head -n 1
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
   -KeyData $sshPublicKey `
