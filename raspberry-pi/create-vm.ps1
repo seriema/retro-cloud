@@ -23,8 +23,8 @@ function ProgressHelper {
 }
 
 # Shared variables
-$prefix = Get-Date -Format "M-d_HH-mm-ss_"
-$rg = "$($prefix)retro-cloud-test"
+$prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
+$rg = "$($prefix)retro-cloud"
 $loc = "EastUS"
 
 ####################################
