@@ -7,12 +7,13 @@ set -u
 
 echo "Create a shareable directory for the Raspberry Pi to mount"
 
-mkdir -p "$RETROCLOUD_SHARE/.emulationstation"
-mkdir -p "$RETROCLOUD_SHARE/RetroPie"
+sharePath="$HOME/retro-cloud-share"
+mkdir -p "$sharePath/.emulationstation"
+mkdir -p "$sharePath/RetroPie"
 
 # Symlink the folders to look like a RetroPie installation.
-ln -s "$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER" "$RETROCLOUD_SHARE/.emulationstation"
-ln -s "$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER" "$RETROCLOUD_SHARE/.emulationstation"
-ln -s "$RETROCLOUD_ROMS" "$RETROCLOUD_SHARE/RetroPie"
+ln -s "$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER" "$sharePath/.emulationstation"
+ln -s "$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER" "$sharePath/.emulationstation"
+ln -s "$RETROCLOUD_ROMS" "$sharePath/RetroPie"
 
-echo "Symlinked folders to $RETROCLOUD_SHARE"
+echo "Symlinked folders to $sharePath"
