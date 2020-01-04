@@ -48,20 +48,14 @@ echo 'Mount right away'
 sudo mount -a
 
 
-echo 'Create Skyscraper output folders to be mounted.'
+echo 'Create Skyscraper output folders.'
 gamelists="$mntPath/output/gamelists"
 downloadedMedia="$mntPath/output/downloaded_media"
-emulationstation="$HOME/.emulationstation"
 cache="$mntPath/cache"
 
 sudo mkdir -p "$gamelists"
 sudo mkdir -p "$downloadedMedia"
-mkdir "$emulationstation"
 sudo mkdir -p "$cache"
-
-echo 'Symlink the folders to look like emulationstation' # but this doesn't work?!
-ln -s "$gamelists" "$emulationstation"
-ln -s "$downloadedMedia" "$emulationstation"
 
 echo 'Add folder paths as environment variables'
 echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
@@ -75,4 +69,3 @@ source ~/.bashrc
 
 echo 'Done!'
 echo "File share mounted on $mntPath"
-echo "Symlinked folders to $emulationstation"
