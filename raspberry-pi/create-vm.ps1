@@ -62,6 +62,7 @@ $pip = New-AzPublicIpAddress `
   -AllocationMethod Static `
   -IdleTimeoutInMinutes 4 `
   -Name "publicdns$(Get-Random)"
+$ip=$pip.IpAddress
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 22 (SSH)"
 $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
@@ -178,17 +179,24 @@ New-AzVM `
   -VM $vmConfig `
 > $null
 
+ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint (~/.ssh/known_hosts)"
+# Avoids prompts when connecting later.
+ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo ''"
+
+###################################
+$currentActivity = "Persist resource values"
+
 ProgressHelper $currentActivity "Passing configuration variables to the .bashrc of the user $username"
-ssh "$($username)@$($pip.IpAddress)" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountName=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export storageAccountName=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 
-# Running without having to manually accept is: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)
-"VM is accessible with: ssh $($username)@$($pip.IpAddress)"
+"The Azure resource group (see it in https://portal.azure.com/): '$rg'"
+"VM is accessible with: ssh $($username)@$ip"
 "Continue setup in the VM. See the Readme."
