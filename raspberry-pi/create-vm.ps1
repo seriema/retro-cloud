@@ -186,7 +186,13 @@ ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo ''"
 ###################################
 $currentActivity = "Persist resource values"
 
-ProgressHelper $currentActivity "Passing configuration variables to the .bashrc of the user $username"
+ProgressHelper $currentActivity "Saving configuration variables on the RetroPie (/home/$username/.bashrc)"
+Add-Content ~/.bashrc ""
+Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
+Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
+Add-Content ~/.bashrc "export RETROCLOUD_VM_USER=$username"
+
+ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
 ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
 ssh "$($username)@$ip" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
 ssh "$($username)@$ip" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
