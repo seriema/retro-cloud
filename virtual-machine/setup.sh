@@ -12,7 +12,7 @@ branch=vm
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
-wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/run-skyscraper.sh"
+wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 # TODO: This should be installed from the install-skyscraper script instead but the branch name in the URL needs to stay in sync here.
 mkdir .skyscraper
 wget -q -O ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
