@@ -22,6 +22,7 @@ echo 'Configure Skyscraper'
 mkdir -p "$HOME/.skyscraper"
 cp .skyscraper/config.ini "$HOME/.skyscraper/config.ini"
 
+# If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and mount-az-share.sh.
 sed -i -e "s+RETROCLOUD_INPUTFOLDER+$RETROCLOUD_ROMS+g" "$HOME/.skyscraper/config.ini"
 sed -i -e "s+RETROCLOUD_GAMELISTFOLDER+$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER+g" "$HOME/.skyscraper/config.ini"
 sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER+g" "$HOME/.skyscraper/config.ini"

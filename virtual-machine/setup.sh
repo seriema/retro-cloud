@@ -21,10 +21,14 @@ echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh
 
 echo "SETUP: Create share for Raspberry Pi"
-bash create-vm-share.sh
+# Run this in interactive mode, otherwise bash won't load the variables set in ~/.bashrc by the create-vm-share.sh script above.
+# https://stackoverflow.com/a/43660876
+bash -i create-vm-share.sh
 
 echo "SETUP: Install Skyscraper"
-bash install-skyscraper.sh
+# Run this in interactive mode, otherwise bash won't load the variables set in ~/.bashrc by the create-vm-share.sh script above.
+# https://stackoverflow.com/a/43660876
+bash -i install-skyscraper.sh
 
 echo "SETUP: Delete ~/tmp/retro-cloud"
 cd
