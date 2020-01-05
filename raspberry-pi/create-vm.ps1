@@ -121,12 +121,13 @@ $storageAccount = New-AzStorageAccount `
 $storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey=' -SimpleMatch).Line.Replace('AccountKey=','')
 # $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
 
-ProgressHelper $currentActivity "Creating the file share (for the scraping cache)"
-$fileShareName = "skyscraper-cache"
+# TODO: Use the same share for ROMs for now.
+ProgressHelper $currentActivity "Creating the file share"
+$fileShareName = "retro-cloud"
 $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
-$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/skyscraper-cache"
+$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
 
 ###################################
 $currentActivity = "Create the virtual machine"

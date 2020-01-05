@@ -53,10 +53,12 @@ echo 'Create Skyscraper output folders.'
 gamelists="$mntPath/output/gamelists"
 downloadedMedia="$mntPath/output/downloaded_media"
 cache="$mntPath/cache"
+roms="$mntPath/roms"
 
 sudo mkdir -p "$gamelists"
 sudo mkdir -p "$downloadedMedia"
 sudo mkdir -p "$cache"
+sudo mkdir -p "$roms"
 
 echo 'Add folder paths as environment variables'
 echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
@@ -66,8 +68,7 @@ echo "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile" | sudo tee -a "$HOME/
 echo "export RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER=$gamelists" | sudo tee -a "$HOME/.bashrc" > /dev/null
 echo "export RETROCLOUD_SKYSCRAPER_MEDIAFOLDER=$downloadedMedia" | sudo tee -a "$HOME/.bashrc" > /dev/null
 echo "export RETROCLOUD_SKYSCRAPER_CACHEFOLDER=$cache" | sudo tee -a "$HOME/.bashrc" > /dev/null
-# TODO: Mount ROMs share. Using temp roms folder until then.
-echo "export RETROCLOUD_ROMS=$HOME/tmp/roms" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "export RETROCLOUD_ROMS=$roms" | sudo tee -a "$HOME/.bashrc" > /dev/null
 
 echo 'Done!'
 echo "File share mounted on $mntPath"
