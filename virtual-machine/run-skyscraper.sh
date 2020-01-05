@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 
 # Abort on error
 set -e

@@ -36,4 +36,4 @@ rm -r "$HOME/tmp/retro-cloud"
 
 echo "SETUP: Done!"
 
-echo "Run the scraper with: $HOME/run-skyscraper.sh"
+echo "Run the scraper with: ./run-skyscraper.sh"
