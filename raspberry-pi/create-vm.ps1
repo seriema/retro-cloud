@@ -158,9 +158,10 @@ $vmConfig = `
     -Enable -ResourceGroupName $rg `
     -StorageAccountName $storageAccountName
 
-ProgressHelper $currentActivity "Checking for an existing SSH public key, otherwise creating one"
+ProgressHelper $currentActivity "Checking for an existing SSH public key in /home/pi/.ssh/id_rsa.pub"
 if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
-  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '' -q
+  ProgressHelper $currentActivity "No SSH key found. Creating without passphrase."
+  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '""' -q
 }
 
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
@@ -181,7 +182,7 @@ New-AzVM `
 
 ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint (~/.ssh/known_hosts)"
 # Avoids prompts when connecting later.
-ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo ''"
+ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo ''" > $null
 
 ###################################
 $currentActivity = "Persist resource values"
