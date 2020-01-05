@@ -184,20 +184,26 @@ ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint 
 # Avoids prompts when connecting later.
 ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo '' > /dev/null"
 
+ProgressHelper $currentActivity "Creating a folder to be shared with the Raspberry Pi"
+# Creating it from the rpi so the setup.sh can continue by mounting it.
+$sharePath="/home/$username/retro-cloud-share"
+ssh "$($username)@$ip" "mkdir -p $sharePath"
+
 ###################################
 $currentActivity = "Persist resource values"
 
-ProgressHelper $currentActivity "Saving configuration variables on the RetroPie (/home/$username/.bashrc)"
+ProgressHelper $currentActivity "Saving configuration variables on the RetroPie (~/.bashrc)"
 Add-Content ~/.bashrc ""
 Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
 Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
 Add-Content ~/.bashrc "export RETROCLOUD_VM_USER=$username"
+Add-Content ~/.bashrc "export RETROCLOUD_VM_SHARE=$sharePath"
 Add-Content ~/.bashrc '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
 Add-Content ~/.bashrc "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
 Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
-Add-Content ~/.bashrc "export RETROCLOUD_FILE_SHARE_NAME=$fileShareName"
-Add-Content ~/.bashrc "export RETROCLOUD_FILE_SHARE_URL=$smbPath"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
 
 ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
 ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
@@ -207,6 +213,7 @@ ssh "$($username)@$ip" "echo 'export storageAccountName=$storageAccountName' | s
 ssh "$($username)@$ip" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
 ssh "$($username)@$ip" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
 ssh "$($username)@$ip" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export RETROCLOUD_VM_SHARE=$sharePath' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 

@@ -23,8 +23,13 @@ else
 fi
 
 
-echo "SETUP: Run PowerShell scripts"
+echo "SETUP: Run PowerShell scripts to create the Azure resources"
 pwsh -executionpolicy bypass -File ".\setup-az.ps1"
+
+echo "SETUP: Mount remote files"
+# Run this in interactive mode, otherwise bash won't load the variables set in ~/.bashrc by the create-vm-share.sh script above.
+# https://stackoverflow.com/a/43660876
+bash -i mount-vm-share.sh
 
 echo "SETUP: Delete ~/tmp/retro-cloud"
 cd -

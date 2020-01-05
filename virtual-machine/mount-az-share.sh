@@ -35,7 +35,7 @@ else
     echo "The credential file $smbCredentialFile already exists, and was not modified."
 fi
 
-echo 'Append the mount to /etc/fstab'
+echo 'Create a persistent mount point in /etc/fstab'
 if [ -z "$(grep $smbPath\ $mntPath /etc/fstab)" ]; then
     echo "# RETRO-CLOUD: The changes below were made by retro-cloud" | sudo tee -a /etc/fstab > /dev/null
     echo "$smbPath $mntPath cifs _netdev,nofail,vers=3.0,credentials=$smbCredentialFile,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab > /dev/null
@@ -45,7 +45,7 @@ else
     exit 0
 fi
 
-echo "Mount Azure File Share on $mntPath"
+echo 'Mount now to avoid a reboot'
 sudo mount -a
 
 

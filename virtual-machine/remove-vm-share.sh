@@ -6,5 +6,4 @@ set -e
 set -u
 
 echo 'Remove the shared directory and symlinks'
-sharePath="$HOME/retro-cloud-share"
-rm -r $sharePath
+rm -r $RETROCLOUD_VM_SHARE
