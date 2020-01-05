@@ -20,21 +20,16 @@ wget -q -O ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/r
 echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh
 
-echo "SETUP: Install Skyscraper"
-bash install-skyscraper.sh
-configuredSkyscraper="$HOME/run-skyscraper.sh"
-cp run-skyscraper.sh "$configuredSkyscraper"
-
 echo "SETUP: Create share for Raspberry Pi"
 bash create-vm-share.sh
+
+echo "SETUP: Install Skyscraper"
+bash install-skyscraper.sh
 
 echo "SETUP: Delete ~/tmp/retro-cloud"
 cd
 rm -r "$HOME/tmp/retro-cloud"
 
-echo "SETUP: Scrape ROMS and build gamelists"
-bash "$configuredSkyscraper"
-
 echo "SETUP: Done!"
 
-echo "Re-run scraping with $configuredSkyscraper"
+echo "Run the scraper with: $HOME/run-skyscraper.sh"

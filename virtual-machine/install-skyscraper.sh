@@ -27,4 +27,7 @@ sed -i -e "s+RETROCLOUD_GAMELISTFOLDER+$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER+g" 
 sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER+g" "$HOME/.skyscraper/config.ini"
 sed -i -e "s+RETROCLOUD_CACHEFOLDER+$RETROCLOUD_SKYSCRAPER_CACHEFOLDER+g" "$HOME/.skyscraper/config.ini"
 
+echo 'Copy run script to user root'
+cp run-skyscraper.sh "$HOME/run-skyscraper.sh"
+
 echo 'Done!'
