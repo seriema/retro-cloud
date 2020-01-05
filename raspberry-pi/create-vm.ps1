@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-powershell
 
-# Don't create new resources if there's an error
+# Abort on error
 $ErrorActionPreference = "Stop"
 
 # Count all the uses of "ProgressHelper" in this script to calculate the progress %.
@@ -182,7 +182,7 @@ New-AzVM `
 
 ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint (~/.ssh/known_hosts)"
 # Avoids prompts when connecting later.
-ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo ''" > $null
+ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo '' > /dev/null"
 
 ###################################
 $currentActivity = "Persist resource values"

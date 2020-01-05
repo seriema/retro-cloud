@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 echo "SETUP: Download scripts to ~/tmp/retro-cloud"
 mkdir -p "$HOME/tmp/retro-cloud"
 cd "$HOME/tmp/retro-cloud"

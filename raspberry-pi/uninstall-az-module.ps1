@@ -1,3 +1,6 @@
+# Abort on error
+$ErrorActionPreference = "Stop"
+
 ###################################
 # Uninstall the Azure PowerShell module
 # https://docs.microsoft.com/en-us/powershell/azure/uninstall-az-ps?view=azps-3.2.0

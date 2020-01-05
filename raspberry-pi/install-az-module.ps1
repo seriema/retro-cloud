@@ -1,3 +1,6 @@
+# Abort on error
+$ErrorActionPreference = "Stop"
+
 ###################################
 # Install the Azure PowerShell module
 
