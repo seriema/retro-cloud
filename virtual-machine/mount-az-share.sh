@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#mounting-azure-file-share
+# https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#create-a-persistent-mount-point-for-the-azure-file-share-with-etcfstab
 
 # Abort on error
 set -e
@@ -12,11 +12,8 @@ sudo apt-get update > /dev/null
 sudo apt-get install cifs-utils > /dev/null
 
 
-echo 'Create a persistent mount point for the Azure file share with /etc/fstab'
-
-echo 'Create a folder for the mount point'
-mntPath="/mnt/$storageAccountName/$fileShareName"
-sudo mkdir -p $mntPath
+echo 'Mount the Azure File Share in the VMs shared folder'
+mntPath="$RETROCLOUD_VM_SHARE"
 
 echo 'Create a credential file to store the username and password for the file share.'
 if [ ! -d "/etc/smbcredentials" ]; then
@@ -35,7 +32,7 @@ else
     echo "The credential file $smbCredentialFile already exists, and was not modified."
 fi
 
-echo 'Create a persistent mount point in /etc/fstab'
+echo 'Create a persistent mount point for the Azure file share with /etc/fstab'
 if [ -z "$(grep $smbPath\ $mntPath /etc/fstab)" ]; then
     echo "# RETRO-CLOUD: The changes below were made by retro-cloud" | sudo tee -a /etc/fstab > /dev/null
     echo "$smbPath $mntPath cifs _netdev,nofail,vers=3.0,credentials=$smbCredentialFile,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab > /dev/null
@@ -45,30 +42,20 @@ else
     exit 0
 fi
 
+# Debugging: Mount the drive without persisting it
+# https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#mount-the-azure-file-share-on-demand-with-mount
+# sudo mount -t cifs $smbPath $mntPath -o _netdev,nofail,vers=3.0,username=$storageAccountName,password=$storageAccountKey,dir_mode=0777,file_mode=0777,serverino
+
 echo 'Mount now to avoid a reboot'
 sudo mount -a
 
 
-echo 'Create Skyscraper output folders.'
-gamelists="$mntPath/output/gamelists"
-downloadedMedia="$mntPath/output/downloaded_media"
-cache="$mntPath/cache"
-roms="$mntPath/roms"
-
-sudo mkdir -p "$gamelists"
-sudo mkdir -p "$downloadedMedia"
-sudo mkdir -p "$cache"
-sudo mkdir -p "$roms"
-
 echo 'Add folder paths as environment variables'
 echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
 echo "#RETRO-CLOUD: The environment variables below are from virtual-machine/mount-az-share.sh" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_AZ_MOUNT=$mntPath" | sudo tee -a "$HOME/.bashrc" > /dev/null
+# Note: RETROCLOUD_VM_SHARE and RETROCLOUD_VM_MOUNT_POINT are currently the same.
+echo "export RETROCLOUD_VM_MOUNT_POINT=$mntPath" | sudo tee -a "$HOME/.bashrc" > /dev/null
 echo "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER=$gamelists" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_MEDIAFOLDER=$downloadedMedia" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_CACHEFOLDER=$cache" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_ROMS=$roms" | sudo tee -a "$HOME/.bashrc" > /dev/null
 
 echo 'Done!'
 echo "File share mounted on $mntPath"
