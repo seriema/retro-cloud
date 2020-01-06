@@ -13,6 +13,7 @@ sudo apt-get install sshfs > /dev/null
 echo 'Create a folder for the mount point'
 # Using a unique name for mounting to be convenient during development.
 # TODO: RETROCLOUD_AZ_RESOURCE_GROUP is currently considered a debug name but perhaps I should save the generated "prefix" (or a system where Azure generates the names)
+# If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and mount-az-share.sh.
 mntPath="/mnt/$RETROCLOUD_AZ_RESOURCE_GROUP"
 sudo mkdir -p $mntPath
 sudo chmod 777 $mntPath
@@ -24,6 +25,23 @@ echo $mntCmd | sudo tee -a /opt/retropie/configs/all/autostart.sh > /dev/null
 
 echo 'Mount now to avoid a reboot'
 $mntCmd
+
+echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
+mv .emulationstation/gamelists .emulationstation/gamelists.bak
+
+echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
+mv .emulationstation/downloaded_media .emulationstation/downloaded_media.bak
+
+echo 'Backup ROMs as ~/RetroPie/roms.bak'
+mv RetroPie/roms RetroPie/roms.bak
+
+echo 'Symlink the mounted folders to look like a RetroPie installation'
+gamelists="$mntPath/.emulationstation/gamelists"
+downloadedMedia="$mntPath/.emulationstation/downloaded_media"
+roms="$mntPath/RetroPie/roms"
+ln -s "$gamelists" "$HOME/.emulationstation"
+ln -s "$downloadedMedia" "$HOME/.emulationstation"
+ln -s "$roms" "$HOME/RetroPie"
 
 echo 'Add folder paths as environment variables'
 echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
