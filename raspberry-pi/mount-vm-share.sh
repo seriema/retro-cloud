@@ -21,7 +21,8 @@ sudo chmod 777 $mntPath
 echo 'Create a persistent mount point in autostart.sh'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and create-vm.ps1.
 mntCmd="sudo -u pi sshfs $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP:$RETROCLOUD_VM_SHARE $mntPath"
-echo $mntCmd | sudo tee -a /opt/retropie/configs/all/autostart.sh > /dev/null
+# The last entry is starting emulationstation, and mounting the drives needs to happen first. Appending to the top with sed: https://stackoverflow.com/a/9533736
+sed -i "1s/^/$mntCmd\n/" /opt/retropie/configs/all/autostart.sh
 
 echo 'Mount now to avoid a reboot'
 $mntCmd
