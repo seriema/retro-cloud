@@ -29,7 +29,7 @@ sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER+g" "$HOME
 sed -i -e "s+RETROCLOUD_CACHEFOLDER+$RETROCLOUD_SKYSCRAPER_CACHEFOLDER+g" "$HOME/.skyscraper/config.ini"
 
 echo 'Copy run script to user root'
-cp run-skyscraper.sh "$HOME/run-skyscraper.sh"
+cp local/run-skyscraper.sh "$HOME/run-skyscraper.sh"
 # Make it executable
 chmod 777 "$HOME/run-skyscraper.sh"
 
