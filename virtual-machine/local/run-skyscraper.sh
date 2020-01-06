@@ -101,7 +101,7 @@ modules=(
 echo 'Create cache and generate gamelists and artwork'
 for platform in "${platforms[@]}"
 do
-    # If the are no games for this platform, skip
+    # If the are no games for this platform, skip (because starting Skyscraper for no games is really slow)
     if ! [ -d "$RETROCLOUD_ROMS/$platform" ]; then
         echo "No games found for $platform. Skipping."
         continue
@@ -114,7 +114,7 @@ do
         Skyscraper -p $platform -s 'arcadedb' > /dev/null
     fi
 
-    # TODO: Run the "screenscraper" module separate (or again?), and using the --unpack flag.
+    # TODO: If there are no games found, run the "screenscraper" module again but with the --unpack flag?
 
     for module in "${modules[@]}"
     do
@@ -123,4 +123,10 @@ do
 
     echo "Generating gamelists and artwork for $platform"
     Skyscraper -p $platform > /dev/null
+
+    # This step is needed because the AZ mounted path is reflected in the gamelists, and they're symlinked on the rpi to look local.
+    echo "Fixing paths in gamelists for $platform"
+    # Need to sudo because Skyscraper creates the gamelists.xml without write access on them.
+    sudo sed -i -e "s+$RETROCLOUD_ROMS+/home/pi/RetroPie/roms+g" "$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER/$platform/gamelist.xml"
+    sudo sed -i -e "s+$RETROCLOUD_SKYSCRAPER_MEDIAFOLDER+/home/pi/.emulationstation/downloaded_media+g" "$RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER/$platform/gamelist.xml"
 done
