@@ -22,7 +22,7 @@ function ProgressHelper {
 
   $script:progressStep++;
   $percent = (100 * $script:progressStep) / $script:progressStepCount;
-  Write-Host "-Activity $activity -Status $operation -PercentComplete $percent"
+  Write-Host "-Activity $activity -Status $operation -PercentComplete $percent";
 }
 
 # Shared variables
@@ -164,6 +164,7 @@ $username = "pi"
 $securePassword = ConvertTo-SecureString ' ' -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
 
+# TODO: Tried using a cheaper VM (Standard_B1ls) but it kept disconnecting.
 ProgressHelper $currentActivity "Creating the virtual machine configuration"
 $vmName = "VM"
 $vmConfig = `
@@ -201,14 +202,28 @@ New-AzVM `
   -VM $vmConfig `
 | Format-Table
 
-ProgressHelper $currentActivity "Waiting for the VM to boot up"
-# TODO: There has to be a better way. Perhaps Azure Boot Diagnostics?
-$sshStatus = $null
-$ErrorActionPreference = "SilentlyContinue"
-while ($sshStatus -eq $null) {
-  $sshStatus = ssh-keyscan -H $ip 2>&1 $null
-}
-$ErrorActionPreference = "Stop"
+ProgressHelper $currentActivity "Waiting for virtual machine to boot"
+$vmState = (Get-AzVM `
+    -ResourceGroupName $rg `
+    -Name "VM" `
+    -Status | Select @{n="Status"; e={$_.Statuses[1].Code}}).Status.replace("PowerState/", "")
+
+"--- VM POWER STATE IS --- $vmState ---"
+# Make it easier to debug
+$env:vmConfig=$vmConfig
+
+$env:ip=$ip
+$env:username=$username
+$env:sharePath=$sharePath
+$env:rg=$rg
+$env:storageAccountName=$storageAccountName
+$env:storageAccountKey=$storageAccountKey
+$env:fileShareName=$fileShareName
+$env:smbPath=$smbPath
+
+ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint (~/.ssh/known_hosts)"
+# Avoids prompts when connecting later.
+ssh -o `"StrictHostKeyChecking no`" "$($username)@$ip" "echo '' > /dev/null"
 
 ProgressHelper $currentActivity "Adding fingerprint to ~/.ssh/known_hosts"
 # Avoids prompts when connecting later. (https://serverfault.com/a/316100)
