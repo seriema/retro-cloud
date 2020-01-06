@@ -170,7 +170,7 @@ $vmName = "VM"
 $vmConfig = `
   New-AzVMConfig `
     -VMName $vmName `
-    -VMSize "Standard_B2s" | `
+    -VMSize "Standard_B1ls" | `
   Set-AzVMOperatingSystem `
     -Linux `
     -ComputerName $vmName `
@@ -203,13 +203,18 @@ New-AzVM `
 | Format-Table
 
 ProgressHelper $currentActivity "Waiting for virtual machine to boot"
-$vmState = (Get-AzVM `
+$vmStateObj = Get-AzVM `
     -ResourceGroupName $rg `
     -Name "VM" `
-    -Status | Select @{n="Status"; e={$_.Statuses[1].Code}}).Status.replace("PowerState/", "")
+    -Status
+$vmState = ($vmStateObj | Select @{n="Status"; e={$_.Statuses[1].Code}}).Status.replace("PowerState/", "")
 
 "--- VM POWER STATE IS --- $vmState ---"
+$vmStateObj
+"------"
 # Make it easier to debug
+$env:vmState=$vmState
+
 $env:vmConfig=$vmConfig
 
 $env:ip=$ip
