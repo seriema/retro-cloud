@@ -190,9 +190,16 @@ while ($sshStatus -eq $null) {
 }
 $ErrorActionPreference = "Stop"
 
-ProgressHelper $currentActivity "Accept the fingerprint (~/.ssh/known_hosts)"
-# Avoids prompts when connecting later.
-ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo '' > /dev/null"
+ProgressHelper $currentActivity "Adding fingerprint to ~/.ssh/known_hosts"
+# Avoids prompts when connecting later. (https://serverfault.com/a/316100)
+# First, remove the key from known hosts. If it doesn't exist it exits with an error message, that can be ignored. If it succeeds it outputs what lines were found, which can also be ignored.
+# Disabled for now because the error, even when piped, will stop the script due to ErrorActionPreference
+# ssh-keygen -R $ip *> $null
+# Second, add the fingerprint to known hosts, and ignore the status message (that's outputed to stderr).
+# TODO: How do I silence ssh-keygen?! "| Out-Null", "*> $null", "2> $null", "2>&1 $null", none of them work. Somehow stderr and stdout gets by.
+$ErrorActionPreference = "SilentlyContinue"
+ssh-keyscan -H $ip >> "$HOME/.ssh/known_hosts" 2>&1 $null
+$ErrorActionPreference = "Stop"
 
 ProgressHelper $currentActivity "Creating a folder to be shared with the Raspberry Pi"
 # Creating it from the rpi so the setup.sh can continue by mounting it.
