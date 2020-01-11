@@ -79,7 +79,7 @@ $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 80 (web)"
 $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
-  -Name "networkSecurityGroupRuleWWW"  `
+  -Name "networkSecurityGroupRuleWWW" `
   -Protocol "Tcp" `
   -Direction "Inbound" `
   -Priority 1001 `
@@ -181,7 +181,16 @@ New-AzVM `
   -VM $vmConfig `
 > $null
 
-ProgressHelper $currentActivity "Test ssh connection and accept the fingerprint (~/.ssh/known_hosts)"
+ProgressHelper $currentActivity "Waiting for the VM to boot up"
+# TODO: There has to be a better way. Perhaps Azure Boot Diagnostics?
+$sshStatus = $null
+$ErrorActionPreference = "SilentlyContinue"
+while ($sshStatus -eq $null) {
+  $sshStatus = ssh-keyscan -H $ip 2>&1 $null
+}
+$ErrorActionPreference = "Stop"
+
+ProgressHelper $currentActivity "Accept the fingerprint (~/.ssh/known_hosts)"
 # Avoids prompts when connecting later.
 ssh -o StrictHostKeyChecking=no "$($username)@$ip" "echo '' > /dev/null"
 
@@ -193,7 +202,7 @@ ssh "$($username)@$ip" "mkdir -p $sharePath"
 ###################################
 $currentActivity = "Persist resource values"
 
-ProgressHelper $currentActivity "Saving configuration variables on the RetroPie (~/.bashrc)"
+ProgressHelper $currentActivity "Saving configuration variables locally (~/.bashrc)"
 Add-Content ~/.bashrc ""
 Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
 Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
