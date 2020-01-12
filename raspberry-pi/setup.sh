@@ -8,7 +8,7 @@ set -u
 echo "SETUP: Download scripts to ~/tmp/retro-cloud"
 mkdir -p "$HOME/tmp/retro-cloud"
 cd "$HOME/tmp/retro-cloud"
-branch=vm
+branch=develop
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/create-vm.ps1"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/install-az-module.ps1"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/install-ps.sh"
