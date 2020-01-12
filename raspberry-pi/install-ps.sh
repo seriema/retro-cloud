@@ -39,4 +39,4 @@ rm ./powershell-6.2.0-linux-arm32.tar.gz
 # Create a symbolic link
 sudo ln -s ~/powershell/pwsh /usr/bin/pwsh
 
-'To start PowerShell run: pwsh'
+echo 'To start PowerShell run: pwsh'
