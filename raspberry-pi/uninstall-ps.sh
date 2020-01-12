@@ -1,6 +1,11 @@
 #!/bin/bash
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#raspbian
 
+# Abort on error
+set -e
+# Error if variable is unset
+set -u
+
 ###################################
 # Delete the PowerShell installation
 

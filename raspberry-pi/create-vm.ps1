@@ -1,6 +1,6 @@
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-powershell
 
-# Don't create new resources if there's an error
+# Abort on error
 $ErrorActionPreference = "Stop"
 
 # Count all the uses of "ProgressHelper" in this script to calculate the progress %.
@@ -23,8 +23,8 @@ function ProgressHelper {
 }
 
 # Shared variables
-$prefix = Get-Date -Format "M-d_HH-mm-ss_"
-$rg = "$($prefix)retro-cloud-test"
+$prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
+$rg = "$($prefix)retro-cloud"
 $loc = "EastUS"
 
 ####################################
@@ -62,6 +62,7 @@ $pip = New-AzPublicIpAddress `
   -AllocationMethod Static `
   -IdleTimeoutInMinutes 4 `
   -Name "publicdns$(Get-Random)"
+$ip=$pip.IpAddress
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 22 (SSH)"
 $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
@@ -78,7 +79,7 @@ $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 80 (web)"
 $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
-  -Name "networkSecurityGroupRuleWWW"  `
+  -Name "networkSecurityGroupRuleWWW" `
   -Protocol "Tcp" `
   -Direction "Inbound" `
   -Priority 1001 `
@@ -117,15 +118,16 @@ $storageAccount = New-AzStorageAccount `
   -Name $storageAccountName `
   -SkuName "Standard_LRS"
 # There has to be a better way to get the key without calling Get-AzStorageAccount (commented out version below)?
-$storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey').Line.split("=")[1]
+$storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey=' -SimpleMatch).Line.Replace('AccountKey=','')
 # $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
 
-ProgressHelper $currentActivity "Creating the file share (for the scraping cache)"
-$fileShareName = "skyscraper-cache"
+# TODO: Use the same share for ROMs for now.
+ProgressHelper $currentActivity "Creating the file share"
+$fileShareName = "retro-cloud"
 $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
-$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/skyscraper-cache"
+$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
 
 ###################################
 $currentActivity = "Create the virtual machine"
@@ -157,13 +159,15 @@ $vmConfig = `
     -Enable -ResourceGroupName $rg `
     -StorageAccountName $storageAccountName
 
-ProgressHelper $currentActivity "Checking for an existing SSH public key, otherwise creating one"
+ProgressHelper $currentActivity "Checking for an existing SSH public key in /home/pi/.ssh/id_rsa.pub"
 if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
-  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '' -q
+  ProgressHelper $currentActivity "No SSH key found. Creating without passphrase."
+  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '""' -q
 }
 
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
-$sshPublicKey = cat ~/.ssh/id_rsa.pub
+# Only take the first line in id_rsa.pub as newlines will cause $sshPublicKey to become an array.
+$sshPublicKey = cat ~/.ssh/id_rsa.pub | head -n 1
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
   -KeyData $sshPublicKey `
@@ -177,17 +181,59 @@ New-AzVM `
   -VM $vmConfig `
 > $null
 
-ProgressHelper $currentActivity "Passing configuration variables to the .bashrc of the user $username"
-ssh "$($username)@$($pip.IpAddress)" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountName=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$($pip.IpAddress)" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
+ProgressHelper $currentActivity "Waiting for the VM to boot up"
+# TODO: There has to be a better way. Perhaps Azure Boot Diagnostics?
+$sshStatus = $null
+$ErrorActionPreference = "SilentlyContinue"
+while ($sshStatus -eq $null) {
+  $sshStatus = ssh-keyscan -H $ip 2>&1 $null
+}
+$ErrorActionPreference = "Stop"
+
+ProgressHelper $currentActivity "Adding fingerprint to ~/.ssh/known_hosts"
+# Avoids prompts when connecting later. (https://serverfault.com/a/316100)
+# First, remove the key from known hosts. If it doesn't exist it exits with an error message, that can be ignored. If it succeeds it outputs what lines were found, which can also be ignored.
+# Disabled for now because the error, even when piped, will stop the script due to ErrorActionPreference
+# ssh-keygen -R $ip *> $null
+# Second, add the fingerprint to known hosts, and ignore the status message (that's outputed to stderr).
+# TODO: How do I silence ssh-keygen?! "| Out-Null", "*> $null", "2> $null", "2>&1 $null", none of them work. Somehow stderr and stdout gets by.
+$ErrorActionPreference = "SilentlyContinue"
+ssh-keyscan -H $ip >> "$HOME/.ssh/known_hosts" 2>&1 $null
+$ErrorActionPreference = "Stop"
+
+ProgressHelper $currentActivity "Creating a folder to be shared with the Raspberry Pi"
+# Creating it from the rpi so the setup.sh can continue by mounting it.
+$sharePath="/home/$username/retro-cloud-share"
+ssh "$($username)@$ip" "mkdir -p $sharePath"
+
+###################################
+$currentActivity = "Persist resource values"
+
+ProgressHelper $currentActivity "Saving configuration variables locally (~/.bashrc)"
+Add-Content ~/.bashrc ""
+Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
+Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
+Add-Content ~/.bashrc "export RETROCLOUD_VM_USER=$username"
+Add-Content ~/.bashrc "export RETROCLOUD_VM_SHARE=$sharePath"
+Add-Content ~/.bashrc '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+
+ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
+ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export resourceGroupName=$rg' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export storageAccountName=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export storageAccountKey=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export fileShareName=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export smbPath=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "$($username)@$ip" "echo 'export RETROCLOUD_VM_SHARE=$sharePath' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 
-# Running without having to manually accept is: ssh -o `"StrictHostKeyChecking no`" $($username)@$($pip.IpAddress)
-"VM is accessible with: ssh $($username)@$($pip.IpAddress)"
+"The Azure resource group (see it in https://portal.azure.com/): '$rg'"
+"VM is accessible with: ssh $($username)@$ip"
 "Continue setup in the VM. See the Readme."
