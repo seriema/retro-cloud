@@ -22,19 +22,21 @@ echo 'Create a persistent mount point in autostart.sh'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and create-vm.ps1.
 mntCmd="sudo -u pi sshfs $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP:$RETROCLOUD_VM_SHARE $mntPath"
 # The last entry is starting emulationstation, and mounting the drives needs to happen first. Appending to the top with sed: https://stackoverflow.com/a/9533736
-sed -i "1s/^/$mntCmd\n/" /opt/retropie/configs/all/autostart.sh
+# autostart.sh not found
+# sed error unknown option to s'
+sudo sed -i "1s+^+$mntCmd\n+" /opt/retropie/configs/all/autostart.sh
 
 echo 'Mount now to avoid a reboot'
 $mntCmd
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
-mv .emulationstation/gamelists .emulationstation/gamelists.bak
+mv $HOME/.emulationstation/gamelists $HOME/.emulationstation/gamelists.bak
 
 echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
-mv .emulationstation/downloaded_media .emulationstation/downloaded_media.bak
+mv $HOME/.emulationstation/downloaded_media $HOME/.emulationstation/downloaded_media.bak
 
 echo 'Backup ROMs as ~/RetroPie/roms.bak'
-mv RetroPie/roms RetroPie/roms.bak
+mv $HOME/RetroPie/roms $HOME/RetroPie/roms.bak
 
 echo 'Symlink the mounted folders to look like a RetroPie installation'
 gamelists="$mntPath/.emulationstation/gamelists"
