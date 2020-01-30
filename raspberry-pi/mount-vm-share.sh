@@ -7,8 +7,8 @@ set -e
 set -u
 
 echo 'Install Prerequisites'
-sudo apt-get update > /dev/null
-sudo apt-get install sshfs > /dev/null
+sudo apt-get update
+sudo apt-get install sshfs
 
 echo 'Create a folder for the mount point'
 # Using a unique name for mounting to be convenient during development.
