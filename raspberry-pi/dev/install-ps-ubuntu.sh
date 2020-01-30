@@ -4,7 +4,7 @@
 # https://peteris.rocks/blog/quiet-and-unattended-installation-with-apt-get/
 
 # Download the Microsoft repository GPG keys
-wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
 
 # Register the Microsoft repository GPG keys
 # sudo dpkg -i packages-microsoft-prod.deb
