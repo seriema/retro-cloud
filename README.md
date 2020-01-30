@@ -16,8 +16,11 @@ An expensive and over-egineered approach to storing ROMs and their metadata whic
 
 1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
     ```
-    wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/setup.sh | bash
+    wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/download-and-run.sh | bash
     ```
+    > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
+    > `WARNING: To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code ABCD12345 to authenticate.`
+
     > Connect to the VM with: `$ bash -i ssh-vm.sh`
 1. Install Retro-Cloud on the VM:
     ```
