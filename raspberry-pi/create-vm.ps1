@@ -180,7 +180,7 @@ if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
 
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
 # Only take the first line in id_rsa.pub as newlines will cause $sshPublicKey to become an array.
-$sshPublicKey = cat ~/.ssh/id_rsa.pub | head -n 1
+$sshPublicKey = cat /home/pi/.ssh/id_rsa.pub | head -n 1
 $sshPublicKey | Format-Table
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
@@ -224,17 +224,17 @@ ssh "$($username)@$ip" "mkdir -p $sharePath"
 $currentActivity = "Persist resource values"
 
 ProgressHelper $currentActivity "Saving configuration variables locally (~/.bashrc)"
-Add-Content ~/.bashrc ""
-Add-Content ~/.bashrc '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
-Add-Content ~/.bashrc "export RETROCLOUD_VM_IP=$ip"
-Add-Content ~/.bashrc "export RETROCLOUD_VM_USER=$username"
-Add-Content ~/.bashrc "export RETROCLOUD_VM_SHARE=$sharePath"
-Add-Content ~/.bashrc '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
-Add-Content ~/.bashrc "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
-Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
-Add-Content ~/.bashrc "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
-Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
-Add-Content ~/.bashrc "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+Add-Content "$HOME/.bashrc" ""
+Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_IP=$ip"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_USER=$username"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_SHARE=$sharePath"
+Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
 
 ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
 ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
