@@ -7,5 +7,5 @@ pool:
 # container: seriema/retro-cloud:azpipelines
 
 steps:
-- script: docker run --privileged --user pi seriema/retro-cloud:develop bash -c "cd retro-cloud-setup ; bash setup.sh"
+- script: docker run --rm --privileged --user pi seriema/retro-cloud:develop bash -c "cd retro-cloud-setup ; bash setup.sh"
   displayName: 'Run retro-cloud setup'
