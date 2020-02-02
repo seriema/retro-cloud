@@ -7,8 +7,5 @@ pool:
 # container: seriema/retro-cloud:azpipelines
 
 steps:
-- script: docker pull seriema/retro-cloud:develop
-  displayName: 'Pull down Docker image'
-
-- script: docker run --privileged --user pi seriema/retro-cloud:develop cd retro-cloud-setup/ && bash setup.sh
+- script: docker run --privileged --user pi seriema/retro-cloud:develop bash retro-cloud-setup/setup.sh
   displayName: 'Run retro-cloud setup'
