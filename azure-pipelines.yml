@@ -8,4 +8,13 @@ container: seriema/retro-cloud:azpipelines
 
 steps:
 - script: ls -la
-  displayName: 'Run a one-line script'
+  displayName: 'See default location'
+
+- script: ls / -la
+  displayName: 'See root'
+
+- script: ls ~ -la
+  displayName: 'See user'
+
+- script: ls pi -la
+  displayName: 'See pi'
