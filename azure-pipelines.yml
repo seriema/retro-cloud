@@ -4,7 +4,7 @@ trigger:
 pool:
   vmImage: 'ubuntu-18.04'
 
-container: seriema/retro-cloud:develop
+container: seriema/retro-cloud:azpipelines
 
 steps:
 - script: cd retro-cloud-setup && ls -la
