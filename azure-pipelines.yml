@@ -1,0 +1,11 @@
+trigger:
+- develop
+
+pool:
+  vmImage: 'ubuntu-18.04'
+
+container: seriema/retro-cloud:develop
+
+steps:
+- script: cd retro-cloud-setup && ls -la
+  displayName: 'Run a one-line script'
