@@ -7,5 +7,5 @@ pool:
 container: seriema/retro-cloud:azpipelines
 
 steps:
-- script: cd retro-cloud-setup && ls -la
+- script: ls -la
   displayName: 'Run a one-line script'
