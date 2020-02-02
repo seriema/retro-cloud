@@ -1,23 +1,14 @@
 pool:
   vmImage: 'ubuntu-18.04'
 
-container: seriema/retro-cloud:azpipelines
+# NOTE: Disabled due to too user handling making both the Dockerfile and this script unnecessarily hard to work with.
+# I need to test on a RetroPie installation, and by default that's a "pi" user. Not "root" nor a random Azure Pipelines created user.
+# https://github.com/microsoft/azure-pipelines-agent/issues/2043
+# container: seriema/retro-cloud:azpipelines
 
 steps:
-- script: ls -la
-  displayName: 'See default location'
+- script: docker pull seriema/retro-cloud:develop
+  displayName: 'Pull down Docker image'
 
-- script: ls / -la
-  displayName: 'See root'
-
-- script: ls ~ -la
-  displayName: 'See user'
-
-- script: ls /home/pi -la
-  displayName: 'See pi'
-
-- script: su pi
-  displayName: 'Change user'
-
-- script: ls ~ -la
-  displayName: 'See user'
+- script: docker run --privileged --user pi seriema/retro-cloud:develop cd retro-cloud-setup/ && bash setup.sh
+  displayName: 'Run retro-cloud setup'
