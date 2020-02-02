@@ -15,3 +15,9 @@ steps:
 
 - script: ls /home/pi -la
   displayName: 'See pi'
+
+- script: su pi
+  displayName: 'Change user'
+
+- script: ls ~ -la
+  displayName: 'See user'
