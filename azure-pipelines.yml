@@ -13,5 +13,5 @@ steps:
 - script: ls ~ -la
   displayName: 'See user'
 
-- script: ls pi -la
+- script: ls /home/pi -la
   displayName: 'See pi'
