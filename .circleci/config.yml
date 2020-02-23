@@ -5,6 +5,11 @@ jobs:
     - image: seriema/retro-cloud:develop
     steps:
     - checkout
+    # GitHub has the public key, and CircleCI adds the private key to the
+    # container. RetroPie setups either have no ssh keys or both private
+    # and public keys, so we remove this private key. Otherwise the scripts
+    # need to change just to work with CircleCI.
+    - run: sudo rm ~/.ssh/id_rsa
     - run: cd raspberry-pi ; bash setup.sh
 workflows:
   version: 2
