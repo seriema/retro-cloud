@@ -11,6 +11,7 @@ jobs:
     # need to change just to work with CircleCI.
     - run: sudo rm ~/.ssh/id_rsa
     - run: cd raspberry-pi ; bash setup.sh
+    - run: cd raspberry-pi ; bash teardown.sh
 workflows:
   version: 2
   build:
