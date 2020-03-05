@@ -10,9 +10,18 @@ jobs:
     # and public keys, so we remove this private key. Otherwise the scripts
     # need to change just to work with CircleCI.
     - run: sudo rm ~/.ssh/id_rsa
-    - run: cd raspberry-pi ; bash setup.sh
-    - run: cat ~/.bashrc
-    - run: cd raspberry-pi ; bash teardown.sh
+    - run:
+        name: Setup Azure resources
+        command: cd raspberry-pi ; bash setup.sh
+        shell: /bin/bash --login -eo pipefail
+    - run:
+        name: Print ~/.bashrc
+        command: cat ~/.bashrc
+        shell: /bin/bash --login -eo pipefail
+    - run:
+        name: Teardown Azure resources
+        command: cd raspberry-pi ; bash teardown.sh
+        shell: /bin/bash --login -eo pipefail
 workflows:
   version: 2
   build:
