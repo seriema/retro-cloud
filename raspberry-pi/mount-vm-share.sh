@@ -1,10 +1,8 @@
 #!/bin/bash
 # https://github.com/RetroPie/RetroPie-Setup/wiki/Running-ROMs-from-a-Network-Share#option-1-add-to-autostartsh-preferred-if-using-v40
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, and error if variable is unset
+set -eu
 
 echo 'Install Prerequisites'
 sudo apt-get update
@@ -26,8 +24,18 @@ mntCmd="sudo -u pi sshfs $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP:$RETROCLOUD_VM_SH
 # sed error unknown option to s'
 sudo sed -i "1s+^+$mntCmd\n+" /opt/retropie/configs/all/autostart.sh
 
-echo 'Mount now to avoid a reboot'
-$mntCmd
+echo 'Attempt to mount VM now to avoid a reboot ...'
+# Allow it to fail. Which can happen in a container without privileges, or certain access rights issues.
+(
+    set +e
+    $mntCmd
+    if [[ $? -eq 0 ]]; then
+        echo '... mounted successfully.'
+    else
+        echo '... WARNING! Could not mount VM. You need to restart before continuing. It could also be a problem with your privilegies.' 1>&2
+    fi
+    set -e
+)
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
 mv $HOME/.emulationstation/gamelists $HOME/.emulationstation/gamelists.bak
