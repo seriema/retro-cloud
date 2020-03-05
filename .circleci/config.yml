@@ -21,7 +21,7 @@ jobs:
         when: always
     - run:
         name: Teardown Azure resources
-        command: cd raspberry-pi ; bash teardown.sh
+        command: cd raspberry-pi ; bash -i teardown.sh
         shell: /bin/bash --login -eo pipefail
         when: always
 workflows:
