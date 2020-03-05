@@ -1,31 +1,37 @@
 version: 2
 jobs:
-  build:
+  infra:
     docker:
     - image: seriema/retro-cloud:develop
+    shell: /bin/bash --login -eo pipefail
     steps:
+
     - checkout
-    # GitHub has the public key, and CircleCI adds the private key to the
-    # container. RetroPie setups either have no ssh keys or both private
-    # and public keys, so we remove this private key. Otherwise the scripts
-    # need to change just to work with CircleCI.
-    - run: sudo rm ~/.ssh/id_rsa
+
+    - run:
+        # GitHub has the public key, and CircleCI adds the private key to the
+        # container. RetroPie setups either have no ssh keys or both private
+        # and public keys, so we remove this private key. Otherwise the scripts
+        # need to change just to work with CircleCI.
+        name: Delete the private key from the "Checkout code" step above
+        command: sudo rm ~/.ssh/id_rsa
+
     - run:
         name: Setup Azure resources
         command: cd raspberry-pi ; bash setup.sh
-        shell: /bin/bash --login -eo pipefail
+
     - run:
         name: Print ~/.bashrc
         command: cat ~/.bashrc
-        shell: /bin/bash --login -eo pipefail
         when: always
+
     - run:
         name: Teardown Azure resources
         command: cd raspberry-pi ; bash -i teardown.sh
-        shell: /bin/bash --login -eo pipefail
         when: always
+
 workflows:
   version: 2
   build:
     jobs:
-    - build
+    - infra
