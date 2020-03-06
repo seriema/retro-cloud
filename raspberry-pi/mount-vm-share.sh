@@ -26,16 +26,12 @@ sudo sed -i "1s+^+$mntCmd\n+" /opt/retropie/configs/all/autostart.sh
 
 echo 'Attempt to mount VM now to avoid a reboot ...'
 # Allow it to fail. Which can happen in a container without privileges, or certain access rights issues.
-(
-    set +e
-    $mntCmd
-    if [[ $? -eq 0 ]]; then
-        echo '... mounted successfully.'
-    else
-        echo '... WARNING! Could not mount VM. You need to restart before continuing. It could also be a problem with your privilegies.' 1>&2
-    fi
-    set -e
-)
+if $mntCmd
+then
+    echo '... mounted successfully.'
+else
+    echo '... WARNING! Could not mount VM. You need to restart before continuing. It could also be a problem with your privilegies.' 1>&2
+fi
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
 mv "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.bak"
