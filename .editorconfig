@@ -15,3 +15,7 @@ trim_trailing_whitespace = false
 [*.yml]
 indent_style = space
 indent_size = 2
+
+# Editorconfig hadn't affected the PS scripts, so instead of reformatting...
+[*.ps1]
+indent_size = 2
