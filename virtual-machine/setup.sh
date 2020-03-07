@@ -1,4 +1,6 @@
 #!/bin/bash
+# Script takes optional parameter for branch name or commit hash.
+branch=${1:-develop}
 
 # Abort on error
 set -e
@@ -8,7 +10,6 @@ set -u
 echo "SETUP: Download scripts to ~/tmp/retro-cloud"
 mkdir -p "$HOME/tmp/retro-cloud"
 cd "$HOME/tmp/retro-cloud"
-branch=develop
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
 wget -q "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
