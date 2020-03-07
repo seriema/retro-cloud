@@ -35,7 +35,7 @@ jobs:
 
     - run:
         name: Setup VM
-        command: bash -i raspberry-pi/local/setup-vm.sh
+        command: bash -i raspberry-pi/local/setup-vm.sh $CIRCLE_SHA1
 
     - run:
         name: Teardown Azure resources
