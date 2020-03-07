@@ -6,19 +6,12 @@ jobs:
     shell: /bin/bash --login -eo pipefail
     steps:
 
-    - checkout
-
     - run:
-        # GitHub has the public key, and CircleCI adds the private key to the
-        # container. RetroPie setups either have no ssh keys or both private
-        # and public keys, so we remove this private key. Otherwise the scripts
-        # need to change just to work with CircleCI.
-        name: Delete the private key from the "Checkout code" step above
-        command: sudo rm ~/.ssh/id_rsa
-
-    - run:
-        name: Setup Azure resources
-        command: cd raspberry-pi ; bash setup.sh
+        name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
+        command: |
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/download-and-run.sh"
+            bash download-and-run.sh $CIRCLE_SHA1
+            rm download-and-run.sh
 
     - run:
         name: Print RaspberryPi ~/.bashrc
@@ -34,12 +27,17 @@ jobs:
         when: always
 
     - run:
-        name: Setup VM
-        command: bash -i raspberry-pi/local/setup-vm.sh $CIRCLE_SHA1
+        name: Install Retro-Cloud on VM
+        command: bash -i ~/setup-vm.sh $CIRCLE_SHA1
 
     - run:
         name: Teardown Azure resources
-        command: cd raspberry-pi ; bash -i teardown.sh
+        command: |
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown-az.ps1"
+            bash -i teardown.sh
+            rm teardown.sh
+            rm teardown-az.ps1
         when: always
 
 workflows:
