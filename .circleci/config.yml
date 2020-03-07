@@ -21,8 +21,16 @@ jobs:
         command: cd raspberry-pi ; bash setup.sh
 
     - run:
-        name: Print ~/.bashrc
+        name: Print RaspberryPi ~/.bashrc
         command: cat ~/.bashrc
+        when: always
+
+    - run:
+        name: Print VM ~/.bashrc
+        command: |
+            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.bashrc"' > print-vm-bashrc.sh
+            bash -i print-vm-bashrc.sh
+            rm print-vm-bashrc.sh
         when: always
 
     - run:
