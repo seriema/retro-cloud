@@ -21,6 +21,7 @@ bash -i mount-vm-share.sh
 
 echo "SETUP: Copy run scripts to user root"
 cp local/run-scraper.sh "$HOME/run-scraper.sh"
+cp local/setup-vm.sh "$HOME/setup-vm.sh"
 cp local/ssh-vm.sh "$HOME/ssh-vm.sh"
 
 echo "SETUP: Done!"
