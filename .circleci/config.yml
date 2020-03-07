@@ -34,6 +34,10 @@ jobs:
         when: always
 
     - run:
+        name: Setup VM
+        command: bash -i raspberry-pi/local/setup-vm.sh
+
+    - run:
         name: Teardown Azure resources
         command: cd raspberry-pi ; bash -i teardown.sh
         when: always
