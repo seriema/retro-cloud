@@ -68,11 +68,6 @@ RUN touch /opt/retropie/configs/all/autostart.sh \
 FROM retropie
 # Copy source code to image
 WORKDIR /home/pi
-COPY ./raspberry-pi ./retro-cloud-setup
-RUN sudo chown pi:pi -R retro-cloud-setup \
-    && sudo chmod g+w -R retro-cloud-setup
-# Commented CMD because the interactive session is shut down if setup.sh fails.
-# CMD cd retro-cloud-setup/ && bash setup.sh
 
 
 # NOTE: Build and run this Dockerfile below
