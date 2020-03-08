@@ -4,7 +4,7 @@ storage "retro-cloud" as scraper_share {
     folder cache {
         card "images and metadata"
     }
-    folder output {
+    folder ".emulationstation" {
         folder downloaded_media as scraper_downloadedmedia {
             folder "scummvm" as scraper_downloadedmedia_scummvm {
                 folder screenshots {
@@ -18,9 +18,11 @@ storage "retro-cloud" as scraper_share {
             }
         }
     }
-    folder roms as roms_roms {
-        folder "scummvm" as roms_scummvm {
-            file "bass-cd-1.2.zip"
+    folder RetroPie {
+        folder roms as roms_roms {
+            folder "scummvm" as roms_scummvm {
+                file "bass-cd-1.2.zip"
+            }
         }
     }
 }
