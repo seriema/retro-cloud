@@ -34,7 +34,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
 
         ```bash
-        $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash
+        $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash -i
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
