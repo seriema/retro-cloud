@@ -24,13 +24,18 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     >
     > `WARNING: To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code ABCD12345 to authenticate.`
 
-    > Connect to the VM with: `$ bash -i ssh-vm.sh`
+1. Install Retro-Cloud on the VM. Alternatives:
+    * On the Raspberry Pi:
 
-1. Install Retro-Cloud on the VM:
+        ```bash
+        $ bash -i setup-vm.sh
+        ```
 
-    ```bash
-    $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash
-    ```
+    * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
+
+        ```bash
+        $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash
+        ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
     * If you already had ROMs on the Raspberry Pi: They're now in `roms.bak` and can be copied over:
