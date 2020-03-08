@@ -1,1 +1,4 @@
 * text=auto
+
+# Bash files should be LF, otherwise Docker on Windows can't run the bash scripts
+*.sh text eol=lf

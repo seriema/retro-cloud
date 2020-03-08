@@ -1,14 +1,12 @@
 #!/bin/bash
 # https://github.com/RetroPie/RetroPie-Setup/wiki/Running-ROMs-from-a-Network-Share#option-1-add-to-autostartsh-preferred-if-using-v40
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, and error if variable is unset
+set -eu
 
 echo 'Install Prerequisites'
-sudo apt-get update > /dev/null
-sudo apt-get install sshfs > /dev/null
+sudo apt-get update
+sudo apt-get install sshfs
 
 echo 'Create a folder for the mount point'
 # Using a unique name for mounting to be convenient during development.
@@ -22,19 +20,31 @@ echo 'Create a persistent mount point in autostart.sh'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and create-vm.ps1.
 mntCmd="sudo -u pi sshfs $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP:$RETROCLOUD_VM_SHARE $mntPath"
 # The last entry is starting emulationstation, and mounting the drives needs to happen first. Appending to the top with sed: https://stackoverflow.com/a/9533736
-sed -i "1s/^/$mntCmd\n/" /opt/retropie/configs/all/autostart.sh
+# autostart.sh not found
+# sed error unknown option to s'
+sudo sed -i "1s+^+$mntCmd\n+" /opt/retropie/configs/all/autostart.sh
 
-echo 'Mount now to avoid a reboot'
-$mntCmd
+echo 'Attempt to mount VM now to avoid a reboot ...'
+# Allow it to fail. Which can happen in a container without privileges, or certain access rights issues.
+(
+    set +e
+    $mntCmd
+    if [[ $? -eq 0 ]]; then
+        echo '... mounted successfully.'
+    else
+        echo '... WARNING! Could not mount VM. You need to restart before continuing. It could also be a problem with your privilegies.' 1>&2
+    fi
+    set -e
+)
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
-mv .emulationstation/gamelists .emulationstation/gamelists.bak
+mv $HOME/.emulationstation/gamelists $HOME/.emulationstation/gamelists.bak
 
 echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
-mv .emulationstation/downloaded_media .emulationstation/downloaded_media.bak
+mv $HOME/.emulationstation/downloaded_media $HOME/.emulationstation/downloaded_media.bak
 
 echo 'Backup ROMs as ~/RetroPie/roms.bak'
-mv RetroPie/roms RetroPie/roms.bak
+mv $HOME/RetroPie/roms $HOME/RetroPie/roms.bak
 
 echo 'Symlink the mounted folders to look like a RetroPie installation'
 gamelists="$mntPath/.emulationstation/gamelists"
