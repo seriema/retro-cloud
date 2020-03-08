@@ -31,6 +31,10 @@ jobs:
         command: bash -i ~/setup-vm.sh $CIRCLE_SHA1
 
     - run:
+        name: Copy a freeware ROM to VM
+        command: bash -i ~/ssh-vm.sh "sudo wget -P retro-cloud-share/RetroPie/roms/scummvm/ -nv https://www.scummvm.org/frs/extras/Mystery%20House/MYSTHOUS.zip"
+
+    - run:
         name: Run scraper on VM
         command: bash -i ~/run-scraper.sh
 
