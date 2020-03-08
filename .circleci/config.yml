@@ -54,6 +54,14 @@ jobs:
         when: always
 
     - run:
+        name: Verify scraper output on VM
+        command: |
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
+            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
+
+    - run:
         name: Teardown Azure resources
         command: |
             wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
