@@ -31,6 +31,10 @@ jobs:
         command: bash -i ~/setup-vm.sh $CIRCLE_SHA1
 
     - run:
+        name: Run scraper on VM
+        command: bash -i ~/run-scraper.sh
+
+    - run:
         name: Teardown Azure resources
         command: |
             wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
