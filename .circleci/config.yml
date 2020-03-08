@@ -33,7 +33,7 @@ jobs:
 
     - run:
         name: Copy a freeware ROM to VM
-        command: bash -i ssh-vm.sh "sudo wget -P retro-cloud-share/RetroPie/roms/scummvm/ -nv https://www.scummvm.org/frs/extras/Mystery%20House/MYSTHOUS.zip"
+        command: bash -i ssh-vm.sh "wget -O - -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
 
     - run:
         name: Run scraper on VM
