@@ -40,6 +40,20 @@ jobs:
         command: bash -i run-scraper.sh
 
     - run:
+        name: Print RaspberryPi ~/ directory listing
+        command: sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+        when: always
+
+    - run:
+        name: Print VM ~/ directory listing
+        command: |
+            printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
+            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP' "'$printCmd'" > print-vm-filesystem.sh
+            bash -i print-vm-filesystem.sh
+            rm print-vm-filesystem.sh
+        when: always
+
+    - run:
         name: Teardown Azure resources
         command: |
             wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
