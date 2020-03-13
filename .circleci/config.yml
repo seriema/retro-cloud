@@ -51,29 +51,26 @@ jobs:
             bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml ~/tmp/test-gamelist-screenscraper-failed.xml"
 
     - run:
-        name: Print RaspberryPi ~/.bashrc
-        command: cat ~/.bashrc
+        name: Prepare RaspberryPi logs for artifacts
+        command: |
+            # Log ~/.bashrc
+            mkdir -p ~/.ci/raspberry-pi && cp -v ~/.bashrc "$_"
+            # Log directory listing
+            sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/" > ~/.ci/raspberry-pi/directory.txt
         when: always
 
     - run:
-        name: Print VM ~/.bashrc
+        name: Prepare VM logs for artifacts
         command: |
+            mkdir -p ~/.ci/virtual-machine
+            # Log ~/.bashrc
             echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.bashrc"' > print-vm-bashrc.sh
-            bash -i print-vm-bashrc.sh
+            bash -i print-vm-bashrc.sh > ~/.ci/virtual-machine/.bashrc
             rm print-vm-bashrc.sh
-        when: always
-
-    - run:
-        name: Print RaspberryPi ~/ directory listing
-        command: sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
-        when: always
-
-    - run:
-        name: Print VM ~/ directory listing
-        command: |
+            # Log directory listing
             printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
             echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP' "'$printCmd'" > print-vm-filesystem.sh
-            bash -i print-vm-filesystem.sh
+            bash -i print-vm-filesystem.sh >  ~/.ci/virtual-machine/directory.txt
             rm print-vm-filesystem.sh
         when: always
 
@@ -100,6 +97,9 @@ jobs:
             rm teardown.sh
             rm teardown-az.ps1
         when: always
+
+    - store_artifacts:
+        path: ~/.ci
 
 workflows:
   version: 2
