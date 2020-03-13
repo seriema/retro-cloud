@@ -4,6 +4,7 @@ jobs:
     docker:
     - image: seriema/retro-cloud:develop
     shell: /bin/bash --login -eo pipefail
+    working_directory: /home/pi
     steps:
 
     - run:
@@ -28,7 +29,37 @@ jobs:
 
     - run:
         name: Install Retro-Cloud on VM
-        command: bash -i ~/setup-vm.sh $CIRCLE_SHA1
+        command: bash -i setup-vm.sh $CIRCLE_SHA1
+
+    - run:
+        name: Copy a freeware ROM to VM
+        command: bash -i ssh-vm.sh "wget -O - -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
+
+    - run:
+        name: Run scraper on VM
+        command: bash -i run-scraper.sh
+
+    - run:
+        name: Print RaspberryPi ~/ directory listing
+        command: sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+        when: always
+
+    - run:
+        name: Print VM ~/ directory listing
+        command: |
+            printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
+            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP' "'$printCmd'" > print-vm-filesystem.sh
+            bash -i print-vm-filesystem.sh
+            rm print-vm-filesystem.sh
+        when: always
+
+    - run:
+        name: Verify scraper output on VM
+        command: |
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
+            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
 
     - run:
         name: Teardown Azure resources

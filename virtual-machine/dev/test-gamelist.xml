@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<gameList>
+  <game>
+    <path>/home/pi/RetroPie/roms/scummvm/MysteryHouse.zip</path>
+    <name>Mystery House</name>
+    <cover />
+    <image>/home/pi/.emulationstation/downloaded_media/scummvm/screenshots/MysteryHouse.png</image>
+    <marquee />
+    <video />
+    <rating />
+    <desc>Mystery House is a monochrome interactive fiction adventure game that places the player in a Victorian mansion with seven other people. As the player explores the mansion, he discovers that there is a killer murdering each guest one by one. The objective of the game is to figure out who the murderer is before the murderer finds the hero. Players explore and manipulate objects by typing in one or two-word phrases such as &quot;north&quot; or &quot;get knife&quot;.</desc>
+    <releasedate />
+    <developer>On-Line Systems</developer>
+    <publisher>On-Line Systems</publisher>
+    <genre>Adventure</genre>
+    <players />
+  </game>
+</gameList>

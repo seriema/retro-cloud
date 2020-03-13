@@ -5,6 +5,6 @@ branch=${1:-develop}
 # Abort on error, and error if variable is unset
 set -eu
 
-ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "wget -nv https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/setup.sh"
-ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "bash -i setup.sh $branch"
-ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "rm setup.sh"
+bash -i ssh-vm.sh "wget -nv https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/setup.sh"
+bash -i ssh-vm.sh "bash -i setup.sh $branch"
+bash -i ssh-vm.sh "rm setup.sh"
