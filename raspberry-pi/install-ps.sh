@@ -1,5 +1,5 @@
 #!/bin/bash
-# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#raspbian
+# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#raspbian
 
 # Abort on error
 set -e
@@ -25,16 +25,16 @@ sudo apt-get install '^libssl1.0.[0-9]$' libunwind8 -y
 # Download and extract PowerShell
 
 # Grab the latest tar.gz
-wget https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz
+wget https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-arm32.tar.gz
 
 # Make folder to put powershell
 mkdir ~/powershell
 
 # Unpack the tar.gz file
-tar -xvf ./powershell-6.2.0-linux-arm32.tar.gz -C ~/powershell
+tar -xvf ./powershell-7.0.0-linux-arm32.tar.gz -C ~/powershell
 
 # Remove tar ball
-rm ./powershell-6.2.0-linux-arm32.tar.gz
+rm ./powershell-7.0.0-linux-arm32.tar.gz
 
 # Create a symbolic link
 sudo ln -s ~/powershell/pwsh /usr/bin/pwsh
