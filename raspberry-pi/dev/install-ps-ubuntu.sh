@@ -4,22 +4,13 @@
 # https://peteris.rocks/blog/quiet-and-unattended-installation-with-apt-get/
 
 # Download the Microsoft repository GPG keys
-wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+wget -nv https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell_7.0.0-1.ubuntu.18.04_amd64.deb
 
-# Register the Microsoft repository GPG keys
-# sudo dpkg -i packages-microsoft-prod.deb
-sudo DEBIAN_FRONTEND=noninteractive dpkg -i packages-microsoft-prod.deb
+# Note: The dpkg -i command fails with unmet dependencies. The next command, apt-get install -f resolves these issues then finishes configuring the PowerShell package.
+sudo dpkg -i powershell_7.0.0-1.ubuntu.18.04_amd64.deb
+sudo apt-get install -f -y
 
-# Update the list of products
-# sudo apt-get update -q
-sudo DEBIAN_FRONTEND=noninteractive apt-get update < /dev/null > /dev/null
-
-# Enable the "universe" repositories
-# sudo add-apt-repository universe
-sudo DEBIAN_FRONTEND=noninteractive add-apt-repository universe < /dev/null > /dev/null
-
-# Install PowerShell
-# sudo apt-get install -y -q powershell
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y powershell < /dev/null > /dev/null
+# Cleanup
+rm powershell_7.0.0-1.ubuntu.18.04_amd64.deb
 
 echo 'To start PowerShell run: pwsh'
