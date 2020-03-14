@@ -54,6 +54,23 @@ jobs:
         when: always
 
     - run:
+        name: Print Azure File Share directory listing
+        command: |
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/list-az-share.ps1"
+            echo 'pwsh -executionpolicy bypass -File ".\list-az-share.ps1"' > run-az-listing.sh
+            bash -i run-az-listing.sh
+            rm run-az-listing.sh list-az-share.ps1
+        when: always
+
+    - run:
+        name: Verify that ROM shows up in Azure File Share
+        command: |
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
+            echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
+            bash -i run-az-share-test.sh
+            rm run-az-share-test.sh test-az-share.ps1
+
+    - run:
         name: Verify scraper output on VM
         command: |
             bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
