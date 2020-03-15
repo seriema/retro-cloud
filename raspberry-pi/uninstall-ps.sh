@@ -1,10 +1,8 @@
 #!/bin/bash
-# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#raspbian
+# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#raspbian
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, and error if variable is unset
+set -eu
 
 ###################################
 # Delete the PowerShell installation
@@ -13,7 +11,7 @@ set -u
 # https://serverfault.com/a/38817
 sudo rm /usr/bin/pwsh
 
-# Delete all the 
+# Delete the PowerShell files
 rm -rf ~/powershell
 
 # Remove unused apt packages
