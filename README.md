@@ -49,3 +49,26 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     > Note: This will take a _long_ time. A test run of 6 platforms with 13k files took 10 hours. EmulationStation must not be running during this time.
     * On the Raspberry Pi: `$ bash -i run-scraper.sh`
     * On the VM: `$ ./run-skyscraper.sh`
+
+## Development
+
+### Windows/Linux/macOS
+
+* Development
+    * `docker run --privileged -it --rm -v home:/home/pi -v az:/.Azure -v opt:/opt -v mnt:/mnt seriema/retro-cloud:amd64`
+    * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
+* Testing
+    * `docker run --privileged -it --rm seriema/retro-cloud:develop`
+* Docker
+    * `docker build -t seriema/retro-cloud:amd64 .`
+    * `docker push seriema/retro-cloud:amd64`
+
+### Raspberry Pi
+
+* Development
+    * `docker run --privileged -it --rm -v home:/home/pi seriema/retro-cloud:arm32v7`
+* Testing
+    * `docker run --privileged -it --rm lasery/retropie:19.09-arm32v6 /bin/bash`
+* Docker
+    * `docker build -t seriema/retro-cloud:arm32v7 .`
+    * `docker push seriema/retro-cloud:arm32v7`
