@@ -3,6 +3,18 @@
 # Abort on error, and error if variable is unset
 set -eu
 
+# If this env var is set then it's running under automation and will skip the prompt.
+if [[ "${AZURE_SERVICE_PRINCIPAL_SECRET:-missing}" == "missing" ]]; then
+    echo "You will eventually be prompted to log in to Azure."
+    echo "1. Log in to https://portal.azure.com on any device to make sure you're ready."
+    echo "2. Head to https://www.microsoft.com/devicelogin and be ready to input the code seen during the setup."
+    # https://stackoverflow.com/a/1885534
+    read -p "Ready to continue [y/N]? " -r
+    if [[ ! $REPLY =~ ^y|Y|[yY][eE][sS]$ ]]; then
+        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
+    fi
+fi
+
 echo "SETUP: Install PowerShell"
 bash install-ps.sh
 
