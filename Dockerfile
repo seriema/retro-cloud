@@ -11,7 +11,7 @@ RUN apt-get update \
     sudo
 
 # Mimic RaspberryPi: Create a user called "pi" and default password "raspberry" that's in the groups pi and sudo
-RUN useradd --create-home pi --groups sudo --gid root \
+RUN useradd --create-home pi --groups sudo --gid root --shell /bin/bash \
     # && echo 'pi:raspberry' | chpasswd \
     && echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi \
     && mkdir -p /home/pi \
