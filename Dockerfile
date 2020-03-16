@@ -13,9 +13,7 @@ RUN apt-get update \
     # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
     openssh-client \
     # Installed by mount-vm-share.sh (preinstalling speeds up testing of the script)
-    sshfs \
-    # Cleanup
-    && rm -rf /var/lib/apt/lists/*
+    sshfs
 
 # Mimic RaspberryPi: Create a user called "pi" and default password "raspberry" that's in the groups pi and sudo
 RUN useradd --create-home pi --groups sudo --gid root \
@@ -67,6 +65,15 @@ FROM retropie
 # Copy source code to image
 WORKDIR /home/pi
 
+
+## Cleanup ##
+
+# https://wiki.debian.org/ReduceDebian
+RUN sudo rm -rf /usr/share/man/?? \
+    && sudo apt autoremove
+
+# https://docs.docker.com/develop/develop-images/dockerfile_best-practices
+RUN sudo rm -rf /var/lib/apt/lists/*
 
 # NOTE: Build and run this Dockerfile below
 # NOTE: run as privileged, otherwise sshfs fails with "fuse: device not found, try 'modprobe fuse' first"
