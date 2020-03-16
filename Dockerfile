@@ -10,6 +10,13 @@ RUN apt-get update \
     # Required to run image as non-root user
     sudo
 
+# skel files are used as the basis for new users and include .bashrc etc:
+# https://www.raspberrypi.org/documentation/linux/usage/users.md
+# These files were copied from a RetroPie 4.5.1 on a RaspberryPi 3 and
+# are included to make the image more realistic. One difference from
+# base docker image is that .bashrc has colors enabled.
+COPY docker/rpi/etc/skel /etc/skel
+
 # Mimic RaspberryPi: Create a user called "pi" without a password that's in the groups pi and sudo
 # Use `adduser` instead of `useradd`:
 # * https://github.com/RetroPie/RetroPie-Setup/issues/2165#issuecomment-337932294
