@@ -10,15 +10,13 @@ RUN apt-get update \
     # Required to run image as non-root user
     sudo
 
-# Mimic RaspberryPi: Create a user called "pi" and default password "raspberry" that's in the groups pi and sudo
-RUN useradd --create-home pi --groups sudo --gid root --shell /bin/bash \
-    # && echo 'pi:raspberry' | chpasswd \
-    && echo "pi ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/pi \
-    && mkdir -p /home/pi \
-    && chmod -R g+w /home/pi \
-    && sudo chmod g+w -R /home/pi \
-    && groupadd pi \
-    && usermod -aG pi pi
+# Mimic RaspberryPi: Create a user called "pi" without a password that's in the groups pi and sudo
+# Use `adduser` instead of `useradd`:
+# * https://github.com/RetroPie/RetroPie-Setup/issues/2165#issuecomment-337932294
+# * https://www.raspberrypi.org/documentation/linux/usage/users.md
+RUN adduser --disabled-password --gecos '' pi \
+    && adduser pi sudo \
+    && echo 'pi ALL=(ALL) NOPASSWD: ALL' | tee /etc/sudoers.d/010_pi-nopasswd
 
 # Change to the "pi" user
 USER pi
