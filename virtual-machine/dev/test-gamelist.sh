@@ -8,4 +8,5 @@ then
     echo "Scraping was successful"
 else
     echo "Scraping failed somehow because the gamelist isn't as expected. See details above."
+    exit 1
 fi
