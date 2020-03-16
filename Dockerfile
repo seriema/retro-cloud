@@ -73,7 +73,10 @@ WORKDIR /home/pi/RetroPie-Setup
 
 # Install RetroPie
 # WARNING! This takes hours. Changing anything above this point in the Dockerfile will invalidate the cache of this layer, forcing an install.
-RUN sudo ./retropie_packages.sh setup basic_install
+RUN if [ "$(uname -m)" = 'armv7l' ]; then sudo __platform="rpi3" ./retropie_packages.sh setup basic_install; fi
+RUN if [ "$(uname -m)" = 'x86_64' ]; then sudo ./retropie_packages.sh setup basic_install; fi
+# The lines above can be commented out to speed up builds for testing, but then needs the line below.
+# RUN sudo mkdir -p /opt/retropie/configs/all && sudo chmod g+w -R /opt/retropie/configs/all
 
 # Exit the folder with the setup script
 WORKDIR /home/pi
