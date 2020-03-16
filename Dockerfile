@@ -1,7 +1,10 @@
 #
 # CREATE A Fake Raspbian IMAGE
 #
-FROM ubuntu:18.04 AS raspberrypi
+FROM debian:stretch AS raspberrypi
+
+# Mentioned in https://hub.docker.com/_/debian and seen in https://github.com/laseryuan/docker-apps/blob/db3c154ebe/retropie/Dockerfile.templ#L13
+ENV LANG C.UTF-8
 
 # Install prerequisites
 RUN apt-get update \
