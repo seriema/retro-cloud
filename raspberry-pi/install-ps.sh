@@ -1,42 +1,46 @@
 #!/bin/bash
-# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-6#raspbian
+# https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#installation---binary-archives
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, and error if variable is unset
+set -eu
 
-if [ -e ~/powershell/pwsh ]; then
+target="/opt/microsoft/powershell/7"
+
+###################################
+# Abort if PowerShell already exists.
+
+if [ -e "$target/pwsh" ]; then
     echo "PowerShell (pwsh) is already installed."
     exit 0
 fi
 
 ###################################
-# Prerequisites
-
-# Update package lists
-sudo apt-get update
-
-# Install libunwind8 and libssl1.0
-# Regex is used to ensure that we do not install libssl1.0-dev, as it is a variant that is not required
-sudo apt-get install '^libssl1.0.[0-9]$' libunwind8 -y
-
-###################################
 # Download and extract PowerShell
 
+if [ $(uname -m) == 'x86_64' ]; then
+    # Only used during development in a Azure VM or Docker, both based on Ubuntu.
+    arch=x64
+else
+    # Assume a Raspberry Pi
+    arch=arm32
+fi
+
 # Grab the latest tar.gz
-wget https://github.com/PowerShell/PowerShell/releases/download/v6.2.0/powershell-6.2.0-linux-arm32.tar.gz
+wget -nv "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
 
 # Make folder to put powershell
-mkdir ~/powershell
+sudo mkdir -p "$target"
 
 # Unpack the tar.gz file
-tar -xvf ./powershell-6.2.0-linux-arm32.tar.gz -C ~/powershell
+sudo tar -zxvf "./powershell-7.0.0-linux-$arch.tar.gz" -C "$target"
+
+# Set execute permissions
+sudo chmod +x "$target/pwsh"
 
 # Remove tar ball
-rm ./powershell-6.2.0-linux-arm32.tar.gz
+rm "./powershell-7.0.0-linux-$arch.tar.gz"
 
 # Create a symbolic link
-sudo ln -s ~/powershell/pwsh /usr/bin/pwsh
+sudo ln -s "$target/pwsh" /usr/bin/pwsh
 
 echo 'To start PowerShell run: pwsh'

@@ -18,8 +18,6 @@ mkdir -p "local"
 wget -nv -O "local/run-scraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/run-scraper.sh"
 wget -nv -O "local/setup-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/setup-vm.sh"
 wget -nv -O "local/ssh-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/ssh-vm.sh"
-mkdir -p "dev"
-wget -nv -O "dev/install-ps-ubuntu.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/install-ps-ubuntu.sh"
 
 echo "SETUP: Run setup.sh"
 bash setup.sh

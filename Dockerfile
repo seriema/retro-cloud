@@ -9,8 +9,6 @@ RUN apt-get update \
     && apt-get install -y \
     # Required by most scripts (when running on the rpi)
     sudo \
-    # Required by install-ps-ubuntu.sh (add-apt-repository, wget)
-    software-properties-common \
     wget \
     # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
     openssh-client \

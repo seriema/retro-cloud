@@ -4,12 +4,7 @@
 set -eu
 
 echo "SETUP: Install PowerShell"
-if cat /etc/os-release | grep -wq 'NAME="Ubuntu"'; then
-    # Only used during development and is used in a Azure VM or Docker.
-    bash dev/install-ps-ubuntu.sh
-else
-    bash install-ps.sh
-fi
+bash install-ps.sh
 
 echo "SETUP: Run PowerShell scripts to create the Azure resources"
 pwsh -executionpolicy bypass -File ".\setup-az.ps1"
