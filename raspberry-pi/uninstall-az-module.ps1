@@ -23,22 +23,7 @@ function Uninstall-AllModules {
   'Creating list of dependencies...'
   $target = Find-Module $TargetModule -RequiredVersion $version
   $target.Dependencies | ForEach-Object {
-    if ($_.PSObject.Properties.Name -contains 'requiredVersion') {
       $AllModules += New-Object -TypeName psobject -Property @{name=$_.name; version=$_.requiredVersion}
-    }
-    else { # Assume minimum version
-      # Minimum version actually reports the installed dependency
-      # which is used, not the actual "minimum dependency." Check to
-      # see if the requested version was installed as a dependency earlier.
-      $candidate = Get-InstalledModule $_.name -RequiredVersion $version -ErrorAction Ignore
-      if ($candidate) {
-        $AllModules += New-Object -TypeName psobject -Property @{name=$_.name; version=$version}
-      }
-      else {
-        $availableModules = Get-InstalledModule $_.name -AllVersions
-        Write-Warning ("Could not find uninstall candidate for {0}:{1} - module may require manual uninstall. Available versions are: {2}" -f $_.name,$version,($availableModules.Version -join ', '))
-      }
-    }
   }
   $AllModules += New-Object -TypeName psobject -Property @{name=$TargetModule; version=$Version}
 
@@ -53,5 +38,5 @@ function Uninstall-AllModules {
 }
 
 # Uninstall all versions
-$versions = (Get-InstalledModule Az -AllVersions | Select-Object Version)
+$versions = (Get-InstalledModule -Name Az -AllVersions | Select-Object Version)
 $versions | foreach { Uninstall-AllModules -TargetModule Az -Version ($_.Version) -Force }

@@ -9,7 +9,7 @@ set -eu
 
 # Remove symbolic link
 # https://serverfault.com/a/38817
-sudo rm /usr/bin/pwsh
+sudo rm -f /usr/bin/pwsh
 
 # Delete the PowerShell files
 rm -rf ~/powershell
