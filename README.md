@@ -60,16 +60,15 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 ### Workflow
 
 * Development
-    * `docker-dev-setup.sh` sets up environment variables for automation (same as used in CI). Avoids the Azure login prompt by setting up a Service Principle account. 
+    * `docker-dev-setup.sh` sets up environment variables for automation (same as used in CI). Avoid the Azure login prompt by setting up a Service Principle account. 
     * `docker-dev-build.sh` to build a Docker image meant for running locally. The tag is `rc:(branch name)`.
     * `docker-dev-run.sh` to run a throwaway Docker container that:
+        * Makes the source code available inside the container as `~/retro-cloud-source`
         * Caches some install steps as named volumes (i.e. PowerShell)
         * Adds environment variables for automation (see `docker-dev-setup.sh`).
-* Testing scripts inside a container
-    * To work with the repo: `git clone https://github.com/seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
-    * To test as a user:
-        * Follow the "Setup" section above.
-    * To test a specific branch as a user:
+* Testing scripts as a user
+    * Follow the "Setup" section above.
+    * To test a specific branch:
         * `branch=[the branch you want to test]`, e.g. `branch=upgrade-powershell`
         * `wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
         * `bash download-and-run.sh "$branch"`
@@ -90,8 +89,13 @@ Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts a
         1. Set `RC_DEV_AZURE_SERVICE_PRINCIPAL_USER`
         1. Set `RC_DEV_AZURE_SERVICE_PRINCIPAL_SECRET`
     * Dev build: `docker build -t "rc:dev" .`
-    * Dev run: `docker run --privileged --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
-    * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
+    * Dev run:
+        * Sharing the source code through Docker
+            * `docker run --privileged --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin -v "$((Get-Location).Path):/home/pi/retro-cloud-source" rc:dev`
+            * **Note:** Requires File Sharing to be enabled. See the [Docker documentation](https://docs.docker.com/docker-for-windows/#file-sharing).
+        * Otherwise go through git
+            * `docker run --privileged --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
+            * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
 * Docker Hub
     * build: `docker build -t seriema/retro-cloud:amd64 .`
     * push: `docker push seriema/retro-cloud:amd64` (should not be needed as Docker Hub builds these)
