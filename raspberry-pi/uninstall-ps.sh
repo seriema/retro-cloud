@@ -12,7 +12,7 @@ set -eu
 sudo rm -f /usr/bin/pwsh
 
 # Delete the PowerShell files
-rm -rf ~/powershell
+sudo rm -rf /opt/microsoft/powershell/7
 
 # Remove unused apt packages
 sudo apt autoremove
