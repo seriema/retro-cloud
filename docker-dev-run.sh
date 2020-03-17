@@ -18,4 +18,5 @@ docker run \
     --volume powershell-bin:/usr/bin \
     --volume powershell-install:/home/pi/powershell \
     --volume "$PWD":/home/pi/retro-cloud-source \
+    --workdir /home/pi/retro-cloud-source \
     "rc:$branch"

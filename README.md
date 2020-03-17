@@ -63,8 +63,8 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * `docker-dev-setup.sh` sets up environment variables for automation (same as used in CI). Avoid the Azure login prompt by setting up a Service Principle account. 
     * `docker-dev-build.sh` to build a Docker image meant for running locally. The tag is `rc:(branch name)`.
     * `docker-dev-run.sh` to run a throwaway Docker container that:
-        * Makes the source code available inside the container as `~/retro-cloud-source`
-        * Caches some install steps as named volumes (i.e. PowerShell)
+        * Makes the source code available inside the container as `~/retro-cloud-source`, and uses it as the work directory.
+        * Caches some install steps as named volumes (i.e. PowerShell).
         * Adds environment variables for automation (see `docker-dev-setup.sh`).
 * Testing scripts as a user
     * Follow the "Setup" section above.
