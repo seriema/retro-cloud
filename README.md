@@ -52,27 +52,38 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 
 ## Development
 
-* `docker-build.sh` to build a Docker image
-* `docker-run.sh` to run a throwaway Docker container
-* `docker-push.sh` to push the built Docker image to Docker Hub
+### Prerequisites
 
-### Windows/Linux/macOS
+* PowerShell Core 6+
+* Bash 4.4.12+
 
-* Development
-    * `docker run --privileged -it --rm -v home:/home/pi -v az:/.Azure -v opt:/opt -v mnt:/mnt seriema/retro-cloud:amd64`
-    * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
-* Testing
-    * `docker run --privileged -it --rm seriema/retro-cloud:develop`
-* Docker
-    * `docker build -t seriema/retro-cloud:amd64 .`
-    * `docker push seriema/retro-cloud:amd64`
-
-### Raspberry Pi
+### Workflow
 
 * Development
-    * `docker run --privileged -it --rm -v home:/home/pi seriema/retro-cloud:arm32v7`
-* Testing
-    * `docker run --privileged -it --rm lasery/retropie:19.09-arm32v6 /bin/bash`
-* Docker
-    * `docker build -t seriema/retro-cloud:arm32v7 .`
-    * `docker push seriema/retro-cloud:arm32v7`
+    * `docker-dev-build.sh` to build a Docker image meant for running locally. The tag is `rc:(branch name)`.
+    * `docker-dev-run.sh` to run a throwaway Docker container with multiple volumes attached to store the pre-requisites from the setup scripts (i.e. PowerShell).
+* Testing scripts inside a container
+    * To work with the repo: `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
+    * To test as a user:
+        * Follow the "Setup" section above.
+    * To test a specific branch as a user:
+        * `branch=[the branch you want to test]`, e.g. `branch=upgrade-powershell`
+        * `wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
+        * `bash download-and-run.sh "$branch"`
+        * `rm download-and-run.sh`
+* Docker Hub
+    * `docker-build.sh` to build a production Docker image.
+    * `docker-push.sh` to push the built production Docker image to Docker Hub.
+    * `docker-run.sh` pulls a production image from Docker Hub and runs it.
+
+### Notes on Windows
+
+Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts above. As a fallback use PowerShell or any terminal that runs Docker and use these commands:
+
+* Development
+    * `docker run --privileged --rm -it -v azure-context:/.Azure -v home:/home/pi -v powershell:/home/pi/powershell -v pwsh-bin:/usr/bin rc:dev`
+    * `git clone https://github.com/seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
+* Docker Hub
+    * build: `docker build -t seriema/retro-cloud:amd64 .`
+    * push: `docker push seriema/retro-cloud:amd64`
+    * run: `docker pull seriema/retro-cloud:amd64 && docker run --privileged --rm -it seriema/retro-cloud:amd64`
