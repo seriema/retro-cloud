@@ -60,6 +60,10 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 
 ## Development
 
+* `docker-build.sh` to build a Docker image
+* `docker-run.sh` to run a throwaway Docker container
+* `docker-push.sh` to push the built Docker image to Docker Hub
+
 ### Windows/Linux/macOS
 
 * Development
