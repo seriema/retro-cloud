@@ -12,7 +12,7 @@ $ErrorActionPreference = "Stop"
 'Install AZ for the active user, if not already installed.'
 if ((Get-Module -ListAvailable -Name Az) -eq $null) {
     # The -Force parameter is needed to avoid a user prompt, but requires the if-installed check otherwise it reinstalls which takes time.
-    Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force > $null
+    Install-Module -Name Az -AllowClobber -Scope CurrentUser -Force
 }
 
 'Log in to Azure ...'
