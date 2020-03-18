@@ -1,0 +1,18 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run RaspberryPi docker",
+            "type": "shell",
+            "command": "docker run --privileged -it --rm -v rpi2:/home/pi -v az:/.Azure -v opt:/opt -v mnt:/mnt seriema/retro-cloud:develop",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}
