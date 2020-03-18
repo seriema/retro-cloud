@@ -16,7 +16,7 @@ docker run \
     --tty \
     --volume azure-context:/home/pi/.Azure \
     --volume powershell-bin:/usr/bin \
-    --volume powershell-install:/home/pi/powershell \
+    --volume powershell-install:/opt/microsoft/powershell \
     --volume "$PWD":/home/pi/retro-cloud-source \
     --workdir /home/pi/retro-cloud-source \
     "rc:$branch"
