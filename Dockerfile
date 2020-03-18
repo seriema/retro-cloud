@@ -66,9 +66,7 @@ RUN sudo apt-get update \
     # Required by most scripts
     wget \
     # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
-    openssh-client \
-    # Installed by mount-vm-share.sh (preinstalling speeds up testing of the script)
-    sshfs
+    openssh-client
 
 ## Cleanup ##
 
