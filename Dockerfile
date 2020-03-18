@@ -36,10 +36,12 @@ WORKDIR /home/pi
 
 ## Install RetroPie ##
 
-# Install the needed packages for the RetroPie setup script:
+# Install the needed packages for the RetroPie setup script on Debian/Ubuntu:
+# https://retropie.org.uk/docs/Debian/
 RUN sudo apt-get update \
     && sudo apt-get upgrade -y \
-    && sudo apt-get install git lsb-release -y
+    && sudo apt-get install -y \
+    git dialog unzip xmlstarlet
 
 # Download the latest RetroPie setup script:
 RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git \
