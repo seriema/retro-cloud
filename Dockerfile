@@ -67,14 +67,6 @@ RUN touch /opt/retropie/configs/all/autostart.sh \
 FROM retropie
 
 
-# Install packages found on a real RaspberryPi with RetroPie
-RUN sudo apt-get update \
-    && sudo apt-get install -y \
-    # Required by most scripts
-    wget \
-    # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
-    openssh-client
-
 ## Cleanup ##
 
 # https://wiki.debian.org/ReduceDebian
