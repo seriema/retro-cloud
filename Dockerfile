@@ -39,7 +39,6 @@ WORKDIR /home/pi
 # Install the needed packages for the RetroPie setup script on Debian/Ubuntu:
 # https://retropie.org.uk/docs/Debian/
 RUN sudo apt-get update \
-    && sudo apt-get upgrade -y \
     && sudo apt-get install -y \
     git dialog unzip xmlstarlet
 
