@@ -7,13 +7,8 @@ FROM ubuntu:18.04 AS raspberrypi
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y \
-    # Required by most scripts (when running on the rpi)
-    sudo \
-    wget \
-    # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
-    openssh-client \
-    # Installed by mount-vm-share.sh (preinstalling speeds up testing of the script)
-    sshfs
+    # Required to run image as non-root user
+    sudo
 
 # Mimic RaspberryPi: Create a user called "pi" and default password "raspberry" that's in the groups pi and sudo
 RUN useradd --create-home pi --groups sudo --gid root \
@@ -65,6 +60,15 @@ FROM retropie
 # Copy source code to image
 WORKDIR /home/pi
 
+# Install packages found on a real RaspberryPi with RetroPie
+RUN sudo apt-get update \
+    && sudo apt-get install -y \
+    # Required by most scripts
+    wget \
+    # Required by create-vm.ps1 (ssh-keygen, ssh-keyscan)
+    openssh-client \
+    # Installed by mount-vm-share.sh (preinstalling speeds up testing of the script)
+    sshfs
 
 ## Cleanup ##
 
