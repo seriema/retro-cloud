@@ -17,6 +17,29 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 # Get rid of the warning: "debconf: delaying package configuration, since apt-utils is not installed"
 RUN apt-get install -y apt-utils
 
+# Add the raspberrypi.org and raspbian.org sources for packages expected by RetroPie-Setup when running on a RaspberryPi.
+# Causes warnings on x86_64 (amd64) so it has to be conditional. Example: "N: Skipping acquire of configured file [...] as repository 'http://raspbian.raspberrypi.org/raspbian stretch InRelease' doesn't support architecture 'amd64'"
+RUN if [ "$(uname -m)" = 'armv7l' ]; then \
+        #
+        # 1. Get the packages needed to add sources
+        apt-get update && apt-get install -y \
+        # curl is used to download the public keys in the next step (and used by the retro-cloud scripts)
+        curl \
+        # gnupg is used by apt-key in the next step
+        gnupg \
+        #
+        # 2. Add the sources and their public keys
+        # https://raspberrypi.stackexchange.com/questions/78427/what-repository-to-add-for-apt-to-find-raspberrypi-kernel
+        && echo "deb http://raspbian.raspberrypi.org/raspbian/ stretch main contrib non-free rpi" >> /etc/apt/sources.list \
+        && echo "deb http://archive.raspberrypi.org/debian/ stretch main ui" >> /etc/apt/sources.list.d/raspi.list \
+        && curl -L http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | apt-key add - \
+        # https://www.raspbian.org/RaspbianRepository
+        && curl -L http://archive.raspbian.org/raspbian.public.key | apt-key add - \
+        #
+        # 3. Refresh the source list to make sure it worked
+        && apt-get update; \
+    fi
+
 # Mimic RaspberryPi: Create a user called "pi" without a password that's in the groups pi and sudo
 # Use `adduser` instead of `useradd`:
 # * https://github.com/RetroPie/RetroPie-Setup/issues/2165#issuecomment-337932294
