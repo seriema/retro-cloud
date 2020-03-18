@@ -15,6 +15,34 @@ jobs:
             rm download-and-run.sh
 
     - run:
+        name: Install Retro-Cloud on VM
+        command: bash -i setup-vm.sh $CIRCLE_SHA1
+
+    - run:
+        name: Copy a freeware ROM to VM
+        command: bash -i ssh-vm.sh "wget -O - -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
+
+    - run:
+        name: Run scraper on VM
+        command: bash -i run-scraper.sh
+
+    - run:
+        name: Verify that ROM shows up in Azure File Share
+        command: |
+            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
+            echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
+            bash -i run-az-share-test.sh
+            rm run-az-share-test.sh test-az-share.ps1
+
+    - run:
+        name: Verify scraper output on VM
+        command: |
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
+            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
+            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
+
+    - run:
         name: Print RaspberryPi ~/.bashrc
         command: cat ~/.bashrc
         when: always
@@ -26,18 +54,6 @@ jobs:
             bash -i print-vm-bashrc.sh
             rm print-vm-bashrc.sh
         when: always
-
-    - run:
-        name: Install Retro-Cloud on VM
-        command: bash -i setup-vm.sh $CIRCLE_SHA1
-
-    - run:
-        name: Copy a freeware ROM to VM
-        command: bash -i ssh-vm.sh "wget -O - -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
-
-    - run:
-        name: Run scraper on VM
-        command: bash -i run-scraper.sh
 
     - run:
         name: Print RaspberryPi ~/ directory listing
@@ -61,22 +77,6 @@ jobs:
             bash -i run-az-listing.sh
             rm run-az-listing.sh list-az-share.ps1
         when: always
-
-    - run:
-        name: Verify that ROM shows up in Azure File Share
-        command: |
-            wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
-            echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
-            bash -i run-az-share-test.sh
-            rm run-az-share-test.sh test-az-share.ps1
-
-    - run:
-        name: Verify scraper output on VM
-        command: |
-            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
-            bash -i ssh-vm.sh "wget -P ~/tmp -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
-            bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
-            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
 
     - run:
         name: Teardown Azure resources
