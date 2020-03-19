@@ -43,9 +43,7 @@ RUN sudo apt-get update \
     git dialog unzip xmlstarlet
 
 # Download the latest RetroPie setup script:
-RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git \
-    && sudo chown pi:pi -R RetroPie-Setup \
-    && sudo chmod g+w -R RetroPie-Setup
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
 
 # Enter the folder with the setup script
 WORKDIR /home/pi/RetroPie-Setup
