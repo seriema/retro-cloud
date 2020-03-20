@@ -66,10 +66,13 @@ RUN sudo apt-get update \
     git dialog unzip xmlstarlet
 
 # Download the latest RetroPie setup script:
-RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
+RUN git clone https://github.com/RetroPie/RetroPie-Setup.git
 
 # Enter the folder with the setup script
 WORKDIR /home/pi/RetroPie-Setup
+
+# Checkout the last working version (4.5.16)
+RUN git checkout 3b6947c0
 
 # Install RetroPie
 # WARNING! This takes hours. Changing anything above this point in the Dockerfile will invalidate the cache of this layer, forcing an install.
