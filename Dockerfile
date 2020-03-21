@@ -78,7 +78,7 @@ RUN sudo apt-get update \
 
 # https://wiki.debian.org/ReduceDebian
 RUN sudo rm -rf /usr/share/man/?? \
-    && sudo apt autoremove
+    && sudo apt autoremove -y
 
 # https://docs.docker.com/develop/develop-images/dockerfile_best-practices
 RUN sudo rm -rf /var/lib/apt/lists/*
