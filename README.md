@@ -17,7 +17,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
 
     ```bash
-    $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/download-and-run.sh | bash
+    $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/download-and-run.sh | bash
     ```
 
     > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
@@ -34,7 +34,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
 
         ```bash
-        $ wget -O - https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash -i
+        $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash -i
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:

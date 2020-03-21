@@ -14,7 +14,7 @@ sudo apt-get install build-essential qt5-default -y > /dev/null
 echo 'Install Skyscraper (takes a while)'
 mkdir -p "$HOME/skysource"
 cd "$HOME/skysource"
-wget -nv -O - https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash > /dev/null
+curl -L https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash > /dev/null
 cd -
 
 echo 'Configure Skyscraper'

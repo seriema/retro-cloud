@@ -10,14 +10,14 @@ set -u
 echo "SETUP: Download scripts to ~/tmp/retro-cloud"
 mkdir -p "$HOME/tmp/retro-cloud"
 cd "$HOME/tmp/retro-cloud"
-wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
-wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
-wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
+curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
+curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
+curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
 # TODO: This should be installed from the install-skyscraper script instead but the branch name in the URL needs to stay in sync here.
 mkdir .skyscraper
-wget -nv -O ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
+curl -L -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
 mkdir "local"
-wget -nv -O "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
+curl -L -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 
 echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh

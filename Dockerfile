@@ -68,6 +68,12 @@ RUN touch /opt/retropie/configs/all/autostart.sh \
 FROM retropie
 
 
+# Install packages found on a real RaspberryPi with RetroPie
+RUN sudo apt-get update \
+    && sudo apt-get install -y \
+    # Required by most scripts
+    curl
+
 ## Cleanup ##
 
 # https://wiki.debian.org/ReduceDebian
