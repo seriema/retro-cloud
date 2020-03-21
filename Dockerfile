@@ -86,8 +86,9 @@ RUN git clone https://github.com/RetroPie/RetroPie-Setup.git
 # Enter the folder with the setup script
 WORKDIR /home/pi/RetroPie-Setup
 
-# Checkout the last working version (4.5.16)
-RUN git checkout 3b6947c0
+# Checkout a specific version to avoid sudden upgrades that break the image
+# 4.5.17 + error code fix https://github.com/RetroPie/RetroPie-Setup/commit/50e8300
+RUN git checkout 50e8300
 
 # Install RetroPie
 # WARNING! This takes hours. Changing anything above this point in the Dockerfile will invalidate the cache of this layer, forcing an install.
