@@ -7,6 +7,11 @@ jobs:
     working_directory: /home/pi
     steps:
 
+    # Only needed until the Docker image has been updated
+    - run:
+        name: Temporary step to install curl
+        command: sudo apt-get update && sudo apt-get install -y curl
+
     - run:
         name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
         command: |
