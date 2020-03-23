@@ -23,6 +23,13 @@ jobs:
         command: bash -i ssh-vm.sh "curl -L https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
 
     - run:
+        name: Add Screenscraper.fr credentials to VM
+        command: |
+            bash -i ssh-vm.sh "echo '' | tee -a ~/.skyscraper/config.ini"
+            bash -i ssh-vm.sh "echo '[screenscraper]' | tee -a ~/.skyscraper/config.ini"
+            bash -i ssh-vm.sh "echo 'userCreds=\"${SCREENSCRAPER_USER}:${SCREENSCRAPER_KEY}\"' | tee -a ~/.skyscraper/config.ini"
+
+    - run:
         name: Run scraper on VM
         command: bash -i run-scraper.sh
 
@@ -37,11 +44,11 @@ jobs:
     - run:
         name: Verify scraper output on VM
         command: |
-            mkdir ~/tmp
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.sh https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
-            bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.xml -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist-screenscraper-failed.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
             bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
-            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
+            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml ~/tmp/test-gamelist-screenscraper-failed.xml"
 
     - run:
         name: Print RaspberryPi ~/.bashrc
@@ -77,6 +84,11 @@ jobs:
             echo 'pwsh -executionpolicy bypass -File ".\list-az-share.ps1"' > run-az-listing.sh
             bash -i run-az-listing.sh
             rm run-az-listing.sh list-az-share.ps1
+        when: always
+
+    - run:
+        name: Print VM Skyscraper config
+        command: bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"
         when: always
 
     - run:
