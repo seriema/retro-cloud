@@ -12,4 +12,4 @@ case "$(uname -m)" in
     *) echo "Unknown architecture: $(uname -m)" &% exit 1 ;;
 esac
 
-docker build -t"$tag" .
+DOCKER_BUILDKIT=1 docker build -t"$tag" .

@@ -6,7 +6,7 @@ set -eu
 branch="$(git rev-parse --abbrev-ref HEAD)"
 tag="rc:$branch"
 
-time docker build \
+time DOCKER_BUILDKIT=1 docker build \
     --tag "$tag" \
     .
 
