@@ -4,7 +4,14 @@
 set -eu
 
 echo 'Verify number of roms folders. There is one for each successful emultator installed.'
-if [ ! $(ls ~/RetroPie/roms | wc -l) == '30' ]; then
+# Two emulators aren't available on amd64: mame-mame4all, amiga
+if [ "$(uname -m)" = 'armv7l' ]; then
+    emulators='32';
+else
+    emulators='30';
+fi
+
+if [ ! $(ls ~/RetroPie/roms | wc -l) == $emulators ]; then
     echo "Not enough roms folders. Did an emulator fail to install?"
     echo "These were installed:"
     ls ~/RetroPie/roms
