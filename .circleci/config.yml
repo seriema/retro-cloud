@@ -23,6 +23,13 @@ jobs:
         command: bash -i ssh-vm.sh "curl -L https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
 
     - run:
+        name: Add Screenscraper.fr credentials to VM
+        command: |
+            bash -i ssh-vm.sh "echo '' | tee -a ~/.skyscraper/config.ini"
+            bash -i ssh-vm.sh "echo '[screenscraper]' | tee -a ~/.skyscraper/config.ini"
+            bash -i ssh-vm.sh "echo 'userCreds=\"${SCREENSCRAPER_USER}:${SCREENSCRAPER_KEY}\"' | tee -a ~/.skyscraper/config.ini"
+
+    - run:
         name: Run scraper on VM
         command: bash -i run-scraper.sh
 
