@@ -18,7 +18,7 @@ if ((Get-Module -ListAvailable -Name Az) -eq $null) {
 'Log in to Azure ...'
 if ((Get-AzContext) -eq $null) {
     # If there's no env var then prompt the user
-    if ($env:AZURE_SERVICE_PRINCIPAL_SECRET -eq $null) {
+    if (!$env:AZURE_SERVICE_PRINCIPAL_SECRET) {
         '...with a browser sign in token.'
         # Note: user prompt!
         Connect-AzAccount

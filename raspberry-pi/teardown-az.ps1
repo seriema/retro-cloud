@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 $DebugPreference = "Continue"
 
 'Delete resources from Azure ...'
-if ($env:AZURE_SERVICE_PRINCIPAL_SECRET -eq $null) {
+if (!$env:AZURE_SERVICE_PRINCIPAL_SECRET) {
     '... are you sure?'
     # Note: user prompt!
     Remove-AzResourceGroup -Name $env:RETROCLOUD_AZ_RESOURCE_GROUP
