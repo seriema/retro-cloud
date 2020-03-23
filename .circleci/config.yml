@@ -47,8 +47,9 @@ jobs:
             mkdir ~/tmp
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.sh https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.xml -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
+            bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist-screenscraper-failed.xml -nv https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
             bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
-            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml"
+            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml ~/tmp/test-gamelist-screenscraper-failed.xml"
 
     - run:
         name: Print RaspberryPi ~/.bashrc

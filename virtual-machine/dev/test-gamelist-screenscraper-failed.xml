@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<gameList>
+  <game>
+    <path>/home/pi/RetroPie/roms/scummvm/MysteryHouse.zip</path>
+    <name>Mystery House</name>
+    <cover />
+    <image />
+    <marquee />
+    <video />
+    <rating />
+    <desc />
+    <releasedate />
+    <developer />
+    <publisher />
+    <genre />
+    <players />
+  </game>
+</gameList>
