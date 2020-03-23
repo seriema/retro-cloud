@@ -13,4 +13,4 @@ case "$(uname -m)" in
 esac
 
 docker pull "$tag"
-docker run --privileged -it --rm "$tag"
+docker run --cap-add SYS_ADMIN --device /dev/fuse -it --rm "$tag"

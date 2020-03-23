@@ -103,12 +103,12 @@ Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts a
     * Dev build: `docker build -t "rc:dev" .`
     * Dev run:
         * Sharing the source code through Docker
-            * `docker run --privileged --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin -v "$((Get-Location).Path):/home/pi/retro-cloud-source" rc:dev`
+            * `docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin -v "$((Get-Location).Path):/home/pi/retro-cloud-source" rc:dev`
             * **Note:** Requires File Sharing to be enabled. See the [Docker documentation](https://docs.docker.com/docker-for-windows/#file-sharing).
         * Otherwise go through git
-            * `docker run --privileged --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
+            * `docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
             * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
 * Docker Hub
     * build: `docker build -t seriema/retro-cloud:amd64 .`
     * push: `docker push seriema/retro-cloud:amd64` (should not be needed as Docker Hub builds these)
-    * run: `docker pull seriema/retro-cloud:amd64 && docker run --privileged --rm -it seriema/retro-cloud:amd64`
+    * run: `docker pull seriema/retro-cloud:amd64 && docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it seriema/retro-cloud:amd64`
