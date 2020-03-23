@@ -87,6 +87,11 @@ jobs:
         when: always
 
     - run:
+        name: Print VM Skyscraper config
+        command: bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"
+        when: always
+
+    - run:
         name: Teardown Azure resources
         command: |
             curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
