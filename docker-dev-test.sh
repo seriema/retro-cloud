@@ -9,7 +9,7 @@ branch="$(git rev-parse --abbrev-ref HEAD)"
 
 docker run \
     --rm \
-    --volume "$PWD:/home/pi/retro-cloud-source" \
-    --workdir "/home/pi/retro-cloud-source" \
+    --volume "$PWD/docker/compose:/home/pi/retro-cloud-test/docker/compose" \
+    --workdir "/home/pi/retro-cloud-test" \
     "rc:$branch" \
     ./docker/compose/run_tests.sh

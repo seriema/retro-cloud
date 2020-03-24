@@ -5,8 +5,8 @@ $branch="$(git rev-parse --abbrev-ref HEAD)"
 
 docker run `
     --rm `
-    --volume "$($PWD.Path):/home/pi/retro-cloud-source" `
-    --workdir "/home/pi/retro-cloud-source" `
+    --volume "$($PWD.Path)/docker/compose:/home/pi/retro-cloud-test/docker/compose" `
+    --workdir "/home/pi/retro-cloud-test" `
     --cap-add SYS_ADMIN `
     --device /dev/fuse `
     "rc:$branch" `
