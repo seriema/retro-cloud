@@ -20,3 +20,6 @@ fi
 
 echo 'Verify that there are no builds left. There is one for each failed build.'
 [ -z "`find /home/pi/RetroPie-Setup/tmp/build -maxdepth 3 -type f`" ]
+
+echo 'Verify that line endings of all files are LF. Windows uses CRLF which can get copied over by Docker ADD/COPY.'
+[ ! "$(grep -r $'\r' * -l)" ]
