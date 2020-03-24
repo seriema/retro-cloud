@@ -14,8 +14,8 @@ RUN apt-get update \
     sudo
 
 # Get rid of the warning: "debconf: unable to initialize frontend: Dialog"
-# https://github.com/moby/moby/issues/27988
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+# https://serverfault.com/a/797318/565229
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Get rid of the warning: "debconf: delaying package configuration, since apt-utils is not installed"
 RUN apt-get install -y apt-utils
