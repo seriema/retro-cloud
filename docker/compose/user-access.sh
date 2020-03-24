@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and enable debug output
+set -eux
 
 echo 'Verify access rights on user home and RetroPie'
 [ $(stat -c %a /home/pi) -eq 755 ]

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and enable debug output
+set -eux
 
 echo 'Verify number of roms folders. There is one for each successful emultator installed.'
 # Two emulators aren't available on amd64: mame-mame4all, amiga

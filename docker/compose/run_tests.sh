@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and enable debug output
+set -eux
 
 echo 'TEST: directory listing'
 ./docker/compose/directory-listing.sh
