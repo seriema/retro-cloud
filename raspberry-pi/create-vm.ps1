@@ -31,6 +31,21 @@ $rg = "$($prefix)retro-cloud"
 $loc = "EastUS"
 
 ####################################
+$currentActivity = "Prerequisites"
+
+ProgressHelper $currentActivity "Checking for an existing SSH public key in ~/.ssh/id_rsa.pub"
+if (![System.IO.File]::Exists("$HOME/.ssh/id_rsa.pub")) {
+  ProgressHelper $currentActivity "No SSH key found. Creating without passphrase."
+  ssh-keygen -t rsa -b 2048 -f "$HOME/.ssh/id_rsa" -N '""'
+}
+# Only take the first line in id_rsa.pub as newlines will cause $sshPublicKey to become an array.
+$sshPublicKey = cat "$HOME/.ssh/id_rsa.pub" | head -n 1
+if (!$sshPublicKey) {
+    Write-Error "SSH public key is empty";
+}
+$sshPublicKey | Format-Table
+
+####################################
 $currentActivity = "Initializing"
 
 ProgressHelper $currentActivity "Creating a resource group"
@@ -172,16 +187,7 @@ $vmConfig = `
     -StorageAccountName $storageAccountName
 $vmConfig | Format-Table
 
-ProgressHelper $currentActivity "Checking for an existing SSH public key in /home/pi/.ssh/id_rsa.pub"
-if (![System.IO.File]::Exists("/home/pi/.ssh/id_rsa.pub")) {
-  ProgressHelper $currentActivity "No SSH key found. Creating without passphrase."
-  ssh-keygen -t rsa -b 2048 -f /home/pi/.ssh/id_rsa -N '""' -q
-}
-
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
-# Only take the first line in id_rsa.pub as newlines will cause $sshPublicKey to become an array.
-$sshPublicKey = cat /home/pi/.ssh/id_rsa.pub | head -n 1
-$sshPublicKey | Format-Table
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
   -KeyData $sshPublicKey `

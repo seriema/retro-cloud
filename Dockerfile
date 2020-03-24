@@ -15,7 +15,9 @@ RUN apt-get update \
 # These files were copied from a RetroPie 4.5.1 on a RaspberryPi 3 and
 # are included to make the image more realistic. One difference from
 # base docker image is that .bashrc has colors enabled.
+# Note: Windows `COPY` sets execute permission (-rwxr-xr-x), which needs to be reverted.
 COPY docker/rpi/etc/skel /etc/skel
+RUN if [ "$(uname -m)" = 'x86_64' ]; then chmod -R -x+X /etc/skel; fi
 
 # Mimic RaspberryPi: Create a user called "pi" without a password that's in the groups pi and sudo
 # Use `adduser` instead of `useradd`:
@@ -43,9 +45,7 @@ RUN sudo apt-get update \
     git dialog unzip xmlstarlet
 
 # Download the latest RetroPie setup script:
-RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git \
-    && sudo chown pi:pi -R RetroPie-Setup \
-    && sudo chmod g+w -R RetroPie-Setup
+RUN git clone --depth=1 https://github.com/RetroPie/RetroPie-Setup.git
 
 # Enter the folder with the setup script
 WORKDIR /home/pi/RetroPie-Setup
@@ -78,7 +78,7 @@ RUN sudo apt-get update \
 
 # https://wiki.debian.org/ReduceDebian
 RUN sudo rm -rf /usr/share/man/?? \
-    && sudo apt autoremove
+    && sudo apt autoremove -y
 
 # https://docs.docker.com/develop/develop-images/dockerfile_best-practices
 RUN sudo rm -rf /var/lib/apt/lists/*
