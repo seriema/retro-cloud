@@ -4,19 +4,14 @@
 set -eux
 
 echo 'Verify number of roms folders. There is one for each successful emultator installed.'
-# Two emulators aren't available on amd64: mame-mame4all, amiga
+# Note: Export a new list with: $ ls -m ~/RetroPie/roms
 if [[ $(uname -m) = 'armv7l' ]]; then
-    emulators=32;
+    emulators="amiga, amstradcpc, arcade, atari2600, atari5200, atari7800, atari800, atarilynx, fba, fds, gamegear, gb, gba, gbc, genesis, mame-libretro, mame-mame4all, mastersystem, megadrive, n64, neogeo, nes, ngp, ngpc, pcengine, psx, sega32x, segacd, sg-1000, snes, vectrex, zxspectrum";
 else
-    emulators=30;
+    # Two emulators aren't available on amd64: mame-mame4all, amiga
+    emulators="amstradcpc, arcade, atari2600, atari5200, atari7800, atari800, atarilynx, fba, fds, gamegear, gb, gba, gbc, genesis, mame-libretro, mastersystem, megadrive, n64, neogeo, nes, ngp, ngpc, pcengine, psx, sega32x, segacd, sg-1000, snes, vectrex, zxspectrum";
 fi
-
-if  [[ $(ls ~/RetroPie/roms | wc -l) -ne $emulators ]]; then
-    echo "Not enough roms folders. Did an emulator fail to install?"
-    echo "These were installed:"
-    ls ~/RetroPie/roms
-    exit 1
-fi
+[[ -z $(echo $(echo $emulators | tr ',' '\n') $(ls -1 ~/RetroPie/roms) | tr ' ' '\n' | sort | uniq -u) ]]
 
 echo 'Verify that there are no builds left. There is one for each failed build.'
 [[ -z $(find /home/pi/RetroPie-Setup/tmp/build -maxdepth 3 -type f) ]]
