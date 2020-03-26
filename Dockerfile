@@ -57,8 +57,10 @@ RUN sudo ./retropie_packages.sh setup basic_install
 # Exit the folder with the setup script
 WORKDIR /home/pi
 
-# Mimic RetroPie: Create fake file structure. Likely only available after a reboot and first run of EmulationStation.
+# Mimic RetroPie: Create fake file structure.
+    # autostart.sh is available after a reboot.
 RUN touch /opt/retropie/configs/all/autostart.sh \
+    # downloaded_media is available after a first run of EmulationStation.
     && mkdir -p /home/pi/.emulationstation/downloaded_media \
     && sudo chmod g+w /home/pi/.emulationstation/downloaded_media
 
