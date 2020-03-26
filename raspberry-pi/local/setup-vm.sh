@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script takes optional parameter for branch name or commit hash.
-branch=${1:-master}
+branch=${1:-develop}
 
 # Abort on error, and error if variable is unset
 set -eu

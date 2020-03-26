@@ -17,7 +17,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
 
     ```bash
-    $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
+    $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/develop/raspberry-pi/download-and-run.sh | bash
     # Or this shortened URL:
     $ curl -sSL https://tiny.cc/retro-cloud-setup | bash
     ```
@@ -36,7 +36,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
 
         ```bash
-        $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
+        $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/develop/virtual-machine/setup.sh | bash
         # Or this shortened URL:
         $ curl -sSL https://tiny.cc/retro-cloud-setup-vm | bash
         ```
