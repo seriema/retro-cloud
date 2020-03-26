@@ -5,17 +5,14 @@ cloud {
     storage scraper_storage {
         storage scraper_cache
         storage scraper_media
+        storage roms_storage
     }
-}
-cloud {
-    storage roms_storage
 }
 
 node raspberry_pi
 
-raspberry_pi <-- scraper_vm : read
+raspberry_pi <--> scraper_vm : read/write
 scraper_vm <--> scraper_storage : read/write
-scraper_vm <-- roms_storage : read
 
 raspberry_pi <.. scraper_media
 raspberry_pi <.. roms_storage

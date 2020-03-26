@@ -1,7 +1,7 @@
 Running ROMs from the cloud
 ---
 
-An expensive and over-egineered approach to storing ROMs and their metadata which sets out to answer the question:
+An expensive and over-engineered approach to storing ROMs and their metadata which sets out to answer the question:
 > Why buy a cheap USB stick when you can use multiple expensive services in the Cloud?
 
 ## Architecture
@@ -14,19 +14,65 @@ An expensive and over-egineered approach to storing ROMs and their metadata whic
 
 ## Setup
 
-1. Create `scraper_vm` as Azure VM.
-1. Create a user on `scraper_vm` called `pi`, this will allow paths from scraping to match what RetroPie expects.
-1. Install [Skyscraper](https://github.com/muldjord/skyscraper) on `pi@scraper_vm`
-1. Configure `Skyscraper`
-    1. Transfer the [.skyscraper](.skyscraper/) folder to `pi@scraper_vm/~/.skyscraper`
-1. Create `scraper_storage` as Azure File Share.
-1. Mount `scraper_storage` as `pi@scraper_vm/` so `pi`-user has **read and write access** rights.
-1. Create `roms_storage`
-1. Mount `roms_storage` as `pi@scraper_vm/.../roms` so `pi`-user with **only read access**
-1. Create a SSH key in `raspberry_pi` and send the public key to `scraper_vm`, so `pi@raspberry_pi` can log into `pi@scraper_vm`.
-1. Move `raspberry_pi:home/pi/RetroPie/roms` to `raspberry_pi:home/pi/RetroPie/roms.bak`.
-1. Move `raspberry_pi:home/pi/RetroPie/gamelists` to `raspberry_pi:home/pi/RetroPie/gamelists.bak`.
-1. Mount `pi@scraper_vm` on `pi@raspberry_pi:home/pi/mount/scraper_vm/` with **only read access**
-1. Symlink `raspberry_pi:home/pi/mount/scraper_vm/roms` as `raspberry_pi:home/pi/RetroPie/roms`
-1. Symlink `raspberry_pi:home/pi/mount/scraper_vm/gamelists` as `raspberry_pi:home/pi/RetroPie/gamelists`
-1. Reboot `raspberry_pi`
+1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
+
+    ```bash
+    $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
+    # Or this shortened URL:
+    $ curl -sSL https://tiny.cc/retro-cloud-setup | bash
+    ```
+
+    > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
+    >
+    > `WARNING: To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code ABCD12345 to authenticate.`
+
+1. Install Retro-Cloud on the VM. Alternatives:
+    * On the Raspberry Pi:
+
+        ```bash
+        $ bash -i setup-vm.sh
+        ```
+
+    * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
+
+        ```bash
+        $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
+        # Or this shortened URL:
+        $ curl -sSL https://tiny.cc/retro-cloud-setup-vm | bash
+        ```
+
+1. Copy ROMs to Azure File Share. Alternatives:
+    * If you already had ROMs on the Raspberry Pi: They're now in `roms.bak` and can be copied over:
+
+        ```bash
+        $ cp -R RetroPie/roms.bak/. RetroPie/roms/
+        ```
+
+    * If you have ROMs on a desktop: Use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and copy them to `Storage Accounts/[numbers]storage/Files Shares/retro-cloud/RetroPie/roms`
+1. Scrape for metadata. Alternatives:
+    > Note: This will take a _long_ time. A test run of 6 platforms with 13k files took 10 hours. EmulationStation must not be running during this time.
+    * On the Raspberry Pi: `$ bash -i run-scraper.sh`
+    * On the VM: `$ ./run-skyscraper.sh`
+
+## Development
+
+### Windows/Linux/macOS
+
+* Development
+    * `docker run --privileged -it --rm -v home:/home/pi -v az:/.Azure -v opt:/opt -v mnt:/mnt seriema/retro-cloud:amd64`
+    * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
+* Testing
+    * `docker run --privileged -it --rm seriema/retro-cloud:develop`
+* Docker
+    * `docker build -t seriema/retro-cloud:amd64 .`
+    * `docker push seriema/retro-cloud:amd64`
+
+### Raspberry Pi
+
+* Development
+    * `docker run --privileged -it --rm -v home:/home/pi seriema/retro-cloud:arm32v7`
+* Testing
+    * `docker run --privileged -it --rm lasery/retropie:19.09-arm32v6 /bin/bash`
+* Docker
+    * `docker build -t seriema/retro-cloud:arm32v7 .`
+    * `docker push seriema/retro-cloud:arm32v7`
