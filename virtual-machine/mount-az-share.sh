@@ -8,8 +8,8 @@ set -u
 
 echo 'Install Prerequisites'
 
-sudo apt-get update > /dev/null
-sudo apt-get install cifs-utils > /dev/null
+sudo apt-get update
+sudo apt-get install cifs-utils
 
 
 echo 'Mount the Azure File Share in the VMs shared folder'

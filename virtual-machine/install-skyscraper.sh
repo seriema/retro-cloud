@@ -7,14 +7,14 @@ set -e
 set -u
 
 echo 'Install Prerequisites (over 500mb, so it takes a while)'
-sudo apt-get update > /dev/null
+sudo apt-get update
 # This is over 500mb!
-sudo apt-get install build-essential qt5-default -y > /dev/null
+sudo apt-get install build-essential qt5-default -y
 
 echo 'Install Skyscraper (takes a while)'
 mkdir -p "$HOME/skysource"
 cd "$HOME/skysource"
-curl -L https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash > /dev/null
+curl -L https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash
 cd -
 
 echo 'Configure Skyscraper'
