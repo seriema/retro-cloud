@@ -20,3 +20,5 @@ cp -v local/setup-vm.sh "$HOME/setup-vm.sh"
 cp -v local/ssh-vm.sh "$HOME/ssh-vm.sh"
 
 echo "SETUP: Done!"
+
+echo 'SETUP: Note, you need to load the environment variables! Start a new interactive shell with `bash -i`.'
