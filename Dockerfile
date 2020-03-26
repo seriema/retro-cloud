@@ -83,9 +83,13 @@ RUN sudo rm -rf /usr/share/man/?? \
 # https://docs.docker.com/develop/develop-images/dockerfile_best-practices
 RUN sudo rm -rf /var/lib/apt/lists/*
 
-# NOTE: Build and run this Dockerfile below
-# NOTE: run as privileged, otherwise sshfs fails with "fuse: device not found, try 'modprobe fuse' first"
-# docker build -t retro-cloud . ; docker run --privileged -it --rm retro-cloud
+## Docker specific workarounds ##
 
-# NOTE: Publish
-# docker push seriema/retro-cloud
+# HACK: give user root access to mount drives in Docker, otherwise sshfs fails with "fuse: failed to open /dev/fuse: Permission denied"
+# NOTE: "pi" on a real RetroPie does not belong to root.
+USER root
+RUN adduser pi root
+USER pi
+
+# NOTE: run as privileged, otherwise sshfs fails with "fuse: device not found, try 'modprobe fuse' first"
+# $ docker run --privileged -it --rm retro-cloud
