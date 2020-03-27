@@ -3,13 +3,10 @@
 # Abort on error, and error if variable is unset
 set -eu
 
+. ./helpers.sh
 # Always use the branch name (i.e. do not accept an optional parameter to use a different name) so naming doesn't get confusing when using run/test.
-branch="$(git rev-parse --abbrev-ref HEAD)"
-tag="rc:$branch"
-
-timestamp="$(date +"%Y-%m-%d_%H-%M-%S")"
-logfile="logs/docker/build/${branch}-${timestamp}.log"
-mkdir -p logs/docker/build
+tag="rc:$(getBranch)"
+logfile="$(createLog docker build)"
 
 time DOCKER_BUILDKIT=1 docker build \
     --tag "$tag" \

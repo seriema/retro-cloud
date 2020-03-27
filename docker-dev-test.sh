@@ -6,11 +6,18 @@ source /etc/profile.d/retro-cloud-dev.sh
 # Abort on error, and error if variable is unset
 set -eu
 
-branch=${1:-"$(git rev-parse --abbrev-ref HEAD)"}
+. ./helpers.sh
+branch=${1:-"$(getBranch)"}
+tag="rc:$branch"
+logfile="$(createLog docker test)"
 
 docker run \
     --rm \
     --volume "$PWD/docker/compose:/home/pi/retro-cloud-test/docker/compose" \
     --workdir "/home/pi/retro-cloud-test" \
-    "rc:$branch" \
-    ./docker/compose/run_tests.sh
+    "$tag" \
+    ./docker/compose/run_tests.sh \
+2>&1 | tee -a "$logfile"
+
+echo
+echo "Test logged to $logfile"

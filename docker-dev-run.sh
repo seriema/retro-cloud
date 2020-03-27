@@ -6,7 +6,9 @@ source /etc/profile.d/retro-cloud-dev.sh
 set -eu
 
 # Accepts a tag (preferably the branch name) as an optional parameter for a command to send to the VM.
-branch=${1:-"$(git rev-parse --abbrev-ref HEAD)"}
+. ./helpers.sh
+branch=${1:-"$(getBranch)"}
+tag="rc:$branch"
 
 docker run \
     --cap-add SYS_ADMIN \
@@ -19,4 +21,4 @@ docker run \
     --tty \
     --volume "$PWD":/home/pi/retro-cloud-source \
     --workdir /home/pi/retro-cloud-source \
-    "rc:$branch"
+    "$tag"
