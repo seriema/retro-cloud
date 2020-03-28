@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  infra:
+  scriptValidation:
     docker:
     - image: seriema/retro-cloud:develop
     shell: /bin/bash --login -eo pipefail
@@ -101,8 +101,21 @@ jobs:
             rm teardown-az.ps1
         when: always
 
+  imageValidation:
+    docker:
+    - image: seriema/retro-cloud:develop
+    working_directory: /home/pi/retro-cloud
+    steps:
+
+    - checkout
+
+    - run:
+        name: Validate Docker image
+        command: bash docker/compose/run_tests.sh
+
 workflows:
   version: 2
-  build:
+  commit:
     jobs:
-    - infra
+    - scriptValidation
+    - imageValidation
