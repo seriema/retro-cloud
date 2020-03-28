@@ -64,6 +64,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 * Testing
     * `docker run --privileged -it --rm seriema/retro-cloud:develop`
     * `docker/compose/run_tests.sh`
+    * `docker-compose -f docker-compose.test.yml up`
 * Docker
     * `docker build -t seriema/retro-cloud:amd64 .`
     * `docker push seriema/retro-cloud:amd64`
