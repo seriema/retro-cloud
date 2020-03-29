@@ -10,6 +10,13 @@ RUN apt-get update \
     # Required to run image as non-root user
     sudo
 
+# Get rid of the warning: "debconf: unable to initialize frontend: Dialog"
+# https://github.com/moby/moby/issues/27988
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+# Get rid of the warning: "debconf: delaying package configuration, since apt-utils is not installed"
+RUN apt-get install -y apt-utils
+
 # Mimic RaspberryPi: Create a user called "pi" without a password that's in the groups pi and sudo
 # Use `adduser` instead of `useradd`:
 # * https://github.com/RetroPie/RetroPie-Setup/issues/2165#issuecomment-337932294
