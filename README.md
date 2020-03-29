@@ -88,7 +88,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 * Docker Hub
     * `docker-build.sh` to build a production Docker image.
     * `docker-push.sh` to push the built production Docker image to Docker Hub.
-    * `docker-run.sh` pulls a production image from Docker Hub and runs it.
+    * `docker-run.sh` runs the latest local production Docker image. Useful to verify the image before pushing it.
 
 ### Notes on Windows
 
