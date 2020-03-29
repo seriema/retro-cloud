@@ -14,9 +14,9 @@ if [[ ! -z $(find /home/pi/RetroPie-Setup -maxdepth 1) ]]; then
     exit 1
 fi
 
-echo "SETUP: Download scripts to ~/tmp/retro-cloud"
-mkdir -p "$HOME/tmp/retro-cloud"
-cd "$HOME/tmp/retro-cloud"
+echo "SETUP: Download scripts to ~/retro-cloud-setup"
+mkdir -p "$HOME/retro-cloud-setup"
+cd "$HOME/retro-cloud-setup"
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
@@ -25,6 +25,8 @@ mkdir .skyscraper
 curl -L -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
 mkdir "local"
 curl -L -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
+mkdir "dev"
+curl -L -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
 
 echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh
@@ -38,10 +40,6 @@ echo "SETUP: Install Skyscraper"
 # Run this in interactive mode, otherwise bash won't load the variables set in ~/.bashrc by the create-vm-share.sh script above.
 # https://stackoverflow.com/a/43660876
 bash -i install-skyscraper.sh
-
-echo "SETUP: Delete ~/tmp/retro-cloud"
-cd
-rm -r "$HOME/tmp/retro-cloud"
 
 echo "SETUP: Done!"
 
