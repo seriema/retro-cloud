@@ -2,7 +2,7 @@ version: 2
 jobs:
   scriptValidation:
     docker:
-    - image: seriema/retro-cloud:experimental-debconf-dialog-2
+    - image: seriema/retro-cloud:develop
     shell: /bin/bash --login -eo pipefail
     working_directory: /home/pi
     steps:
@@ -103,7 +103,7 @@ jobs:
 
   imageValidation:
     docker:
-    - image: seriema/retro-cloud:experimental-debconf-dialog-2
+    - image: seriema/retro-cloud:develop
     working_directory: /home/pi/retro-cloud
     steps:
 
