@@ -1,6 +1,6 @@
 #!/bin/bash
 # Script takes optional parameter for branch name or commit hash.
-branch=${1:-develop}
+branch=${1:-master}
 
 # Abort on error
 set -e
