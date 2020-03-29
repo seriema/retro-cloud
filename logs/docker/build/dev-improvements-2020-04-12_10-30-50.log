@@ -1,0 +1,114 @@
+#2 [internal] load .dockerignore
+#2 DONE 0.0s
+
+#1 [internal] load build definition from Dockerfile
+#1 ...
+
+#2 [internal] load .dockerignore
+#2 transferring context: 34B 0.0s done
+#2 DONE 0.1s
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 32B 0.0s done
+#1 DONE 0.2s
+
+#3 [internal] load metadata for docker.io/library/debian:stretch
+#3 DONE 0.0s
+
+#4 [raspberrypi 1/7] FROM docker.io/library/debian:stretch
+#4 DONE 0.0s
+
+#14 [retropie 4/10] RUN git clone https://github.com/RetroPie/RetroPie-Setup...
+#14 CACHED
+
+#16 [retropie 6/10] RUN git checkout 50e8300
+#16 CACHED
+
+#18 [retropie 8/10] RUN if [ "$(uname -m)" = 'x86_64' ]; then sudo ./retropi...
+#18 CACHED
+
+#13 [retropie 3/10] RUN if [ "$(uname -m)" = 'x86_64' ]; then sudo apt-get u...
+#13 CACHED
+
+#15 [retropie 5/10] WORKDIR /home/pi/RetroPie-Setup
+#15 CACHED
+
+#5 [raspberrypi 2/7] RUN apt-get update     && apt-get upgrade -y     && ap...
+#5 CACHED
+
+#8 [raspberrypi 5/7] RUN if [ "$(uname -m)" = 'armv7l' ]; then         apt-...
+#8 CACHED
+
+#19 [retropie 9/10] WORKDIR /home/pi
+#19 CACHED
+
+#20 [retropie 10/10] RUN touch /opt/retropie/configs/all/autostart.sh     &&...
+#20 CACHED
+
+#6 [raspberrypi 3/7] RUN apt-get install -y apt-utils
+#6 CACHED
+
+#7 [raspberrypi 4/7] RUN if [ "$(uname -m)" = 'armv7l' ]; then         apt-...
+#7 CACHED
+
+#11 [retropie 1/10] WORKDIR /home/pi
+#11 CACHED
+
+#12 [retropie 2/10] RUN if [ "$(uname -m)" = 'armv7l' ]; then sudo apt-get u...
+#12 CACHED
+
+#21 [stage-2 1/4] RUN sudo apt-get update     && sudo apt-get install -y    ...
+#21 CACHED
+
+#9 [raspberrypi 6/7] RUN if [ "$(uname -m)" = 'x86_64' ]; then         apt-...
+#9 CACHED
+
+#10 [raspberrypi 7/7] RUN adduser --disabled-password --gecos '' pi     && a...
+#10 CACHED
+
+#17 [retropie 7/10] RUN if [ "$(uname -m)" = 'armv7l' ]; then sudo __platfor...
+#17 CACHED
+
+#23 [stage-2 3/4] RUN sudo rm -rf /var/lib/apt/lists/*
+#23 CACHED
+
+#22 [stage-2 2/4] RUN sudo rm -rf /usr/share/man/??     && sudo apt autoremo...
+#22 CACHED
+
+#24 [stage-2 4/4] RUN adduser pi root
+#24 CACHED
+
+#25 exporting to image
+#25 exporting layers done
+#25 writing image sha256:1fbaaa6fe0be09404640778c3adff3added6d43840cf1a141ee80dbdbec04aa8
+#25 writing image sha256:1fbaaa6fe0be09404640778c3adff3added6d43840cf1a141ee80dbdbec04aa8 0.0s done
+#25 naming to docker.io/library/rc:dev-improvements done
+#25 DONE 0.2s
+IMAGE               CREATED             CREATED BY                                      SIZE                COMMENT
+1fbaaa6fe0be        2 weeks ago         USER pi                                         0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c adduser pi root # buildkit       2.4kB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         USER root                                       0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c sudo rm -rf /var/lib/apt/list…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c sudo rm -rf /usr/share/man/??…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c sudo apt-get update     && su…   5.9MB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c touch /opt/retropie/configs/a…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         WORKDIR /home/pi                                0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c if [ "$(uname -m)" = 'x86_64'…   263MB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c if [ "$(uname -m)" = 'armv7l'…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c git checkout 50e8300 # buildk…   142kB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         WORKDIR /home/pi/RetroPie-Setup                 0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c git clone https://github.com/…   26.3MB              buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c if [ "$(uname -m)" = 'x86_64'…   2.8MB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c if [ "$(uname -m)" = 'armv7l'…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         WORKDIR /home/pi                                0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         USER pi                                         0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN |1 DEBIAN_FRONTEND=noninteractive /bin/s…   335kB               buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN |1 DEBIAN_FRONTEND=noninteractive /bin/s…   1.38GB              buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN |1 DEBIAN_FRONTEND=noninteractive /bin/s…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN |1 DEBIAN_FRONTEND=noninteractive /bin/s…   0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN |1 DEBIAN_FRONTEND=noninteractive /bin/s…   2.26MB              buildkit.dockerfile.v0
+<missing>           2 weeks ago         ARG DEBIAN_FRONTEND=noninteractive              0B                  buildkit.dockerfile.v0
+<missing>           2 weeks ago         RUN /bin/sh -c apt-get update     && apt-get…   20.3MB              buildkit.dockerfile.v0
+<missing>           2 weeks ago         ENV LANG=C.UTF-8                                0B                  buildkit.dockerfile.v0
+<missing>           6 weeks ago         /bin/sh -c #(nop)  CMD ["bash"]                 0B                  
+<missing>           6 weeks ago         /bin/sh -c #(nop) ADD file:08c5ab7c53526da15…   101MB               
