@@ -44,6 +44,7 @@ jobs:
     - run:
         name: Verify scraper output on VM
         command: |
+            bash -i ssh-vm.sh "mkdir -p ~/tmp"
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.sh https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
             bash -i ssh-vm.sh "curl -L -o ~/tmp/test-gamelist-screenscraper-failed.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
