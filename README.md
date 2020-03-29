@@ -20,6 +20,8 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
     # Or this shortened URL:
     $ curl -sSL https://tiny.cc/retro-cloud-setup | bash
+    # Or get the latest development version:
+    $ curl -sSL https://tiny.cc/rc-rpi | bash
     ```
 
     > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
@@ -39,6 +41,8 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
         # Or this shortened URL:
         $ curl -sSL https://tiny.cc/retro-cloud-setup-vm | bash
+        # Or get the latest development version:
+        $ curl -sSL https://tiny.cc/rc-vm | bash
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
