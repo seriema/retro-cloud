@@ -19,11 +19,10 @@ cache="$RETROCLOUD_VM_SHARE/cache"
 sudo mkdir -p "$cache"
 
 echo 'Add folder paths as environment variables'
-echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "#RETRO-CLOUD: The environment variables below are from virtual-machine/create-vm-share.sh" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER=$gamelists" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_MEDIAFOLDER=$downloadedMedia" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_ROMS=$roms" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_SKYSCRAPER_CACHEFOLDER=$cache" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "# RETRO-CLOUD: The environment variables below are from virtual-machine/create-vm-share.sh" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_GAMELISTFOLDER=$gamelists" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_MEDIAFOLDER=$downloadedMedia" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
+echo "export RETROCLOUD_ROMS=$roms" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
+echo "export RETROCLOUD_SKYSCRAPER_CACHEFOLDER=$cache" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
 
 echo 'Done!'
