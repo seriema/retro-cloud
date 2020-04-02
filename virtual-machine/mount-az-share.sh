@@ -51,11 +51,10 @@ sudo mount -a
 
 
 echo 'Add folder paths as environment variables'
-echo "" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "#RETRO-CLOUD: The environment variables below are from virtual-machine/mount-az-share.sh" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "# RETRO-CLOUD: The environment variables below are from virtual-machine/mount-az-share.sh" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
 # Note: RETROCLOUD_VM_SHARE and RETROCLOUD_VM_MOUNT_POINT are currently the same.
-echo "export RETROCLOUD_VM_MOUNT_POINT=$mntPath" | sudo tee -a "$HOME/.bashrc" > /dev/null
-echo "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile" | sudo tee -a "$HOME/.bashrc" > /dev/null
+echo "export RETROCLOUD_VM_MOUNT_POINT=$mntPath" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
+echo "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile" | sudo tee -a "$HOME/.retro-cloud.env" > /dev/null
 
 echo 'Done!'
 echo "File share mounted on $mntPath"

@@ -52,6 +52,19 @@ jobs:
             bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml ~/tmp/test-gamelist-screenscraper-failed.xml"
 
     - run:
+        name: Print RaspberryPi ~/.retro-cloud.env
+        command: cat ~/.retro-cloud.env
+        when: always
+
+    - run:
+        name: Print VM ~/.retro-cloud.env
+        command: |
+            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.retro-cloud.env"' > print-vm-bashrc.sh
+            bash -i print-vm-bashrc.sh
+            rm print-vm-bashrc.sh
+        when: always
+
+    - run:
         name: Print RaspberryPi ~/.bashrc
         command: cat ~/.bashrc
         when: always

@@ -229,27 +229,36 @@ ssh "$($username)@$ip" "mkdir -p $sharePath"
 ###################################
 $currentActivity = "Persist resource values"
 
-ProgressHelper $currentActivity "Saving configuration variables locally (~/.bashrc)"
-Add-Content "$HOME/.bashrc" ""
-Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_IP=$ip"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_USER=$username"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_SHARE=$sharePath"
-Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+$envVarFile="$HOME/.retro-cloud.env"
+ProgressHelper $currentActivity "Saving configuration variables locally in $envVarFile"
 
-ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
-ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_VM_SHARE=$sharePath' | sudo tee -a ~/.bashrc > /dev/null"
+Add-Content "$envVarFile" '# RETRO-CLOUD: The environment variables below are from raspberry-pi/create-vm.ps1'
+Add-Content "$envVarFile" '# These are needed by the RetroPie.'
+Add-Content "$envVarFile" "export RETROCLOUD_VM_IP=$ip"
+Add-Content "$envVarFile" "export RETROCLOUD_VM_USER=$username"
+Add-Content "$envVarFile" '# These are needed by both the RetroPie and VM.'
+Add-Content "$envVarFile" "export RETROCLOUD_VM_SHARE=$sharePath"
+Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
+Add-Content "$envVarFile" '# These are needed by the VM.'
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+
+ProgressHelper $currentActivity "Add $envVarFile to be loaded by ~/.bashrc"
+Add-Content "$HOME/.bashrc" ""
+Add-Content "$HOME/.bashrc" "# RETRO-CLOUD CONFIG START"
+Add-Content "$HOME/.bashrc" ". $envVarFile"
+Add-Content "$HOME/.bashrc" "# RETRO-CLOUD CONFIG END"
+
+$vmEnvVarFile="/home/$username/.retro-cloud.env"
+ProgressHelper $currentActivity "Passing configuration variables to VM (${username}@${ip}:${vmEnvVarFile})"
+scp "$envVarFile" "${username}@${ip}:${vmEnvVarFile}"
+ssh "${username}@${ip}" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '# RETRO-CLOUD CONFIG START' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '. $vmEnvVarFile' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '# RETRO-CLOUD CONFIG END' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 
