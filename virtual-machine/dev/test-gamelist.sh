@@ -19,4 +19,7 @@ then
 fi
 
 echo "No something's definitely wrong. See details above."
+echo "Printing the scraped XML:"
+cat "$RETROCLOUD_VM_SHARE/.emulationstation/gamelists/nes/gamelist.xml"
+
 exit 1
