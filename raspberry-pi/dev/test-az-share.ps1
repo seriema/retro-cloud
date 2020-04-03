@@ -9,11 +9,11 @@ $ctx = New-AzStorageContext -StorageAccountName $env:RETROCLOUD_AZ_STORAGE_ACCOU
 Get-AzStorageFileContent `
     -Context $ctx `
     -ShareName $env:RETROCLOUD_AZ_FILE_SHARE_NAME `
-    -Path "RetroPie/roms/scummvm/MysteryHouse.zip" `
+    -Path "RetroPie/roms/nes/elite.zip" `
     -Verbose
 
 # It didn't fail and error out, so it successed.
 'Success. ROM found in Azure File Share.'
 
 # Cleanup
-Remove-Item .\MysteryHouse.zip -Verbose
+Remove-Item .\elite.zip -Verbose
