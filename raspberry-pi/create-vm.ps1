@@ -258,7 +258,7 @@ Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 Add-Content "$envVarFile" '# These are needed by the VM.'
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS=$smbCredentialFile"
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
 

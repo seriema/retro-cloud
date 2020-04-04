@@ -7,8 +7,8 @@ set -e
 set -u
 
 # The samba credentials file should have been added during VM creation and should not be removed.
-if [[ ! -f "$RETROCLOUD_AZ_CREDENTIALS" ]]; then
-    echo "Cannot mount Azure File Share without samba credentials. File missing: $RETROCLOUD_AZ_CREDENTIALS";
+if [[ ! -f "$RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS" ]]; then
+    echo "Cannot mount Azure File Share without samba credentials. File missing: $RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS";
 fi
 
 echo 'Install Prerequisites'
@@ -28,7 +28,7 @@ fi
 echo 'Add a persistent mount point entry for the Azure file share in /etc/fstab'
 if [ -z "$(grep $RETROCLOUD_AZ_FILE_SHARE_URL\ $mntPath /etc/fstab)" ]; then
     echo "# RETRO-CLOUD: The changes below were made by retro-cloud" | sudo tee -a /etc/fstab > /dev/null
-    echo "$RETROCLOUD_AZ_FILE_SHARE_URL $mntPath cifs _netdev,nofail,vers=3.0,credentials=$RETROCLOUD_AZ_CREDENTIALS,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab > /dev/null
+    echo "$RETROCLOUD_AZ_FILE_SHARE_URL $mntPath cifs _netdev,nofail,vers=3.0,credentials=$RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab > /dev/null
 else
     echo "/etc/fstab was not modified to avoid conflicting entries as this Azure file share was already present. You may want to double check /etc/fstab to ensure the configuration is as desired."
     echo "Aborting to avoid issues"
@@ -37,7 +37,7 @@ fi
 
 # Debugging: Mount the drive without persisting it
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#mount-the-azure-file-share-on-demand-with-mount
-# Note: $RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY is no longer stored as an environment variable. Need to read it from $RETROCLOUD_AZ_CREDENTIALS file for the next line to work.
+# Note: $RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY is no longer stored as an environment variable. Need to read it from $RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS file for the next line to work.
 # sudo mount -t cifs $RETROCLOUD_AZ_FILE_SHARE_URL $mntPath -o _netdev,nofail,vers=3.0,username=$RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME,password=$RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY,dir_mode=0777,file_mode=0777,serverino
 
 echo 'Mount now to avoid a reboot'

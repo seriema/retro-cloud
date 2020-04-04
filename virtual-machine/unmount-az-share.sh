@@ -12,7 +12,7 @@ sudo rm -r -f $mntPath
 
 # Do not delete it because it can't be recreated from within the VM
 # echo 'Delete the credential file that stores the username and password for the file share.'
-# sudo rm -f $RETROCLOUD_AZ_CREDENTIALS
+# sudo rm -f $RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS
 
 echo 'Remove the persistent mount point entry for the Azure file share in /etc/fstab'
 sudo sed -i.bak "/RETRO-CLOUD/d" /etc/fstab
