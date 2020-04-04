@@ -148,7 +148,7 @@ $storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Sele
 $storageAccountKey | Format-Table
 
 # TODO: Use the same share for ROMs for now.
-ProgressHelper $currentActivity "Creating the file share"
+ProgressHelper $currentActivity "Creating the Azure File Share"
 $fileShareName = "retro-cloud"
 $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
@@ -201,6 +201,9 @@ New-AzVM `
   -VM $vmConfig `
 | Format-Table
 
+###################################
+$currentActivity = "Setup the virtual machine"
+
 ProgressHelper $currentActivity "Waiting for the VM to boot up"
 # TODO: There has to be a better way. Perhaps Azure Boot Diagnostics?
 $sshStatus = $null
@@ -226,6 +229,19 @@ ProgressHelper $currentActivity "Creating a folder to be shared with the Raspber
 $sharePath="/home/$username/retro-cloud-share"
 ssh "$($username)@$ip" "mkdir -p $sharePath"
 
+ProgressHelper $currentActivity "Creating a credential file to store the username and password for the Azure File Share"
+# This is part of mounting a file share on Linux, that is done by virtual-machine/mount-az-share.sh,
+# but by doing it here we only need to pass the storage account key once and avoid it being stored in
+# the environment variables with the other resource values (which we pass around and print for debugging).
+# https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#create-a-persistent-mount-point-for-the-azure-file-share-with-etcfstab
+
+$smbCredentialFile="/etc/smbcredentials/$storageAccountName.cred"
+ssh "${username}@${ip}" "sudo mkdir -p /etc/smbcredentials"
+ssh "${username}@${ip}" "echo 'username=$storageAccountName' | sudo tee $smbCredentialFile > /dev/null"
+ssh "${username}@${ip}" "echo 'password=$storageAccountKey' | sudo tee -a $smbCredentialFile > /dev/null"
+# Change permissions on the credential file so only root can read or modify the password file
+ssh "${username}@${ip}" "sudo chmod 600 $smbCredentialFile"
+
 ###################################
 $currentActivity = "Persist resource values"
 
@@ -242,7 +258,7 @@ Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 Add-Content "$envVarFile" '# These are needed by the VM.'
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_CREDENTIALS=$smbCredentialFile"
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
 
