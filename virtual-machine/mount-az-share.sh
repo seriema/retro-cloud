@@ -14,8 +14,13 @@ sudo apt-get install cifs-utils
 
 echo 'Mount the Azure File Share in the VMs shared folder'
 mntPath="$RETROCLOUD_VM_SHARE"
+# The folder is created during VM creation, but if unmount-az-share.sh has run then it's been deleted and needs to be recreated.
+if [[ ! -d $mntPath ]]; then
+    echo 'Create the shared folder because it was missing'
+    mkdir -p $mntPath
+fi
 
-echo 'Create a credential file to store the username and password for the file share.'
+echo 'Create a credential file to store the username and password for the file share'
 if [ ! -d "/etc/smbcredentials" ]; then
     sudo mkdir "/etc/smbcredentials"
 fi
@@ -32,7 +37,7 @@ else
     echo "The credential file $smbCredentialFile already exists, and was not modified."
 fi
 
-echo 'Create a persistent mount point for the Azure file share with /etc/fstab'
+echo 'Add a persistent mount point entry for the Azure file share in /etc/fstab'
 if [ -z "$(grep $RETROCLOUD_AZ_FILE_SHARE_URL\ $mntPath /etc/fstab)" ]; then
     echo "# RETRO-CLOUD: The changes below were made by retro-cloud" | sudo tee -a /etc/fstab > /dev/null
     echo "$RETROCLOUD_AZ_FILE_SHARE_URL $mntPath cifs _netdev,nofail,vers=3.0,credentials=$smbCredentialFile,dir_mode=0777,file_mode=0777,serverino" | sudo tee -a /etc/fstab > /dev/null
