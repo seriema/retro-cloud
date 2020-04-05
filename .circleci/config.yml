@@ -8,6 +8,16 @@ jobs:
     - checkout
 
     - run:
+        name: Validate scripts execution permission
+        command: |
+            findFilesWithoutExecutionPermission () { find . -type f -name '*.sh' -not -executable; }
+            if [ $(findFilesWithoutExecutionPermission | wc -l) -ne 0 ]; then
+                echo 'These files are lacking execute (+x) permission:'
+                findFilesWithoutExecutionPermission
+                exit 1;
+            fi
+
+    - run:
         name: Lint Scripts
         command: find . -type f -name '*.sh' | xargs shellcheck --external-sources
 
