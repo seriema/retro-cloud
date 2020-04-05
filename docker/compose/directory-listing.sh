@@ -12,6 +12,8 @@ else
     # Two emulators aren't available on amd64: mame-mame4all, amiga
     emulators="amstradcpc, arcade, atari2600, atari5200, atari7800, atari800, atarilynx, fba, fds, gamegear, gb, gba, gbc, genesis, mame-libretro, mastersystem, megadrive, n64, neogeo, nes, ngp, ngpc, pcengine, psx, sega32x, segacd, sg-1000, snes, vectrex, zxspectrum";
 fi
+# Disable lint: this was tedious to validate and it uses word splitting on purpose
+# shellcheck disable=SC2046
 [[ -z $(echo $(echo "$emulators" | tr ',' '\n') $(ls -1 ~/RetroPie/roms) | tr ' ' '\n' | sort | uniq -u) ]]
 
 echo 'Verify that there are no builds left. There is one for each failed build.'
