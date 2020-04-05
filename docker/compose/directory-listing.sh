@@ -25,4 +25,4 @@ echo 'Verify that line endings of all files are LF. Windows uses CRLF which can 
 # Note: The Dockerfile no longer copies bash files because COPY constantly invalidates the cache, forcing
 # unnecessary rebuilds that take 30-60 minutes locally and 2-3 hours on Docker Hub. The test is kept
 # as a regression test for future changes to the Dockerfile.
-[[ -z $(grep -r $'\r' * -l) ]]
+! grep -r $'\r' * -l -q
