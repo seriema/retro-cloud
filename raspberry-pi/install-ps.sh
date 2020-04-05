@@ -17,7 +17,7 @@ fi
 ###################################
 # Download and extract PowerShell
 
-if [ $(uname -m) == 'x86_64' ]; then
+if [[ $(uname -m) == 'x86_64' ]]; then
     # Only used during development in a Azure VM or Docker, both based on Ubuntu.
     arch=x64
 else
