@@ -37,4 +37,4 @@ chmod +x "$HOME/ssh-vm.sh"
 
 echo "SETUP: Done!"
 
-echo 'SETUP: Note, you need to load the environment variables! Start a new interactive shell with `bash -i`.'
+echo "SETUP: Note, you need to load the environment variables! Start a new interactive shell with 'bash -i'."
