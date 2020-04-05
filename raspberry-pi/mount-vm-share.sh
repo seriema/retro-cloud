@@ -13,8 +13,8 @@ echo 'Create a folder for the mount point'
 # TODO: RETROCLOUD_AZ_RESOURCE_GROUP is currently considered a debug name but perhaps I should save the generated "prefix" (or a system where Azure generates the names)
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and mount-az-share.sh.
 mntPath="/mnt/$RETROCLOUD_AZ_RESOURCE_GROUP"
-sudo mkdir -p $mntPath
-sudo chmod 777 $mntPath
+sudo mkdir -p "$mntPath"
+sudo chmod 777 "$mntPath"
 
 echo 'Create a persistent mount point in autostart.sh'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and create-vm.ps1.
@@ -38,13 +38,13 @@ echo 'Attempt to mount VM now to avoid a reboot ...'
 )
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
-mv $HOME/.emulationstation/gamelists $HOME/.emulationstation/gamelists.bak
+mv "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.bak"
 
 echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
-mv $HOME/.emulationstation/downloaded_media $HOME/.emulationstation/downloaded_media.bak || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
+mv "${HOME}/.emulationstation/downloaded_media" "${HOME}/.emulationstation/downloaded_media.bak" || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
 
 echo 'Backup ROMs as ~/RetroPie/roms.bak'
-mv $HOME/RetroPie/roms $HOME/RetroPie/roms.bak
+mv "${HOME}/RetroPie/roms" "${HOME}/RetroPie/roms.bak"
 
 echo 'Symlink the mounted folders to look like a RetroPie installation'
 gamelists="$mntPath/.emulationstation/gamelists"
