@@ -1,5 +1,16 @@
 version: 2
 jobs:
+  bashValidation:
+    docker:
+    - image: koalaman/shellcheck-alpine:stable
+    steps:
+
+    - checkout
+
+    - run:
+        name: Lint Scripts
+        command: find . -type f -name '*.sh' | xargs shellcheck --external-sources
+
   scriptValidation:
     docker:
     - image: seriema/retro-cloud:develop
@@ -131,5 +142,6 @@ workflows:
   version: 2
   commit:
     jobs:
+    - bashValidation
     - scriptValidation
     - imageValidation
