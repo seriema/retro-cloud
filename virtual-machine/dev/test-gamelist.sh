@@ -18,8 +18,13 @@ then
     exit 0
 fi
 
+echo ""
 echo "No something's definitely wrong. See details above."
+echo ""
 echo "Printing the scraped XML:"
 cat "$RETROCLOUD_VM_SHARE/.emulationstation/gamelists/nes/gamelist.xml"
+echo ""
+echo "There might be some information from Skyscraper. Printing '~/.skyscraper/screenscraper_error.json':"
+cat "$HOME/.skyscraper/screenscraper_error.json"
 
 exit 1
