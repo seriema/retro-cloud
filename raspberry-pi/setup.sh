@@ -11,7 +11,7 @@ if [[ "${AZURE_SERVICE_PRINCIPAL_SECRET:-missing}" == "missing" ]]; then
     # https://stackoverflow.com/a/1885534
     read -p "Ready to continue [y/N]? " -r
     if [[ ! $REPLY =~ ^y|Y|[yY][eE][sS]$ ]]; then
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
+        [[ "$0" = "${BASH_SOURCE[*]}" ]] && exit 1 || return 1
     fi
 fi
 
@@ -37,4 +37,4 @@ chmod +x "$HOME/ssh-vm.sh"
 
 echo "SETUP: Done!"
 
-echo 'SETUP: Note, you need to load the environment variables! Start a new interactive shell with `bash -i`.'
+echo "SETUP: Note, you need to load the environment variables! Start a new interactive shell with 'bash -i'."

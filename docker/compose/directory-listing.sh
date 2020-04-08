@@ -12,7 +12,9 @@ else
     # Two emulators aren't available on amd64: mame-mame4all, amiga
     emulators="amstradcpc, arcade, atari2600, atari5200, atari7800, atari800, atarilynx, fba, fds, gamegear, gb, gba, gbc, genesis, mame-libretro, mastersystem, megadrive, n64, neogeo, nes, ngp, ngpc, pcengine, psx, sega32x, segacd, sg-1000, snes, vectrex, zxspectrum";
 fi
-[[ -z $(echo $(echo $emulators | tr ',' '\n') $(ls -1 ~/RetroPie/roms) | tr ' ' '\n' | sort | uniq -u) ]]
+# Disable lint: this was tedious to validate and it uses word splitting on purpose
+# shellcheck disable=SC2046
+[[ -z $(echo $(echo "$emulators" | tr ',' '\n') $(ls -1 ~/RetroPie/roms) | tr ' ' '\n' | sort | uniq -u) ]]
 
 echo 'Verify that there are no builds left. There is one for each failed build.'
 # Added when RetroPie-Setup was failing silently and not installing all emulators.
@@ -25,4 +27,4 @@ echo 'Verify that line endings of all files are LF. Windows uses CRLF which can 
 # Note: The Dockerfile no longer copies bash files because COPY constantly invalidates the cache, forcing
 # unnecessary rebuilds that take 30-60 minutes locally and 2-3 hours on Docker Hub. The test is kept
 # as a regression test for future changes to the Dockerfile.
-[[ -z $(grep -r $'\r' * -l) ]]
+! grep -r $'\r' ./* -l -q

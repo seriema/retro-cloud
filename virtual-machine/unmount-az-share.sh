@@ -7,8 +7,8 @@ set -u
 
 echo 'Unmount the Azure File Share in the VMs shared folder.'
 mntPath="$RETROCLOUD_VM_SHARE"
-sudo umount $mntPath
-sudo rm -r -f $mntPath
+sudo umount "$mntPath"
+sudo rm -r -f "$mntPath"
 
 # Do not delete it because it can't be recreated from within the VM
 # echo 'Delete the credential file that stores the username and password for the file share.'

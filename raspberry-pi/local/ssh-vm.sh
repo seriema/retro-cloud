@@ -7,4 +7,6 @@ set -e
 # Error if variable is unset
 set -u
 
-ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP $vmCmd
+# Lint disable: We do want the command to expand on the client side.
+# shellcheck disable=SC2029
+ssh "${RETROCLOUD_VM_USER}@${RETROCLOUD_VM_IP}" "$vmCmd"

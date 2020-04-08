@@ -6,4 +6,4 @@ set -e
 set -u
 
 echo 'Remove the shared directory and symlinks'
-rm -r $RETROCLOUD_VM_SHARE
+rm -r "$RETROCLOUD_VM_SHARE"

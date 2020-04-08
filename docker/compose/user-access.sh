@@ -17,9 +17,9 @@ echo 'Verify access permissions of different directories'
 
 echo 'Verify group memberships'
 # Added when replacing 'useradd' with 'adduser' to verify that the user gets a group with the same name.
-[[ $(groups | grep pi) ]]
+groups | grep -q pi
 # Added when replacing 'useradd' with 'adduser' to verify that the user is still given sudo rights.
-[[ $(groups | grep sudo) ]]
+groups | grep -q sudo
 
 echo 'Verify that the image default user is "pi"'
 # Added when not setting "USER pi" as the last user in the Dockerfile.

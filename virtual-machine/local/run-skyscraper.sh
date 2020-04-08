@@ -111,18 +111,18 @@ do
 
     # "arcadedb" only has MAME games
     if [[ $platform == *"mame"* ]]; then
-        Skyscraper -p $platform -s 'arcadedb'
+        Skyscraper -p "$platform" -s 'arcadedb'
     fi
 
     # TODO: If there are no games found, run the "screenscraper" module again but with the --unpack flag?
 
     for module in "${modules[@]}"
     do
-        Skyscraper -p $platform -s $module
+        Skyscraper -p "$platform" -s "$module"
     done
 
     echo "Generating gamelists and artwork for $platform"
-    Skyscraper -p $platform
+    Skyscraper -p "$platform"
 
     # This step is needed because the AZ mounted path is reflected in the gamelists, and they're symlinked on the rpi to look local.
     echo "Fixing paths in gamelists for $platform"
