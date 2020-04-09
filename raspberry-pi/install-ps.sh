@@ -6,6 +6,8 @@ set -eu
 
 target="/opt/microsoft/powershell/7"
 
+echo 'Install PowerShell'
+
 ###################################
 # Abort if PowerShell already exists.
 
@@ -25,22 +27,22 @@ else
     arch=arm32
 fi
 
-# Grab the latest tar.gz
+echo 'Download the latest tar.gz'
 curl -OL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
 
-# Make folder to put powershell
+echo "Make folder to put powershell ($target)"
 sudo mkdir -p "$target"
 
-# Unpack the tar.gz file
+echo 'Unpack the tar.gz file'
 sudo tar -zxf "./powershell-7.0.0-linux-$arch.tar.gz" -C "$target"
 
-# Set execute permissions
+echo 'Set execute permissions'
 sudo chmod +x "$target/pwsh"
 
-# Remove tar ball
+echo 'Remove tar ball'
 rm "./powershell-7.0.0-linux-$arch.tar.gz"
 
-# Create a symbolic link
+echo 'Create a symbolic link as /usr/bin/pwsh'
 sudo ln -s "$target/pwsh" /usr/bin/pwsh
 
 echo 'To start PowerShell run: pwsh'
