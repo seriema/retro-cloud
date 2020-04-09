@@ -6,6 +6,10 @@
 # Abort on error
 $ErrorActionPreference = "Stop"
 
+# Disable progress bar output because the Module installation uses a Progress bar, which doesn't
+# render well on a Raspberry Pi and makes the build log in CI unreadable.
+$Global:ProgressPreference = "SilentlyContinue"
+
 ###################################
 # Install the Azure PowerShell module
 
