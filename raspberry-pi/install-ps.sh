@@ -32,7 +32,7 @@ curl -OL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powe
 sudo mkdir -p "$target"
 
 # Unpack the tar.gz file
-sudo tar -zxvf "./powershell-7.0.0-linux-$arch.tar.gz" -C "$target"
+sudo tar -zxf "./powershell-7.0.0-linux-$arch.tar.gz" -C "$target"
 
 # Set execute permissions
 sudo chmod +x "$target/pwsh"
