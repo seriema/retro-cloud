@@ -4,9 +4,6 @@
 # Abort on error
 $ErrorActionPreference = "Stop"
 
-# Enable debug output
-$DebugPreference = "Continue"
-
 'Delete resources from Azure ...'
 if (!$env:AZURE_SERVICE_PRINCIPAL_SECRET) {
     '... Note: This operation takes a very long time (15-20 min) so it will only send a command to Azure and not wait for the removal to be complete.'

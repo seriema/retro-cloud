@@ -3,9 +3,6 @@
 # Abort on error
 $ErrorActionPreference = "Stop"
 
-# Enable debug output
-$DebugPreference = "Continue"
-
 # Count all the uses of "ProgressHelper" in this script to calculate the progress %.
 $script:progressStepCount = ([System.Management.Automation.PsParser]::Tokenize((gc "$PSScriptRoot\$($MyInvocation.MyCommand.Name)"), [ref]$null) | where { $_.Type -eq 'Command' -and $_.Content -eq 'ProgressHelper' }).Count
 $script:progressStep = 0
