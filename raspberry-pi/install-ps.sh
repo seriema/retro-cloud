@@ -6,8 +6,6 @@ set -eu
 
 target="/opt/microsoft/powershell/7"
 
-echo 'Install PowerShell'
-
 ###################################
 # Abort if PowerShell already exists.
 
