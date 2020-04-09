@@ -196,6 +196,7 @@ New-AzVM `
   -ResourceGroupName $rg `
   -Location $loc `
   -VM $vmConfig `
+  -Verbose `
 | Format-List
 
 ###################################
