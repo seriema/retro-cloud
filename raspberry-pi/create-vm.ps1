@@ -40,7 +40,7 @@ $sshPublicKey = cat "$HOME/.ssh/id_rsa.pub" | head -n 1
 if (!$sshPublicKey) {
     Write-Error "SSH public key is empty";
 }
-$sshPublicKey | Format-List
+$sshPublicKey | ConvertTo-Json
 
 ####################################
 $currentActivity = "Initializing"
@@ -49,7 +49,7 @@ ProgressHelper $currentActivity "Creating a resource group"
 New-AzResourceGroup `
   -Name $rg `
   -Location $loc `
-| Format-List
+| ConvertTo-Json
 
 ####################################
 $currentActivity = "Create virtual network resources"
@@ -60,7 +60,7 @@ Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "true"
 $subnetConfig = New-AzVirtualNetworkSubnetConfig `
   -Name "subnet" `
   -AddressPrefix 192.168.1.0/24
-$subnetConfig | Format-List
+$subnetConfig | ConvertTo-Json
 Set-Item Env:\SuppressAzurePowerShellBreakingChangeWarnings "false"
 
 ProgressHelper $currentActivity "Creating a virtual network"
@@ -70,7 +70,7 @@ $vnet = New-AzVirtualNetwork `
   -Name "vnet" `
   -AddressPrefix 192.168.0.0/16 `
   -Subnet $subnetConfig
-$vnet | Format-List
+$vnet | ConvertTo-Json
 
 ProgressHelper $currentActivity "Creating a public IP address and specifying a DNS name"
 $pip = New-AzPublicIpAddress `
@@ -79,7 +79,7 @@ $pip = New-AzPublicIpAddress `
   -AllocationMethod Static `
   -IdleTimeoutInMinutes 4 `
   -Name "publicdns$(Get-Random)"
-$pip | Format-List
+$pip | ConvertTo-Json
 $ip=$pip.IpAddress
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 22 (SSH)"
@@ -93,7 +93,7 @@ $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
   -DestinationAddressPrefix * `
   -DestinationPortRange 22 `
   -Access "Allow"
-$nsgRuleSSH | Format-List
+$nsgRuleSSH | ConvertTo-Json
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 80 (web)"
 $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
@@ -106,7 +106,7 @@ $nsgRuleWeb = New-AzNetworkSecurityRuleConfig `
   -DestinationAddressPrefix * `
   -DestinationPortRange 80 `
   -Access "Allow"
-$nsgRuleWeb | Format-List
+$nsgRuleWeb | ConvertTo-Json
 
 ProgressHelper $currentActivity "Creating a network security group (NSG)"
 $nsg = New-AzNetworkSecurityGroup `
@@ -114,7 +114,7 @@ $nsg = New-AzNetworkSecurityGroup `
   -Location $loc `
   -Name "networkSecurityGroup" `
   -SecurityRules $nsgRuleSSH,$nsgRuleWeb
-$nsg | Format-List
+$nsg | ConvertTo-Json
 
 ProgressHelper $currentActivity "Creating a virtual network card and associate it with the public IP address and NSG"
 $nic = New-AzNetworkInterface `
@@ -124,7 +124,7 @@ $nic = New-AzNetworkInterface `
   -SubnetId $vnet.Subnets[0].Id `
   -PublicIpAddressId $pip.Id `
   -NetworkSecurityGroupId $nsg.Id
-$nic | Format-List
+$nic | ConvertTo-Json
 
 ###################################
 $currentActivity = "Create the storage account (for scraping cache and boot diagnostics)"
@@ -138,11 +138,11 @@ $storageAccount = New-AzStorageAccount `
   -Location $loc `
   -Name $storageAccountName `
   -SkuName "Standard_LRS"
-$storageAccount | Format-List
+$storageAccount | ConvertTo-Json
 # There has to be a better way to get the key without calling Get-AzStorageAccount (commented out version below)?
 $storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey=' -SimpleMatch).Line.Replace('AccountKey=','')
 # $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
-$storageAccountKey | Format-List
+$storageAccountKey | ConvertTo-Json
 
 # TODO: Use the same share for ROMs for now.
 ProgressHelper $currentActivity "Creating the Azure File Share"
@@ -150,7 +150,7 @@ $fileShareName = "retro-cloud"
 $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
-$fileShare | Format-List
+$fileShare | ConvertTo-Json
 $smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
 
 ###################################
@@ -182,21 +182,21 @@ $vmConfig = `
   Set-AzVMBootDiagnostic `
     -Enable -ResourceGroupName $rg `
     -StorageAccountName $storageAccountName
-$vmConfig | Format-List
+$vmConfig | ConvertTo-Json
 
 ProgressHelper $currentActivity "Adding the SSH public key to the VM's SSH authorized keys"
 Add-AzVMSshPublicKey `
   -VM $vmconfig `
   -KeyData $sshPublicKey `
   -Path "/home/$username/.ssh/authorized_keys" `
-| Format-List
+| ConvertTo-Json
 
 ProgressHelper $currentActivity "Creating the virtual machine (takes a while)"
 New-AzVM `
   -ResourceGroupName $rg `
   -Location $loc `
   -VM $vmConfig `
-| Format-List
+| ConvertTo-Json
 
 ###################################
 $currentActivity = "Setup the virtual machine"
