@@ -75,6 +75,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         * Makes the source code available inside the container as `~/retro-cloud-source`, and uses it as the work directory.
         * Caches some install steps as named volumes (i.e. PowerShell).
         * Adds environment variables for automation (see `docker-dev-setup.sh`).
+    * `lint.sh` to lint all `.sh` files through a Docker image with [shellcheck](https://github.com/koalaman/shellcheck).
 * Testing scripts as a user
     * Follow the "Setup" section above.
     * To test a specific branch:
