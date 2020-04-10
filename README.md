@@ -90,6 +90,8 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * `docker-build.sh` to build a production Docker image.
     * `docker-push.sh` to push the built production Docker image to Docker Hub.
     * `docker-run.sh` runs the latest local production Docker image. Useful to verify the image before pushing it.
+* Circle CI
+    * `build-all-commits.sh` to queue a build for every commit between current branch and develop. Meant to be used before creating a PR or merging to develop so that each commit is validated.
 
 ### Notes on Windows
 
