@@ -169,7 +169,7 @@ $vmName = "VM"
 $vmConfig = `
   New-AzVMConfig `
     -VMName $vmName `
-    -VMSize "Standard_F1" | `
+    -VMSize "Standard_F1s" | `
   Set-AzVMOperatingSystem `
     -Linux `
     -ComputerName $vmName `
