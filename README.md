@@ -95,11 +95,12 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts above. As a **fallback** use PowerShell or any terminal that runs Docker and use these commands:
 
 * Development
-    * Dev setup: Set up these environment variables for automation to skip Azure login prompts by using a Service Principle account.
+    * Dev setup: Set up a Docker .env file to skip Azure login prompts by using a Service Principle account.
         1. Run `raspberry-pi/dev/create-service-principal.ps1` to create a Service Principle. Note the output.
-        1. Set `RC_DEV_AZURE_TENANT_ID`
-        1. Set `RC_DEV_AZURE_SERVICE_PRINCIPAL_USER`
-        1. Set `RC_DEV_AZURE_SERVICE_PRINCIPAL_SECRET`
+        1. Create a new file in the root: `.env`
+            1. Set `AZURE_TENANT_ID`
+            1. Set `AZURE_SERVICE_PRINCIPAL_USER`
+            1. Set `AZURE_SERVICE_PRINCIPAL_SECRET`
     * Dev build: `docker build -t "rc:dev" .`
     * Dev run:
         * Sharing the source code through Docker

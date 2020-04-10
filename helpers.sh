@@ -3,6 +3,13 @@
 # Abort on error, and error if variable is unset
 set -eu
 
+# This file is set by docker-dev-setup.sh, and is optional to have.
+if [[ -f .env ]]; then
+    # Disable lint: the .env file is git ignored so it can't be included for shellcheck (https://github.com/koalaman/shellcheck/wiki/SC1091)
+    # shellcheck disable=SC1091
+    source .env
+fi
+
 getBranch()
 {
     git rev-parse --abbrev-ref HEAD
