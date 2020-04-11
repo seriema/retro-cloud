@@ -33,6 +33,12 @@ if [[ $(getArch) == "arm32v7" ]]; then # Raspberry Pi
         "$tag" \
     )
 
+    # We need the RPi configured controllers to connect and they need to be writable because EmulationStation always writes to them, but not risk breaking the RPi configs
+    docker cp --follow-link /opt/retropie/configs/all/retroarch/. "${containerInstance}:/opt/retropie/configs/all/retroarch"
+    # We need the configs but cannot copy the whole EmulationStation folder if this container is to mimic a user's RetroPie
+    docker cp /opt/retropie/configs/all/emulationstation/es_input.cfg "${containerInstance}:/opt/retropie/configs/all/emulationstation/es_input.cfg"
+    docker cp /opt/retropie/configs/all/emulationstation/es_temporaryinput.cfg "${containerInstance}:/opt/retropie/configs/all/emulationstation/es_temporaryinput.cfg"
+
 else # Windows
     containerInstance=$(docker container create \
         --cap-add SYS_ADMIN \
@@ -43,6 +49,8 @@ else # Windows
         "$tag" \
     )
 fi
+
+# Do not copy the host's SSH keys, if this container is to mimic a user's RetroPie
 
 # Run the prepared container
 docker container start --attach --interactive "$containerInstance"
