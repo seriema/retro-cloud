@@ -1,14 +1,15 @@
 #!/bin/bash
+# Accepts a tag (preferably the branch name) as an optional parameter used for the Docker image tag name.
+# Note: First time running this you want to run ./raspberry-pi/install-ps.sh. The PowerShell installation will then persist between containers through named volumes.
 
 # Abort on error, and error if variable is unset
 set -eu
 
-# Accepts a tag (preferably the branch name) as an optional parameter for a command to send to the VM.
 . ./helpers.sh
 branch=${1:-"$(getBranch)"}
 tag="rc:$branch"
 
-if [[ $(getArch) == "arm32v7" ]]; then
+if [[ $(getArch) == "arm32v7" ]]; then # Raspberry Pi
     containerInstance=$(docker container create \
         --env PULSE_SERVER=unix:/run/user/1000/pulse/native \
         --env-file .env \
@@ -30,6 +31,15 @@ if [[ $(getArch) == "arm32v7" ]]; then
         --volume /opt/vc:/opt/vc \
         --volume /run/user/1000:/run/user/1000 \
         --volume /var/run/dbus/:/var/run/dbus/ \
+        `# This stores the PowerShell installation, symlink is created later.` \
+        --volume powershell-install:/opt/microsoft/powershell \
+        `# These stores the PowerShell module for Azure.` \
+        --volume powershell-modules-cache:/home/pi/.cache/powershell \
+        --volume powershell-modules-config:/home/pi/.config/NuGet \
+        --volume powershell-modules-share:/home/pi/.local/share/powershell \
+        `# This stores the Azure authentication context.` \
+        --volume powershell-azure-context:/home/pi/.Azure \
+        `# Make the source code available and start the container in that directory.` \
         --volume "$PWD":/home/pi/retro-cloud-source \
         --workdir /home/pi/retro-cloud-source \
         "$tag" \
@@ -41,7 +51,7 @@ if [[ $(getArch) == "arm32v7" ]]; then
     docker cp /opt/retropie/configs/all/emulationstation/es_input.cfg "${containerInstance}:/opt/retropie/configs/all/emulationstation/es_input.cfg"
     docker cp /opt/retropie/configs/all/emulationstation/es_temporaryinput.cfg "${containerInstance}:/opt/retropie/configs/all/emulationstation/es_temporaryinput.cfg"
 
-else
+else # Windows
     containerInstance=$(docker container create \
         --cap-add SYS_ADMIN \
         --device /dev/fuse \
@@ -49,6 +59,15 @@ else
         --interactive \
         --rm \
         --tty \
+        `# This stores the PowerShell installation, symlink is created later.` \
+        --volume powershell-install:/opt/microsoft/powershell \
+        `# These stores the PowerShell module for Azure.` \
+        --volume powershell-modules-cache:/home/pi/.cache/powershell \
+        --volume powershell-modules-config:/home/pi/.config/NuGet \
+        --volume powershell-modules-share:/home/pi/.local/share/powershell \
+        `# This stores the Azure authentication context.` \
+        --volume powershell-azure-context:/home/pi/.Azure \
+        `# Make the source code available and start the container in that directory.` \
         --volume "$PWD":/home/pi/retro-cloud-source \
         --workdir /home/pi/retro-cloud-source \
         "$tag" \
@@ -58,5 +77,11 @@ fi
 # We want writable .ssh/known_hosts but not risk that our own .ssh/ directory gets broken
 docker cp "$HOME/.ssh" "${containerInstance}:/home/pi/.ssh"
 
-# Run the prepared container
-docker container start --attach --interactive "$containerInstance"
+# Start the prepared container
+docker container start "$containerInstance"
+
+# Symlink the PowerShell binary as 'pwsh', like install-ps.sh does
+docker exec -d "$containerInstance" sudo ln --symbolic "/opt/microsoft/powershell/7/pwsh" "/usr/bin/pwsh"
+
+# Attach and do interactive work in the container
+docker container attach "$containerInstance"
