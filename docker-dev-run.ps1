@@ -1,7 +1,9 @@
+param (
+    [string]$branch = "$(git rev-parse --abbrev-ref HEAD)"
+)
+
 # Abort on error
 $ErrorActionPreference = "Stop"
-
-$branch = "$(git rev-parse --abbrev-ref HEAD)"
 
 docker run `
     --cap-add SYS_ADMIN `

@@ -5,7 +5,8 @@ source /etc/profile.d/retro-cloud-dev.sh
 # Abort on error, and error if variable is unset
 set -eu
 
-branch="$(git rev-parse --abbrev-ref HEAD)"
+# Accepts a tag (preferably the branch name) as an optional parameter for a command to send to the VM.
+branch=${1:-"$(git rev-parse --abbrev-ref HEAD)"}
 
 docker run \
     --cap-add SYS_ADMIN \
