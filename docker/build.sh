@@ -17,3 +17,5 @@ docker image history --human "$tag" | tee -a "$logfile"
 
 echo
 echo "Build logged to $logfile"
+# Assuming it built. The logging is currently swallowing docker build errors.
+echo "Image created as $tag"

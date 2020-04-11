@@ -1,4 +1,5 @@
 #!/bin/bash
+# Helper functions used in various dev scripts.
 
 # Abort on error, and error if variable is unset
 set -eu

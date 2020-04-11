@@ -5,8 +5,12 @@
 set -eu
 
 . ./helpers.sh
-tag="seriema/retro-cloud:latest-$(getArch)"
 
+# Get the latest release image
+tag="seriema/retro-cloud:latest-$(getArch)"
+docker pull "$tag"
+
+# Create a machine specific container
 if [[ $(getArch) == "arm32v7" ]]; then # Raspberry Pi
     containerInstance=$(docker container create \
         --env PULSE_SERVER=unix:/run/user/1000/pulse/native \
