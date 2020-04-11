@@ -4,23 +4,16 @@ Running ROMs from the cloud
 An expensive and over-engineered approach to storing ROMs and their metadata which sets out to answer the question:
 > Why buy a cheap USB stick when you can use multiple expensive services in the Cloud?
 
-## Architecture
-
-![architecture-diagram](diagrams/architecture.svg)
-
-### File structure
-
-![filestructure-diagram](diagrams/filestructure.svg)
-
 ## Setup
 
 1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
 
     ```bash
     $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
-    # Or this shortened URL:
+    # Or:
     $ curl -sSL https://tiny.cc/retro-cloud-setup | bash
-    # Or get the latest development version:
+
+    # Or the latest development version:
     $ curl -sSL https://tiny.cc/rc-rpi | bash
     ```
 
@@ -39,9 +32,10 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 
         ```bash
         $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
-        # Or this shortened URL:
+        # Or:
         $ curl -sSL https://tiny.cc/retro-cloud-setup-vm | bash
-        # Or get the latest development version:
+
+        # Or the latest development version:
         $ curl -sSL https://tiny.cc/rc-vm | bash
         ```
 
@@ -60,55 +54,70 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 
 ## Development
 
+### Architecture
+
+![architecture-diagram](diagrams/architecture.svg)
+
+### File structure
+
+![filestructure-diagram](diagrams/filestructure.svg)
+
+
 ### Prerequisites
 
 * PowerShell 7+
 * Bash 4.4.12+
+* Docker Engine 19+ (Optional, but highly recommended)
 
 ### Workflow
 
+This project is in large part install scripts running on someone's Raspberry Pi for the first time. To ensure installation works it's crucial to test on a new RetroPie installation each time. Wiping a SD-card after every test can be time consuming, so there is a Docker image to make this convenient. Therefore, there are three main areas of development: test environment, install scripts, and functionality.
+
+1. **The test environment:** A best-effort Docker image to represent a newly installed RetroPie installation, as there is no official Docker image for neither Raspbian (the RaspberryPi OS) nor RetroPie. It can run slimmed down as a user's RetroPie, or with some install scripts pre-run and with the source code available inside the container.
+1. **The install scripts:** Bash and PowerShell scripts that installs all the needed tools and applications to create and connect all Azure resources with the user's RetroPie.
+    > Tip: Use `docker/start.sh` while working on the scripts for faster iteration, and `start.sh` to test run them from scratch.
+1. **The functionality:** Part of the install scripts, but focusing on the features available after installation. Such as ROM scraping.
+
 * Development
-    * `docker-dev-setup.sh` sets up environment variables for automation (same as used in CI). Avoid the Azure login prompt by setting up a Service Principle account. 
-    * `docker-dev-build.sh` to build a Docker image meant for running locally. The tag is `rc:(branch name)`.
-    * `docker-dev-test.sh` to validate the built Docker image.
-    * `docker-dev-run.sh` to run a throwaway Docker container that:
+    * `docker/setup.sh` sets up environment variables for automation (same as used in CI) in a `.env` file in the root. Avoid the Azure login prompt by setting up a Service Principle account.
+        > Tip: Use `docker/dev/create-service-principal.ps1` to conveniently create a Service Principle, and store the results in the `.env` file.
+    * `docker/build.sh` to build a Docker image meant for running locally. The tag is `rc:[branch name]`.
+    * `docker/test.sh` to validate the built Docker image.
+    * `docker/start.sh` to run a throwaway Docker container that:
         * Makes the source code available inside the container as `~/retro-cloud-source`, and uses it as the work directory.
         * Caches some install steps as named volumes (i.e. PowerShell).
-        * Adds environment variables for automation (see `docker-dev-setup.sh`).
-    * `lint.sh` to lint all `.sh` files through a Docker image with [shellcheck](https://github.com/koalaman/shellcheck).
-* Testing scripts as a user
-    * Follow the "Setup" section above.
+        * Adds environment variables from the `.env` file for automation (see `docker/setup.sh`).
+    * `docker/publish-arm.sh` to build and push an ARM image of the master branch to Docker Hub as `seriema/retro-cloud:latest-arm32v7`. The AMD image is built by Docker Hub automated builds as `seriema/retro-cloud:latest-amd64`.
+    * `lint.sh` to lint all `.sh` files through a Docker image with [shellcheck](https://github.com/koalaman/shellcheck), and check their execution permissions.
+    * `.env` file: Used to store environment variables useful during development. It consists of:
+        1. Azure automation
+            * `AZURE_TENANT_ID`
+            * `AZURE_SERVICE_PRINCIPAL_USER`
+            * `AZURE_SERVICE_PRINCIPAL_SECRET`
+        1. Retro-Cloud setup (re-use an Azure infrastructure between runs by copying these values from the RPi's `$HOME/.retro-cloud.env`)
+            * `RETROCLOUD_VM_IP`
+            * `RETROCLOUD_VM_USER`
+            * `RETROCLOUD_VM_SHARE`
+            * `RETROCLOUD_AZ_RESOURCE_GROUP`
+        1. CircleCI scripting
+            * `CIRCLECI_API_USER_TOKEN`
+* Testing install scripts as a user
+    * `start.sh` to run a throwaway Docker container using the latest release image.
     * To test a specific branch:
         * `branch=[the branch you want to test]`, e.g. `branch=upgrade-powershell`
-        * `wget -nv "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
+        * `curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
         * `bash download-and-run.sh "$branch"`
         * `rm download-and-run.sh`
     * To validate that the image is correct:
         * `docker/compose/run_tests.sh`
-        * `docker-compose -f docker-compose.test.yml up`
-* Docker Hub
-    * `publish-arm.sh` to build and push an ARM image of the master branch to Docker Hub as `seriema/retro-cloud:latest-arm32v7`. The AMD image is built by Docker Hub automated builds as `seriema/retro-cloud:latest-amd64`.
-* Circle CI
-    * `build-all-commits.sh` to queue a build for every commit between current branch and develop. Meant to be used before creating a PR or merging to develop so that each commit is validated.
+* Continous Integration with CircleCI
+    * `.circleci/build-all-commits.sh` to queue a build for every commit between current branch and develop. Meant to be used before creating a PR or merging to develop so that each commit is validated.
 
 ### Notes on Windows
 
-Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts above. As a **fallback** use PowerShell or any terminal that runs Docker and use these commands:
+Some of the Bash scripts above don't work on Windows (Git Bash) so there are some PowerShell equivalents. They aren't guaranteed to be as powerfull as the Bash scripts.
 
 * Development
-    * Dev setup: Set up a Docker .env file to skip Azure login prompts by using a Service Principle account.
-        1. Run `raspberry-pi/dev/create-service-principal.ps1` to create a Service Principle. Note the output.
-        1. Create a new file in the root: `.env`
-            1. Set `AZURE_TENANT_ID`
-            1. Set `AZURE_SERVICE_PRINCIPAL_USER`
-            1. Set `AZURE_SERVICE_PRINCIPAL_SECRET`
-    * Dev build: `docker build -t "rc:dev" .`
-    * Dev run:
-        * Sharing the source code through Docker
-            * `docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin -v "$((Get-Location).Path):/home/pi/retro-cloud-source" rc:dev`
-            * **Note:** Requires File Sharing to be enabled. See the [Docker documentation](https://docs.docker.com/docker-for-windows/#file-sharing).
-        * Otherwise go through git
-            * `docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
-            * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
-* Docker
-    * run: `docker pull seriema/retro-cloud:latest-amd64 && docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it seriema/retro-cloud:latest-amd64`
+    * `docker/start.ps1`
+    * `docker/test.ps1`
+    > **Note:** Requires File Sharing to be enabled. See the [Docker documentation](https://docs.docker.com/docker-for-windows/#file-sharing).
