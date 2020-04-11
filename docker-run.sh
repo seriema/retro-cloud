@@ -1,10 +1,11 @@
 #!/bin/bash
+# Starts a basic container using a release image.
 
 # Abort on error, and error if variable is unset
 set -eu
 
 . ./helpers.sh
-tag="seriema/retro-cloud:$(getArch)"
+tag="seriema/retro-cloud:latest-$(getArch)"
 
 if [[ $(getArch) == "arm32v7" ]]; then # Raspberry Pi
     containerInstance=$(docker container create \

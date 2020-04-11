@@ -87,9 +87,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         * `docker/compose/run_tests.sh`
         * `docker-compose -f docker-compose.test.yml up`
 * Docker Hub
-    * `docker-build.sh` to build a production Docker image.
-    * `docker-push.sh` to push the built production Docker image to Docker Hub.
-    * `docker-run.sh` runs the latest local production Docker image. Useful to verify the image before pushing it.
+    * `publish-arm.sh` to build and push an ARM image of the master branch to Docker Hub as `seriema/retro-cloud:latest-arm32v7`. The AMD image is built by Docker Hub automated builds as `seriema/retro-cloud:latest-amd64`.
 * Circle CI
     * `build-all-commits.sh` to queue a build for every commit between current branch and develop. Meant to be used before creating a PR or merging to develop so that each commit is validated.
 
@@ -112,7 +110,5 @@ Preferably use Bash (`docker-run.sh` doesn't work in Git Bash) and the scripts a
         * Otherwise go through git
             * `docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it -v azure-context:/.Azure -v powershell-install:/home/pi/powershell -v powershell-bin:/usr/bin rc:dev`
             * `git clone git@github.com:seriema/retro-cloud.git && cd retro-cloud && git checkout develop`
-* Docker Hub
-    * build: `docker build -t seriema/retro-cloud:amd64 .`
-    * push: `docker push seriema/retro-cloud:amd64` (should not be needed as Docker Hub builds these)
-    * run: `docker pull seriema/retro-cloud:amd64 && docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it seriema/retro-cloud:amd64`
+* Docker
+    * run: `docker pull seriema/retro-cloud:latest-amd64 && docker run --cap-add SYS_ADMIN --device /dev/fuse --rm -it seriema/retro-cloud:latest-amd64`
