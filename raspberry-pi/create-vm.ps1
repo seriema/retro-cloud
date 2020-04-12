@@ -29,6 +29,7 @@ function ProgressHelper {
 $prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
 $rg = "$($prefix)retro-cloud"
 $loc = "EastUS"
+$envVarFile="$HOME/.retro-cloud.env"
 
 ####################################
 $currentActivity = "Prerequisites"
@@ -44,6 +45,11 @@ if (!$sshPublicKey) {
     Write-Error "SSH public key is empty";
 }
 $sshPublicKey | Format-Table
+
+ProgressHelper $currentActivity "Saving the Azure Resource Group name locally in $envVarFile in case of failure during setup"
+Add-Content "$envVarFile" '# RETRO-CLOUD: The environment variables below are from raspberry-pi/create-vm.ps1'
+Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 
 ####################################
 $currentActivity = "Initializing"
@@ -248,14 +254,11 @@ $currentActivity = "Persist resource values"
 $envVarFile="$HOME/.retro-cloud.env"
 ProgressHelper $currentActivity "Saving configuration variables locally in $envVarFile"
 
-Add-Content "$envVarFile" '# RETRO-CLOUD: The environment variables below are from raspberry-pi/create-vm.ps1'
 Add-Content "$envVarFile" '# These are needed by the RetroPie.'
 Add-Content "$envVarFile" "export RETROCLOUD_VM_IP=$ip"
 Add-Content "$envVarFile" "export RETROCLOUD_VM_USER=$username"
 Add-Content "$envVarFile" '# These are needed by both the RetroPie and VM.'
 Add-Content "$envVarFile" "export RETROCLOUD_VM_SHARE=$sharePath"
-Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 Add-Content "$envVarFile" '# These are needed by the VM.'
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
 Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS=$smbCredentialFile"
