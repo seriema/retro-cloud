@@ -25,6 +25,19 @@ function ProgressHelper {
   Write-Host "-Activity $activity -Status $operation -PercentComplete $percent"
 }
 
+function SaveConfigVar {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]
+        [string]$name,
+
+        [Parameter(Mandatory=$True)]
+        [string]$value
+    )
+
+    Add-Content "$envVarFile" "export ${name}=${value}"
+}
+
 # Shared variables
 $prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
 $rg = "$($prefix)retro-cloud"
@@ -63,7 +76,7 @@ New-AzResourceGroup `
   -Name $rg `
   -Location $loc `
 | Format-Table
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
+SaveConfigVar RETROCLOUD_AZ_RESOURCE_GROUP $rg
 
 ####################################
 $currentActivity = "Create virtual network resources"
@@ -95,7 +108,7 @@ $pip = New-AzPublicIpAddress `
   -Name "publicdns$(Get-Random)"
 $pip | Format-Table
 $ip=$pip.IpAddress
-Add-Content "$envVarFile" "export RETROCLOUD_VM_IP=$ip"
+SaveConfigVar RETROCLOUD_VM_IP $ip
 
 ProgressHelper $currentActivity "Creating an inbound network security group rule for port 22 (SSH)"
 $nsgRuleSSH = New-AzNetworkSecurityRuleConfig `
@@ -154,7 +167,7 @@ $storageAccount = New-AzStorageAccount `
   -Name $storageAccountName `
   -SkuName "Standard_LRS"
 $storageAccount | Format-Table
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+SaveConfigVar RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME $storageAccountName
 # There has to be a better way to get the key without calling Get-AzStorageAccount (commented out version below)?
 $storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Select-String -Pattern 'AccountKey=' -SimpleMatch).Line.Replace('AccountKey=','')
 # $storageAccountKey = ((Get-AzStorageAccountKey -ResourceGroupName $rg -Name $storageAccountName) | Where-Object {$_.KeyName -eq "key1"}).Value
@@ -167,9 +180,9 @@ $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
 $fileShare | Format-Table
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+SaveConfigVar RETROCLOUD_AZ_FILE_SHARE_NAME $fileShareName
 $smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+SaveConfigVar RETROCLOUD_AZ_FILE_SHARE_URL $smbPath
 
 ###################################
 $currentActivity = "Create the virtual machine"
@@ -215,7 +228,7 @@ New-AzVM `
   -Location $loc `
   -VM $vmConfig `
 | Format-Table
-Add-Content "$envVarFile" "export RETROCLOUD_VM_USER=$username"
+SaveConfigVar RETROCLOUD_VM_USER $username
 
 ###################################
 $currentActivity = "Setup the virtual machine"
@@ -244,7 +257,7 @@ ProgressHelper $currentActivity "Creating a folder to be shared with the Raspber
 # Creating it from the rpi so the setup.sh can continue by mounting it.
 $sharePath="/home/$username/retro-cloud-share"
 ssh "$($username)@$ip" "mkdir -p $sharePath"
-Add-Content "$envVarFile" "export RETROCLOUD_VM_SHARE=$sharePath"
+SaveConfigVar RETROCLOUD_VM_SHARE $sharePath
 
 ProgressHelper $currentActivity "Creating a credential file to store the username and password for the Azure File Share"
 # This is part of mounting a file share on Linux, that is done by virtual-machine/mount-az-share.sh,
@@ -258,7 +271,7 @@ ssh "${username}@${ip}" "echo 'username=$storageAccountName' | sudo tee $smbCred
 ssh "${username}@${ip}" "echo 'password=$storageAccountKey' | sudo tee -a $smbCredentialFile > /dev/null"
 # Change permissions on the credential file so only root can read or modify the password file
 ssh "${username}@${ip}" "sudo chmod 600 $smbCredentialFile"
-Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS=$smbCredentialFile"
+SaveConfigVar RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS $smbCredentialFile
 
 $vmEnvVarFile="/home/$username/.retro-cloud.env"
 ProgressHelper $currentActivity "Passing configuration variables to VM (${username}@${ip}:${vmEnvVarFile})"
