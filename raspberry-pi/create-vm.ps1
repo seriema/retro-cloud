@@ -164,12 +164,20 @@ $username = "pi"
 $securePassword = ConvertTo-SecureString ' ' -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
 
-ProgressHelper $currentActivity "Creating the virtual machine configuration"
+if ($Env:CI) {
+    $vmSizeMessage="a fast and expensive VM for Continous Integration"
+    $vmSize="Standard_F1s"
+} else {
+    $vmSizeMessage="a cheap VM for the user to save money (can be upscaled in the Azure Portal)"
+    $vmSize="Standard_B1s"
+}
+
+ProgressHelper $currentActivity "Creating the virtual machine configuration with $vmSizeMessage"
 $vmName = "VM"
 $vmConfig = `
   New-AzVMConfig `
     -VMName $vmName `
-    -VMSize "Standard_F2s_v2" | `
+    -VMSize $vmSize | `
   Set-AzVMOperatingSystem `
     -Linux `
     -ComputerName $vmName `
