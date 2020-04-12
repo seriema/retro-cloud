@@ -29,9 +29,6 @@ if [[ $(getArch) == "arm32v7" ]]; then # Raspberry Pi
         --volume /dev/vchiq:/dev/vchiq \
         --volume /dev/vcio:/dev/vcio \
         --volume /dev/vcsm:/dev/vcsm \
-        --volume /home/pi/.ssh:/home/pi/.ssh:ro \
-        --volume /opt/retropie/configs/all/retroarch:/home/pi/.config/retroarch:ro \
-        --volume /opt/retropie/configs/all/retroarch-joypads:/opt/retropie/configs/all/retroarch-joypads:ro \
         --volume /opt/vc:/opt/vc \
         --volume /run/user/1000:/run/user/1000 \
         --volume /var/run/dbus/:/var/run/dbus/ \
