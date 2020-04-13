@@ -31,11 +31,21 @@ jobs:
         command: docker pull seriema/retro-cloud:latest-amd64
 
     - run:
+        name: Create an .env file for Docker
+        command: |
+            echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" >> .env
+            echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" >> .env
+            echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" >> .env
+            echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" >> .env
+            echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" >> .env
+
+    - run:
         name: Create Docker container to emulate a RaspberryPi with RetroPie
         command: |
             docker container create \
                 --cap-add SYS_ADMIN \
                 --device /dev/fuse \
+                --env-file .env \
                 --interactive \
                 --rm \
                 --tty \
