@@ -116,15 +116,13 @@ jobs:
     steps:
     - checkout
     - run: ls -la
-    - run:
-        name: "Testing"
-        command: start.sh
+    - run: ./start.sh
 
 workflows:
   version: 2
   commit:
     jobs:
-    - bashValidation
+    # - bashValidation
     # - scriptValidation
     # - imageValidation
     - travisCompare
