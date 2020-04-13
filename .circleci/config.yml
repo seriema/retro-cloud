@@ -110,6 +110,15 @@ jobs:
         name: Validate Docker image
         command: bash docker/compose/run_tests.sh
 
+    travisCompare:
+      machine:
+        image: ubuntu-1604:201903-01
+      steps:
+      - checkout
+      - run:
+          name: "Testing"
+          command: start.sh
+
 workflows:
   version: 2
   commit:
@@ -117,3 +126,4 @@ workflows:
     - bashValidation
     # - scriptValidation
     # - imageValidation
+    - travisCompare
