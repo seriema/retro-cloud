@@ -13,13 +13,13 @@ before_script:
         --interactive \
         --rm \
         --tty \
-        --name "$TRAVIS_BUILD_NUMBER" \
+        --name "$TRAVIS_BUILD_ID" \
         seriema/retro-cloud:latest-amd64
-- docker container start "$TRAVIS_BUILD_NUMBER"
+- docker container start "$TRAVIS_BUILD_ID"
 
 script:
-- docker exec "$TRAVIS_BUILD_NUMBER" ls -la
-- docker exec "$TRAVIS_BUILD_NUMBER" ls -la "$HOME"
+- docker exec "$TRAVIS_BUILD_ID" ls -la
+- docker exec "$TRAVIS_BUILD_ID" ls -la "$HOME"
 
 after_script:
-- docker stop "$TRAVIS_BUILD_NUMBER"
+- docker stop "$TRAVIS_BUILD_ID"
