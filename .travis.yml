@@ -10,7 +10,6 @@ before_install:
         --cap-add SYS_ADMIN \
         --device /dev/fuse \
         --rm \
-        -it \
         seriema/retro-cloud:latest
 
 script:
