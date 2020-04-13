@@ -5,21 +5,23 @@ services:
     - docker
 
 before_script:
-- docker pull seriema/retro-cloud:latest-amd64
-- |
-    docker container create \
-        --cap-add SYS_ADMIN \
-        --device /dev/fuse \
-        --interactive \
-        --rm \
-        --tty \
-        --name "$TRAVIS_BUILD_NUMBER" \
-        seriema/retro-cloud:latest-amd64
-- docker container start "$TRAVIS_BUILD_NUMBER"
+# - docker pull seriema/retro-cloud:latest-amd64
+# - |
+#     docker container create \
+#         --cap-add SYS_ADMIN \
+#         --device /dev/fuse \
+#         --interactive \
+#         --rm \
+#         --tty \
+#         --name "$TRAVIS_BUILD_NUMBER" \
+#         seriema/retro-cloud:latest-amd64
+# - docker container start "$TRAVIS_BUILD_NUMBER"
+- echo "$TRAVIS_BUILD_NUMBER"
+- printenv
 
-script:
-- docker exec "$TRAVIS_BUILD_NUMBER" ls -la
-- docker exec "$TRAVIS_BUILD_NUMBER" ls -la "$HOME"
+# script:
+# - docker exec "$TRAVIS_BUILD_NUMBER" ls -la
+# - docker exec "$TRAVIS_BUILD_NUMBER" ls -la "$HOME"
 
-after_script:
-- docker stop "$TRAVIS_BUILD_NUMBER"
+# after_script:
+# - docker stop "$TRAVIS_BUILD_NUMBER"
