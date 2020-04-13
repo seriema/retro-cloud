@@ -128,12 +128,7 @@ jobs:
 
     - run:
         name: Teardown Azure resources
-        command: |
-            curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown.sh"
-            curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/teardown-az.ps1"
-            bash -i teardown.sh
-            rm teardown.sh
-            rm teardown-az.ps1
+        command: cd retro-cloud-setup && bash teardown.sh
         when: always
 
   imageValidation:
