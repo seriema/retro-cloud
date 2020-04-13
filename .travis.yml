@@ -8,11 +8,19 @@ env:
   - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
 
 before_script:
+# Create .env
+- echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
+- echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
+- echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
+- echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
+- echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
+# Start Docker
 - docker pull seriema/retro-cloud:latest-amd64
 - |
     docker container create \
         --cap-add SYS_ADMIN \
         --device /dev/fuse \
+        --env-file .env \
         --interactive \
         --rm \
         --tty \
@@ -37,4 +45,5 @@ script:
 - docker exec "$CONTAINER_NAME" rm teardown-az.ps1
 
 after_script:
+# Stop Docker
 - docker stop "$CONTAINER_NAME"
