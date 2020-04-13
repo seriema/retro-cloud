@@ -10,7 +10,6 @@ before_script:
     docker container create \
         --cap-add SYS_ADMIN \
         --device /dev/fuse \
-        --env-file .env \
         --interactive \
         --rm \
         --tty \
