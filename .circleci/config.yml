@@ -86,9 +86,8 @@ jobs:
         name: Verify that ROM shows up in Azure File Share
         command: |
             docker exec "Build-$CIRCLE_BUILD_NUM" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
-            docker exec "Build-$CIRCLE_BUILD_NUM" echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i run-az-share-test.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" rm run-az-share-test.sh test-az-share.ps1
+            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i pwsh -executionpolicy bypass -File ".\test-az-share.ps1"
+            docker exec "Build-$CIRCLE_BUILD_NUM" rm test-az-share.ps1
 
     - run:
         name: Verify scraper output on VM
@@ -108,22 +107,18 @@ jobs:
     - run:
         name: Print VM ~/.retro-cloud.env
         command: |
-            docker exec "Build-$CIRCLE_BUILD_NUM" echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.retro-cloud.env"' > print-vm-bashrc.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i print-vm-bashrc.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" rm print-vm-bashrc.sh
+            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i ssh-vm.sh "cat ~/.retro-cloud.env"
         when: always
 
     - run:
         name: Print RaspberryPi ~/.bashrc
-        command: cat ~/.bashrc
+        command: docker exec "Build-$CIRCLE_BUILD_NUM" cat ~/.bashrc
         when: always
 
     - run:
         name: Print VM ~/.bashrc
         command: |
-            docker exec "Build-$CIRCLE_BUILD_NUM" echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.bashrc"' > print-vm-bashrc.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i print-vm-bashrc.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" rm print-vm-bashrc.sh
+            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i ssh-vm.sh "cat ~/.bashrc"
         when: always
 
     - run:
@@ -134,19 +129,16 @@ jobs:
     - run:
         name: Print VM ~/ directory listing
         command: |
-            docker exec "Build-$CIRCLE_BUILD_NUM" printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
-            docker exec "Build-$CIRCLE_BUILD_NUM" echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP' "'$printCmd'" > print-vm-filesystem.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i print-vm-filesystem.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" rm print-vm-filesystem.sh
+            printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
+            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i ssh-vm.sh "'$printCmd'"
         when: always
 
     - run:
         name: Print Azure File Share directory listing
         command: |
             docker exec "Build-$CIRCLE_BUILD_NUM" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/list-az-share.ps1"
-            docker exec "Build-$CIRCLE_BUILD_NUM" echo 'pwsh -executionpolicy bypass -File ".\list-az-share.ps1"' > run-az-listing.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i run-az-listing.sh
-            docker exec "Build-$CIRCLE_BUILD_NUM" rm run-az-listing.sh list-az-share.ps1
+            docker exec "Build-$CIRCLE_BUILD_NUM" bash -i pwsh -executionpolicy bypass -File ".\list-az-share.ps1"
+            docker exec "Build-$CIRCLE_BUILD_NUM" rm list-az-share.ps1
         when: always
 
     - run:
