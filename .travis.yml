@@ -21,8 +21,10 @@ before_script:
 - docker container start "$CONTAINER_NAME"
 
 script:
-# Whereami?
+# koko doko?
 - docker exec "$CONTAINER_NAME" ls -la
+- docker exec "$CONTAINER_NAME" whoami
+- docker exec "$CONTAINER_NAME" echo $PWD
 # Setup
 - docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh"
 - docker exec "$CONTAINER_NAME" bash download-and-run.sh "$TRAVIS_COMMIT"
