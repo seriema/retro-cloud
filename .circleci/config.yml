@@ -135,9 +135,7 @@ jobs:
 
     - run:
         name: Print VM ~/ directory listing
-        command: |
-            printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
-            docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'bash -i ssh-vm.sh "$printCmd"'
+        command: docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'bash -i ssh-vm.sh sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
         when: always
 
     - run:
