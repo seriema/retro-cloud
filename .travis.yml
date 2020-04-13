@@ -15,7 +15,7 @@ before_script:
         --rm \
         --tty \
         --name "$TRAVIS_BUILD_NUMBER" \
-        seriema/retro-cloud:latest-arm32v7
+        seriema/retro-cloud:latest-amd64
 - docker container start "$TRAVIS_BUILD_NUMBER"
 
 script:
