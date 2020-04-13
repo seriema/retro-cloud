@@ -14,6 +14,8 @@ curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberr
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/mount-vm-share.sh"
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/setup-az.ps1"
 curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/setup.sh"
+curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/teardown.sh"
+curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/teardown-az.ps1"
 mkdir -p "local"
 curl -L -o "local/run-scraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/run-scraper.sh"
 curl -L -o "local/setup-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/setup-vm.sh"

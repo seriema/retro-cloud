@@ -21,6 +21,12 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     >
     > `WARNING: To sign in, use a web browser to open the page https://microsoft.com/devicelogin and enter the code ABCD12345 to authenticate.`
 
+    * In case the setup fails before creating all necessary Azure resources it's easiest to tear them down and try again:
+        1. `$ cd retro-cloud-setup`
+        1. `$ bash teardown.sh`
+        1. `$ rm -f "$HOME/.retro-cloud.env"`
+        1. `$ bash setup.sh`
+
 1. Install Retro-Cloud on the VM. Alternatives:
     * On the Raspberry Pi:
 
