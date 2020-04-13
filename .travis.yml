@@ -22,7 +22,6 @@ before_script:
 
 script:
 - docker exec "$CONTAINER_NAME" ls -la
-- docker exec "$CONTAINER_NAME" 'ls -la "$HOME"'
 
 after_script:
 - docker stop "$CONTAINER_NAME"
