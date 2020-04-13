@@ -30,9 +30,9 @@ before_script:
 
 script:
 # koko doko?
-- docker exec "$CONTAINER_NAME" ls -la
-- docker exec "$CONTAINER_NAME" whoami
-- docker exec "$CONTAINER_NAME" echo $PWD
+- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'ls -la'
+- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'whoami'
+- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'echo $PWD'
 # Setup
 - docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh"
 - docker exec "$CONTAINER_NAME" bash download-and-run.sh "$TRAVIS_COMMIT"
