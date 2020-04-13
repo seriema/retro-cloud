@@ -21,7 +21,18 @@ before_script:
 - docker container start "$CONTAINER_NAME"
 
 script:
+# Whereami?
 - docker exec "$CONTAINER_NAME" ls -la
+# Setup
+- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh"
+- docker exec "$CONTAINER_NAME" bash download-and-run.sh "$TRAVIS_COMMIT"
+- docker exec "$CONTAINER_NAME" rm download-and-run.sh
+# Teardown
+- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh"
+- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1"
+- docker exec "$CONTAINER_NAME" bash -i teardown.sh
+- docker exec "$CONTAINER_NAME" rm teardown.sh
+- docker exec "$CONTAINER_NAME" rm teardown-az.ps1
 
 after_script:
 - docker stop "$CONTAINER_NAME"
