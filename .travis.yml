@@ -4,6 +4,9 @@ language: bash # "Setting the language key to bash, sh or shell is equivalent to
 services:
     - docker
 
+env:
+  - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+
 before_script:
 - docker pull seriema/retro-cloud:latest-amd64
 - |
@@ -13,13 +16,13 @@ before_script:
         --interactive \
         --rm \
         --tty \
-        --name "$TRAVIS_BUILD_ID" \
+        --name "$CONTAINER_NAME" \
         seriema/retro-cloud:latest-amd64
-- docker container start "$TRAVIS_BUILD_ID"
+- docker container start "$CONTAINER_NAME"
 
 script:
-- docker exec "$TRAVIS_BUILD_ID" ls -la
-- docker exec "$TRAVIS_BUILD_ID" 'ls -la "$HOME"'
+- docker exec "$CONTAINER_NAME" ls -la
+- docker exec "$CONTAINER_NAME" 'ls -la "$HOME"'
 
 after_script:
-- docker stop "$TRAVIS_BUILD_ID"
+- docker stop "$CONTAINER_NAME"
