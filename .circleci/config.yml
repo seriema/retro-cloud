@@ -57,6 +57,13 @@ jobs:
         command: docker container start "Build-$CIRCLE_BUILD_NUM"
 
     - run:
+        name: koko doko?
+        command: |
+            docker exec "Build-$CIRCLE_BUILD_NUM" ls -la
+            docker exec "Build-$CIRCLE_BUILD_NUM" whoami
+            docker exec "Build-$CIRCLE_BUILD_NUM" echo $PWD
+
+    - run:
         name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
         command: |
             docker exec "Build-$CIRCLE_BUILD_NUM" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/download-and-run.sh"
