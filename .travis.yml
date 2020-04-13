@@ -1,13 +1,10 @@
-language: ruby
+language: bash # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
 
 services:
   - docker
 
 before_install:
-- docker pull carlad/sinatra
-- docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
-- docker ps -a
-- docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
+- docker pull seriema/retro-cloud
 
 script:
-- bundle exec rake test
+- ./start.sh
