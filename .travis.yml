@@ -19,7 +19,7 @@ before_script:
 
 script:
 - docker exec "$TRAVIS_BUILD_ID" ls -la
-- docker exec "$TRAVIS_BUILD_ID" ls -la "$HOME"
+- docker exec "$TRAVIS_BUILD_ID" 'ls -la "$HOME"'
 
 after_script:
 - docker stop "$TRAVIS_BUILD_ID"
