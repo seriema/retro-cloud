@@ -6,6 +6,7 @@ services:
 
 env:
   - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+  - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
 
 arch:
   - arm64
@@ -33,19 +34,19 @@ before_script:
 
 script:
 # koko doko?
-- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'ls -la'
-- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'whoami'
-- docker exec "Build-$CIRCLE_BUILD_NUM" /bin/bash -c 'echo $PWD'
+- $RUN_IN_RPI 'ls -la'
+- $RUN_IN_RPI 'whoami'
+- $RUN_IN_RPI 'echo $PWD'
 # Setup
-- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh"
-- docker exec "$CONTAINER_NAME" bash download-and-run.sh "$TRAVIS_COMMIT"
-- docker exec "$CONTAINER_NAME" rm download-and-run.sh
+- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
+- $RUN_IN_RPI "bash download-and-run.sh '$TRAVIS_COMMIT'"
+- $RUN_IN_RPI "rm download-and-run.sh"
 # Teardown
-- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh"
-- docker exec "$CONTAINER_NAME" curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1"
-- docker exec "$CONTAINER_NAME" bash -i teardown.sh
-- docker exec "$CONTAINER_NAME" rm teardown.sh
-- docker exec "$CONTAINER_NAME" rm teardown-az.ps1
+- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
+- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
+- $RUN_IN_RPI "bash -i teardown.sh"
+- $RUN_IN_RPI "rm teardown.sh"
+- $RUN_IN_RPI "rm teardown-az.ps1"
 
 after_script:
 # Stop Docker
