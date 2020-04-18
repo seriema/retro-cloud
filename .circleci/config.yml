@@ -47,11 +47,7 @@ jobs:
 
     - run:
         name: Verify that ROM shows up in Azure File Share
-        command: |
-            curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
-            echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
-            bash -i run-az-share-test.sh
-            rm run-az-share-test.sh test-az-share.ps1
+        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\test-az-share.ps1"'
 
     - run:
         name: Verify scraper output on VM
