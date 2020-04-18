@@ -4,7 +4,7 @@
 set -eu
 
 # Copy a tiny (82K) freeware game from the makers website
-curl -OL http://www.elitehomepage.org/archive/a/b7120500.zip
+curl -fOL http://www.elitehomepage.org/archive/a/b7120500.zip
 
 # Move it and give it a better name otherwise the scrapers won't find it
 sudo mkdir -p "$RETROCLOUD_VM_SHARE/RetroPie/roms/nes"
