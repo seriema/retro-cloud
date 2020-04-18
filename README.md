@@ -53,6 +53,9 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         ```
 
     * If you have ROMs on a desktop: Use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and copy them to `Storage Accounts/[numbers]storage/Files Shares/retro-cloud/RetroPie/roms`
+1. Add scraper credentials. Retro-Cloud uses [Skyscraper by Lars Muldjord](https://github.com/muldjord/skyscraper) for scraping. It supports adding credentials the scraper modules, which can allow you to scrape using more threads, priority when the source is under heavy load, or access to sources that require credentials. Read more [here](https://github.com/muldjord/skyscraper/blob/master/docs/CONFIGINI.md#usercredscredentials-or-key). Alternatives:
+    * On the Raspberry Pi: `$ ./add-scraper-credential.sh MODULE USER PASSWORD`
+    * On the VM: `$ ./add-scraper-credential.sh MODULE USER PASSWORD`
 1. Scrape for metadata. Alternatives:
     > Note: This will take a _long_ time. A test run of 6 platforms with 13k files took 10 hours. EmulationStation must not be running during this time.
     * On the Raspberry Pi: `$ bash -i run-scraper.sh`

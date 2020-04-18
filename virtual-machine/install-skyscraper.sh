@@ -29,8 +29,10 @@ sed -i -e "s+RETROCLOUD_MEDIAFOLDER+$RETROCLOUD_VM_DOWNLOADEDMEDIA+g" "$HOME/.sk
 sed -i -e "s+RETROCLOUD_CACHEFOLDER+$RETROCLOUD_VM_SKYSCRAPER_CACHE+g" "$HOME/.skyscraper/config.ini"
 
 echo 'Copy run script to user root'
+cp -v local/add-scraper-credential.sh "$HOME/add-scraper-credential.sh"
 cp -v local/run-skyscraper.sh "$HOME/run-skyscraper.sh"
 # Make it executable
+chmod 777 "$HOME/add-scraper-credential.sh"
 chmod 777 "$HOME/run-skyscraper.sh"
 
 echo 'Done!'

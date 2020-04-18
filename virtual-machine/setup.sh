@@ -24,6 +24,7 @@ curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual
 mkdir .skyscraper
 curl -fL -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
 mkdir "local"
+curl -fL -o "local/add-scraper-credential.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/add-scraper-credential.sh"
 curl -fL -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 mkdir "dev"
 curl -fL -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
