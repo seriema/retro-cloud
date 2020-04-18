@@ -34,13 +34,13 @@ else
 fi
 
 echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
-mv "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.bak"
+mv -v "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.bak"
 
 echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
-mv "${HOME}/.emulationstation/downloaded_media" "${HOME}/.emulationstation/downloaded_media.bak" || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
+mv -v "${HOME}/.emulationstation/downloaded_media" "${HOME}/.emulationstation/downloaded_media.bak" || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
 
 echo 'Backup ROMs as ~/RetroPie/roms.bak'
-mv "${HOME}/RetroPie/roms" "${HOME}/RetroPie/roms.bak"
+mv -v "${HOME}/RetroPie/roms" "${HOME}/RetroPie/roms.bak"
 
 echo 'Symlink the mounted folders to look like a RetroPie installation'
 gamelists="$mntPath/.emulationstation/gamelists"
