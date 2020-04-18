@@ -66,10 +66,7 @@ jobs:
 
     - run:
         name: Print VM ~/.retro-cloud.env
-        command: |
-            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.retro-cloud.env"' > print-vm-bashrc.sh
-            bash -i print-vm-bashrc.sh
-            rm print-vm-bashrc.sh
+        command: bash -i ssh-vm.sh 'cat "$HOME/.retro-cloud.env"'
         when: always
 
     - run:
@@ -79,10 +76,7 @@ jobs:
 
     - run:
         name: Print VM ~/.bashrc
-        command: |
-            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.bashrc"' > print-vm-bashrc.sh
-            bash -i print-vm-bashrc.sh
-            rm print-vm-bashrc.sh
+        command: bash -i ssh-vm.sh 'cat "$HOME/.bashrc"'
         when: always
 
     - run:
