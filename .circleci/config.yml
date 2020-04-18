@@ -35,7 +35,7 @@ jobs:
 
     - run:
         name: Copy a freeware ROM to VM
-        command: bash -i ssh-vm.sh "curl -fL https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
+        command: bash -i ssh-vm.sh 'bash -i retro-cloud-setup/dev/test-copy-rom.sh'
 
     - run:
         name: Add Screenscraper.fr credentials to VM
