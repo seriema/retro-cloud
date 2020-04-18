@@ -4,7 +4,7 @@
 set -eu
 
 echo 'LINT: Check for Bash scripts without execute permission.'
-find . -type f -name '*.sh' -not -executable
+./shared/validate-execute-permissions.sh
 
 echo 'LINT: Lint with shellcheck.'
 # Runs shellcheck as a docker app so you don't need it installed.
