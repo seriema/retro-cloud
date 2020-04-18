@@ -35,9 +35,9 @@ RUN if [ "$(uname -m)" = 'armv7l' ]; then \
         # https://raspberrypi.stackexchange.com/questions/78427/what-repository-to-add-for-apt-to-find-raspberrypi-kernel
         && echo "deb http://raspbian.raspberrypi.org/raspbian/ stretch main contrib non-free rpi" >> /etc/apt/sources.list \
         && echo "deb http://archive.raspberrypi.org/debian/ stretch main ui" >> /etc/apt/sources.list.d/raspi.list \
-        && curl -L http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | apt-key add - \
+        && curl -fL http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | apt-key add - \
         # https://www.raspbian.org/RaspbianRepository
-        && curl -L http://archive.raspbian.org/raspbian.public.key | apt-key add - \
+        && curl -fL http://archive.raspbian.org/raspbian.public.key | apt-key add - \
         #
         # 3. Refresh the source list to make sure it worked
         && apt-get update; \

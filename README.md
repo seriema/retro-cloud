@@ -9,12 +9,12 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 1. Install Retro-Cloud on the Raspberry Pi (creates the VM for step 2):
 
     ```bash
-    $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
+    $ curl -fsSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
     # Or:
-    $ curl -sSL https://tiny.cc/retro-cloud-setup | bash
+    $ curl -fsSL https://tiny.cc/retro-cloud-setup | bash
 
     # Or the latest development version:
-    $ curl -sSL https://tiny.cc/rc-rpi | bash
+    $ curl -fsSL https://tiny.cc/rc-rpi | bash
     ```
 
     > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
@@ -37,12 +37,12 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * On the VM. Log into the VM from the RPi with `$ bash -i ssh-vm.sh`, or any other way you want, and then run:
 
         ```bash
-        $ curl -sSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
+        $ curl -fsSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
         # Or:
-        $ curl -sSL https://tiny.cc/retro-cloud-setup-vm | bash
+        $ curl -fsSL https://tiny.cc/retro-cloud-setup-vm | bash
 
         # Or the latest development version:
-        $ curl -sSL https://tiny.cc/rc-vm | bash
+        $ curl -fsSL https://tiny.cc/rc-vm | bash
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
@@ -111,7 +111,7 @@ This project is in large part install scripts running on someone's Raspberry Pi 
     * `start.sh` to run a throwaway Docker container using the latest release image.
     * To test a specific branch:
         * `branch=[the branch you want to test]`, e.g. `branch=upgrade-powershell`
-        * `curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
+        * `curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${branch}/raspberry-pi/download-and-run.sh"`
         * `bash download-and-run.sh "$branch"`
         * `rm download-and-run.sh`
     * To validate that the image is correct:

@@ -26,7 +26,7 @@ else
 fi
 
 # Grab the latest tar.gz
-curl -OL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
+curl -fOL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
 
 # Make folder to put powershell
 sudo mkdir -p "$target"
