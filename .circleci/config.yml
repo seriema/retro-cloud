@@ -85,7 +85,7 @@ jobs:
 
     - run:
         name: Print Azure File Share directory listing
-        command: curl -fL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/list-az-share.ps1" | bash -i -c 'pwsh -executionpolicy bypass -Command -'
+        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\list-az-share.ps1"'
         when: always
 
     - run:
