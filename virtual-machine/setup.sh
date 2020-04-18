@@ -27,6 +27,7 @@ mkdir "local"
 curl -fL -o "local/add-scraper-credential.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/add-scraper-credential.sh"
 curl -fL -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 mkdir "dev"
+curl -fL -o "dev/list-home.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/shared/list-home.sh"
 curl -fL -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
 
 echo "SETUP: Mount Azure File Share"
