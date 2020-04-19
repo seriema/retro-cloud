@@ -1,3 +1,15 @@
+version: ~> 1.0 # Opt in to beta Build Config Validation https://docs.travis-ci.com/user/build-config-validation#beta-opt-in
+language: shell # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
+os: linux
+dist: xenial
+
+services:
+    - docker
+
+env:
+    global:
+        - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+
 jobs:
   include:
     - stage: "workflows"                # naming the Tests stage
