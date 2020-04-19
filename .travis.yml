@@ -12,6 +12,29 @@ env:
 
 jobs:
   include:
+    - stage: "Start container"
+      script:
+      # Create .env
+      - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
+      - echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
+      - echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
+      - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
+      - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
+      # Start Docker
+      - docker pull seriema/retro-cloud:latest-amd64
+      - |
+          docker container create \
+              --cap-add SYS_ADMIN \
+              --device /dev/fuse \
+              --env-file .env \
+              --interactive \
+              --rm \
+              --tty \
+              --name "$CONTAINER_NAME" \
+              seriema/retro-cloud:latest-amd64
+      - docker container start "$CONTAINER_NAME"
+
+    - stage: "workflow"
     - script:
       - ./shared/validate-execute-permissions.sh
       - ./shared/lint-shellcheck.sh
@@ -24,3 +47,8 @@ jobs:
     - script:
       - ./script-validation
       name: "scriptValidation"
+
+    - stage: "Stop container"
+    - script:
+        # Stop Docker
+      - docker stop "$CONTAINER_NAME"
