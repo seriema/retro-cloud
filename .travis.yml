@@ -12,45 +12,45 @@ env:
         - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
 
 arch:
-  - arm64
+    - arm64
 
 before_script:
-# Create .env
-- echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
-- echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
-- echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
-- echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
-- echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
-# Start Docker
-- docker pull seriema/retro-cloud:latest-arm32v7
-- |
-    docker container create \
-        --cap-add SYS_ADMIN \
-        --device /dev/fuse \
-        --env-file .env \
-        --interactive \
-        --rm \
-        --tty \
-        --name "$CONTAINER_NAME" \
-        seriema/retro-cloud:latest-arm32v7
-- docker container start "$CONTAINER_NAME"
+    # Create .env
+    - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
+    - echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
+    - echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
+    - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
+    - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
+    # Start Docker
+    - docker pull seriema/retro-cloud:latest-arm32v7
+    - |
+        docker container create \
+            --cap-add SYS_ADMIN \
+            --device /dev/fuse \
+            --env-file .env \
+            --interactive \
+            --rm \
+            --tty \
+            --name "$CONTAINER_NAME" \
+            seriema/retro-cloud:latest-arm32v7
+    - docker container start "$CONTAINER_NAME"
 
 script:
-# koko doko?
-- $RUN_IN_RPI 'ls -la'
-- $RUN_IN_RPI 'whoami'
-- $RUN_IN_RPI 'echo $PWD'
-# Setup
-- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
-- $RUN_IN_RPI "bash download-and-run.sh '$TRAVIS_COMMIT'"
-- $RUN_IN_RPI "rm download-and-run.sh"
-# Teardown
-- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
-- $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
-- $RUN_IN_RPI "bash -i teardown.sh"
-- $RUN_IN_RPI "rm teardown.sh"
-- $RUN_IN_RPI "rm teardown-az.ps1"
+    # koko doko?
+    - $RUN_IN_RPI 'ls -la'
+    - $RUN_IN_RPI 'whoami'
+    - $RUN_IN_RPI 'echo $PWD'
+    # Setup
+    - $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
+    - $RUN_IN_RPI "bash download-and-run.sh '$TRAVIS_COMMIT'"
+    - $RUN_IN_RPI "rm download-and-run.sh"
+    # Teardown
+    - $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
+    - $RUN_IN_RPI "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
+    - $RUN_IN_RPI "bash -i teardown.sh"
+    - $RUN_IN_RPI "rm teardown.sh"
+    - $RUN_IN_RPI "rm teardown-az.ps1"
 
 after_script:
-# Stop Docker
-- docker stop "$CONTAINER_NAME"
+    # Stop Docker
+    - docker stop "$CONTAINER_NAME"
