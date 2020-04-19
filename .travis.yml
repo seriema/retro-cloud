@@ -9,7 +9,6 @@ services:
 env:
     global:
         - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
-        - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
 
 before_script:
     # Create .env
@@ -34,19 +33,19 @@ before_script:
 
 script:
     # koko doko?
-    - ${RUN_IN_RPI} 'ls -la'
-    - ${RUN_IN_RPI} 'whoami'
-    - ${RUN_IN_RPI} 'echo $PWD'
+    - docker exec "$CONTAINER_NAME" /bin/bash -c 'ls -la'
+    - docker exec "$CONTAINER_NAME" /bin/bash -c 'whoami'
+    - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo $PWD'
     # Setup
-    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
-    # - ${RUN_IN_RPI} "bash download-and-run.sh '$TRAVIS_COMMIT'"
-    # - ${RUN_IN_RPI} "rm download-and-run.sh"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "bash download-and-run.sh '$TRAVIS_COMMIT'"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm download-and-run.sh"
     # Teardown
-    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
-    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
-    # - ${RUN_IN_RPI} "bash -i teardown.sh"
-    # - ${RUN_IN_RPI} "rm teardown.sh"
-    # - ${RUN_IN_RPI} "rm teardown-az.ps1"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i teardown.sh"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm teardown.sh"
+    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm teardown-az.ps1"
 
 after_script:
     # Stop Docker
