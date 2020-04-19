@@ -36,7 +36,7 @@ jobs:
       name: "Startu your enginesu"
 
     - stage: "workflow"
-    - script:
+      script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
       name: "bashValidation"
@@ -50,6 +50,6 @@ jobs:
       name: "scriptValidation"
 
     - stage: "Stop container"
-    - script:
+      script:
         # Stop Docker
       - docker stop "$CONTAINER_NAME"
