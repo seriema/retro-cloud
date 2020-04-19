@@ -1,5 +1,7 @@
 version: ~> 1.0 # Opt in to beta Build Config Validation https://docs.travis-ci.com/user/build-config-validation#beta-opt-in
-language: bash # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
+language: shell # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
+os: linux
+dist: xenial
 
 services:
     - docker
