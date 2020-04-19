@@ -17,9 +17,14 @@ curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspber
 curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/teardown.sh"
 curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/teardown-az.ps1"
 mkdir -p "local"
+curl -fL -o "local/add-scraper-credential.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/add-scraper-credential.sh"
 curl -fL -o "local/run-scraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/run-scraper.sh"
 curl -fL -o "local/setup-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/setup-vm.sh"
 curl -fL -o "local/ssh-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/ssh-vm.sh"
+mkdir -p "dev"
+curl -fL -o "dev/list-az-share.ps1" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/list-az-share.ps1"
+curl -fL -o "dev/list-home.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/shared/list-home.sh"
+curl -fL -o "dev/test-az-share.ps1" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/test-az-share.ps1"
 
 echo "SETUP: Run setup.sh"
 bash setup.sh

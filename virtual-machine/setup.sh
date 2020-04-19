@@ -24,9 +24,14 @@ curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual
 mkdir .skyscraper
 curl -fL -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
 mkdir "local"
+curl -fL -o "local/add-scraper-credential.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/add-scraper-credential.sh"
 curl -fL -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 mkdir "dev"
+curl -fL -o "dev/list-home.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/shared/list-home.sh"
 curl -fL -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
+curl -fL -o "dev/test-gamelist-screenscraper-failed.xml" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
+curl -fL -o "dev/test-gamelist.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist.sh"
+curl -fL -o "dev/test-gamelist.xml" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist.xml"
 
 echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh

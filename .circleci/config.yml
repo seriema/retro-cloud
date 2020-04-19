@@ -1,25 +1,19 @@
 version: 2
 jobs:
   bashValidation:
-    docker:
-    - image: koalaman/shellcheck-alpine:stable
+    machine:
+      image: ubuntu-1604:201903-01
     steps:
 
     - checkout
 
     - run:
         name: Validate scripts execution permission
-        command: |
-            findFilesWithoutExecutionPermission () { find . -type f -name '*.sh' -not -executable; }
-            if [ $(findFilesWithoutExecutionPermission | wc -l) -ne 0 ]; then
-                echo 'These files are lacking execute (+x) permission:'
-                findFilesWithoutExecutionPermission
-                exit 1;
-            fi
+        command: ./shared/validate-execute-permissions.sh
 
     - run:
         name: Lint Scripts
-        command: find . -type f -name '*.sh' | xargs shellcheck --external-sources
+        command: ./shared/lint-shellcheck.sh
 
   scriptValidation:
     docker:
@@ -41,14 +35,11 @@ jobs:
 
     - run:
         name: Copy a freeware ROM to VM
-        command: bash -i ssh-vm.sh "curl -fL https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-copy-rom.sh | bash -i"
+        command: bash -i ssh-vm.sh 'bash -i retro-cloud-setup/dev/test-copy-rom.sh'
 
     - run:
         name: Add Screenscraper.fr credentials to VM
-        command: |
-            bash -i ssh-vm.sh "echo '' | tee -a ~/.skyscraper/config.ini"
-            bash -i ssh-vm.sh "echo '[screenscraper]' | tee -a ~/.skyscraper/config.ini"
-            bash -i ssh-vm.sh "echo 'userCreds=\"${SCREENSCRAPER_USER}:${SCREENSCRAPER_KEY}\"' | tee -a ~/.skyscraper/config.ini"
+        command: ./add-scraper-credential.sh screenscraper "$SCREENSCRAPER_USER" "$SCREENSCRAPER_KEY"
 
     - run:
         name: Run scraper on VM
@@ -56,21 +47,11 @@ jobs:
 
     - run:
         name: Verify that ROM shows up in Azure File Share
-        command: |
-            curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/test-az-share.ps1"
-            echo 'pwsh -executionpolicy bypass -File ".\test-az-share.ps1"' > run-az-share-test.sh
-            bash -i run-az-share-test.sh
-            rm run-az-share-test.sh test-az-share.ps1
+        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\test-az-share.ps1"'
 
     - run:
         name: Verify scraper output on VM
-        command: |
-            bash -i ssh-vm.sh "mkdir -p ~/tmp"
-            bash -i ssh-vm.sh "curl -fL -o ~/tmp/test-gamelist.sh https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.sh"
-            bash -i ssh-vm.sh "curl -fL -o ~/tmp/test-gamelist.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist.xml"
-            bash -i ssh-vm.sh "curl -fL -o ~/tmp/test-gamelist-screenscraper-failed.xml https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
-            bash -i ssh-vm.sh "bash -i ~/tmp/test-gamelist.sh"
-            bash -i ssh-vm.sh "rm ~/tmp/test-gamelist.sh ~/tmp/test-gamelist.xml ~/tmp/test-gamelist-screenscraper-failed.xml"
+        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"
 
     - run:
         name: Print RaspberryPi ~/.retro-cloud.env
@@ -79,10 +60,7 @@ jobs:
 
     - run:
         name: Print VM ~/.retro-cloud.env
-        command: |
-            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.retro-cloud.env"' > print-vm-bashrc.sh
-            bash -i print-vm-bashrc.sh
-            rm print-vm-bashrc.sh
+        command: bash -i ssh-vm.sh 'cat "$HOME/.retro-cloud.env"'
         when: always
 
     - run:
@@ -92,33 +70,22 @@ jobs:
 
     - run:
         name: Print VM ~/.bashrc
-        command: |
-            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP "cat ~/.bashrc"' > print-vm-bashrc.sh
-            bash -i print-vm-bashrc.sh
-            rm print-vm-bashrc.sh
+        command: bash -i ssh-vm.sh 'cat "$HOME/.bashrc"'
         when: always
 
     - run:
         name: Print RaspberryPi ~/ directory listing
-        command: sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"
+        command: bash -i retro-cloud-setup/dev/list-home.sh
         when: always
 
     - run:
         name: Print VM ~/ directory listing
-        command: |
-            printCmd='sudo find ~ | sed -e "s/[^-][^\/]*\// |/g" -e "s/|\([^ ]\)/|-\1/"'
-            echo 'ssh $RETROCLOUD_VM_USER@$RETROCLOUD_VM_IP' "'$printCmd'" > print-vm-filesystem.sh
-            bash -i print-vm-filesystem.sh
-            rm print-vm-filesystem.sh
+        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/list-home.sh"
         when: always
 
     - run:
         name: Print Azure File Share directory listing
-        command: |
-            curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/dev/list-az-share.ps1"
-            echo 'pwsh -executionpolicy bypass -File ".\list-az-share.ps1"' > run-az-listing.sh
-            bash -i run-az-listing.sh
-            rm run-az-listing.sh list-az-share.ps1
+        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\list-az-share.ps1"'
         when: always
 
     - run:

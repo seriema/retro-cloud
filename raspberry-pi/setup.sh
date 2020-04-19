@@ -27,10 +27,12 @@ echo "SETUP: Mount remote files"
 bash -i mount-vm-share.sh
 
 echo "SETUP: Copy run scripts to user root"
+cp -v local/add-scraper-credential.sh "$HOME/add-scraper-credential.sh"
 cp -v local/run-scraper.sh "$HOME/run-scraper.sh"
 cp -v local/setup-vm.sh "$HOME/setup-vm.sh"
 cp -v local/ssh-vm.sh "$HOME/ssh-vm.sh"
 # Make them executable
+chmod +x "$HOME/add-scraper-credential.sh"
 chmod +x "$HOME/run-scraper.sh"
 chmod +x "$HOME/setup-vm.sh"
 chmod +x "$HOME/ssh-vm.sh"
