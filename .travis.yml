@@ -38,15 +38,15 @@ script:
     - ${RUN_IN_RPI} 'whoami'
     - ${RUN_IN_RPI} 'echo $PWD'
     # Setup
-    - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
-    - ${RUN_IN_RPI} "bash download-and-run.sh '$TRAVIS_COMMIT'"
-    - ${RUN_IN_RPI} "rm download-and-run.sh"
+    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
+    # - ${RUN_IN_RPI} "bash download-and-run.sh '$TRAVIS_COMMIT'"
+    # - ${RUN_IN_RPI} "rm download-and-run.sh"
     # Teardown
-    - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
-    - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
-    - ${RUN_IN_RPI} "bash -i teardown.sh"
-    - ${RUN_IN_RPI} "rm teardown.sh"
-    - ${RUN_IN_RPI} "rm teardown-az.ps1"
+    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
+    # - ${RUN_IN_RPI} "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
+    # - ${RUN_IN_RPI} "bash -i teardown.sh"
+    # - ${RUN_IN_RPI} "rm teardown.sh"
+    # - ${RUN_IN_RPI} "rm teardown-az.ps1"
 
 after_script:
     # Stop Docker
