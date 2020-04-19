@@ -7,8 +7,9 @@ services:
     - docker
 
 env:
-  - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
-  - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
+    global:
+        - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+        - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
 
 arch:
   - arm64
