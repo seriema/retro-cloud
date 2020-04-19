@@ -1,10 +1,9 @@
 jobs:
   include:
     - stage: "workflows"                # naming the Tests stage
-    - script: ./unit-tests
-      name: "Unit Tests"            # names the first Tests stage job
-    - script: ./integration-tests
-      name: "Integration Tests"     # names the second Tests stage job
-    - stage: deploy
-      name: "Deploy to GCP"
-      script: ./deploy
+    - script: ./bash-validation
+      name: "bashValidation"            # names the first Tests stage job
+    - script: ./script-validation
+      name: "scriptValidation"     # names the second Tests stage job
+    - script: ./image-validation
+      name: "imageValidation"     # names the second Tests stage job
