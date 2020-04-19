@@ -1,52 +1,8 @@
-version: ~> 1.0 # Opt in to beta Build Config Validation https://docs.travis-ci.com/user/build-config-validation#beta-opt-in
-language: shell # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
-os: linux
-dist: xenial
-
-services:
-    - docker
-
-env:
-    global:
-        - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
-
-before_script:
-    # Create .env
-    - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
-    - echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
-    - echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
-    - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
-    - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
-    # Start Docker
-    - docker pull seriema/retro-cloud:latest-amd64
-    - |
-        docker container create \
-            --cap-add SYS_ADMIN \
-            --device /dev/fuse \
-            --env-file .env \
-            --interactive \
-            --rm \
-            --tty \
-            --name "$CONTAINER_NAME" \
-            seriema/retro-cloud:latest-amd64
-    - docker container start "$CONTAINER_NAME"
-
-script:
-    # koko doko?
-    - docker exec "$CONTAINER_NAME" /bin/bash -c 'ls -la'
-    - docker exec "$CONTAINER_NAME" /bin/bash -c 'whoami'
-    - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo $PWD'
-    # Setup
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh'"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "bash download-and-run.sh '$TRAVIS_COMMIT'"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm download-and-run.sh"
-    # Teardown
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown.sh'"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "curl -OL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/teardown-az.ps1'"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i teardown.sh"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm teardown.sh"
-    # - docker exec "$CONTAINER_NAME" /bin/bash -c "rm teardown-az.ps1"
-
-after_script:
-    # Stop Docker
-    - docker stop "$CONTAINER_NAME"
+jobs:
+  include:
+    - stage: test
+      script: ./test 1
+    - # stage name not required, will continue to use `test`
+      script: ./test 2
+    - stage: deploy
+      script: ./deploy
