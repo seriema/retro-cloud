@@ -1,8 +1,8 @@
 jobs:
   include:
-    - stage: "Tests"                # naming the Tests stage
+    - stage: "workflows"                # naming the Tests stage
+    - script: ./unit-tests
       name: "Unit Tests"            # names the first Tests stage job
-      script: ./unit-tests
     - script: ./integration-tests
       name: "Integration Tests"     # names the second Tests stage job
     - stage: deploy
