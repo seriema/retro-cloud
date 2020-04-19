@@ -16,9 +16,11 @@ jobs:
       - ./shared/validate-execute-permissions.sh
       - ./shared/lint-shellcheck.sh
       name: "bashValidation"
+
+    - script:
+      - ./docker/compose/run_tests.sh
+      name: "imageValidation"
+
     - script:
       - ./script-validation
       name: "scriptValidation"
-    - script:
-      - ./image-validation
-      name: "imageValidation"
