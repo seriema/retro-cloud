@@ -33,9 +33,9 @@ jobs:
               --name "$CONTAINER_NAME" \
               seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
-      name: "Startu your enginesu"
+      name: "Docker start"
 
-    - stage: "workflow"
+    - stage: "Workflows"
       script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
@@ -53,3 +53,4 @@ jobs:
       script:
         # Stop Docker
       - docker stop "$CONTAINER_NAME"
+      name: "Docker stop"
