@@ -13,7 +13,8 @@ env:
 jobs:
   include:
     - script:
-      - ./bash-validation
+      - ./shared/validate-execute-permissions.sh
+      - ./shared/lint-shellcheck.sh
       name: "bashValidation"
     - script:
       - ./script-validation
