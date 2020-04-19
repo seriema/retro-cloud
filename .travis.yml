@@ -11,9 +11,6 @@ env:
         - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
         - RUN_IN_RPI="docker exec '$CONTAINER_NAME' /bin/bash -c"
 
-arch:
-    - arm64
-
 before_script:
     # Create .env
     - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
@@ -22,7 +19,7 @@ before_script:
     - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
     - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
     # Start Docker
-    - docker pull seriema/retro-cloud:latest-arm32v7
+    - docker pull seriema/retro-cloud:latest-amd64
     - |
         docker container create \
             --cap-add SYS_ADMIN \
@@ -32,7 +29,7 @@ before_script:
             --rm \
             --tty \
             --name "$CONTAINER_NAME" \
-            seriema/retro-cloud:latest-arm32v7
+            seriema/retro-cloud:latest-amd64
     - docker container start "$CONTAINER_NAME"
 
 script:
