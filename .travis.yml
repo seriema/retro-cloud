@@ -13,9 +13,12 @@ env:
 jobs:
   include:
     - stage: "workflows"
-    - script: "bashValidation"
+    - script:
       - ./bash-validation
-    - script: "scriptValidation"
+      name: "bashValidation"
+    - script:
       - ./script-validation
-    - script: "imageValidation"
+      name: "scriptValidation"
+    - script:
       - ./image-validation
+      name: "imageValidation"
