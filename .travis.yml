@@ -12,7 +12,6 @@ env:
 
 jobs:
   include:
-    - name: workflows
     - script:
       - ./bash-validation
       name: "bashValidation"
