@@ -33,19 +33,20 @@ jobs:
               --name "$CONTAINER_NAME" \
               seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
+      name: "Startu your enginesu"
 
     - stage: "workflow"
     - script:
-      - ./shared/validate-execute-permissions.sh
-      - ./shared/lint-shellcheck.sh
+      - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
       name: "bashValidation"
 
     - script:
-      - ./docker/compose/run_tests.sh
+      - docker exec "$CONTAINER_NAME" /bin/bash -c './docker/compose/run_tests.sh'
       name: "imageValidation"
 
     - script:
-      - ./script-validation
+      - docker exec "$CONTAINER_NAME" /bin/bash -c './script-validation'
       name: "scriptValidation"
 
     - stage: "Stop container"
