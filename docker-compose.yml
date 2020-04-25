@@ -1,0 +1,11 @@
+version: "3.7"
+services:
+
+  rpi:
+    image: seriema/retro-cloud:latest-amd64
+    cap_add:
+      - SYS_ADMIN
+    devices:
+      - "/dev/fuse"
+    tty: true
+    stdin_open: true
