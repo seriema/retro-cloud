@@ -60,6 +60,16 @@ New-AzResourceGroup `
   -Location $loc `
 | Format-Table
 
+ProgressHelper $currentActivity "Creating a container group"
+New-AzContainerGroup `
+  -ResourceGroupName $rg `
+  -Name container-group `
+  -Image seriema/retro-cloud:vm `
+  -OsType Linux `
+  -DnsNameLabel retro-cloud-container `
+| Format-Table
+
+
 ####################################
 $currentActivity = "Create virtual network resources"
 
@@ -255,6 +265,22 @@ ssh "${username}@${ip}" "echo 'username=$storageAccountName' | sudo tee $smbCred
 ssh "${username}@${ip}" "echo 'password=$storageAccountKey' | sudo tee -a $smbCredentialFile > /dev/null"
 # Change permissions on the credential file so only root can read or modify the password file
 ssh "${username}@${ip}" "sudo chmod 600 $smbCredentialFile"
+
+### TESTING
+# Example 6: Creates a container group that mounts Azure File volume
+$secpasswd = ConvertTo-SecureString $storageAccountKey -AsPlainText -Force
+$mycred = New-Object System.Management.Automation.PSCredential ($storageAccountName, $secpasswd)
+# $mycred = $storageAccount.Context.StorageAccount.Credentials
+New-AzContainerGroup `
+  -ResourceGroupName $rg `
+  -Location $loc `
+  -Name mycontainer `
+  -Image seriema/retro-cloud:vm `
+  -OsType Linux `
+  -RestartPolicy Never `
+  -AzureFileVolumeShareName $fileShareName `
+  -AzureFileVolumeAccountCredential $mycred `
+  -AzureFileVolumeMountPath $sharePath
 
 ###################################
 $currentActivity = "Persist resource values"

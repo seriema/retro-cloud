@@ -1,8 +1,8 @@
 # Can run without prompting if the following environment variables are set:
 # * AZURE_SERVICE_PRINCIPAL_SECRET
 
-# Abort on error
-$ErrorActionPreference = "Stop"
+# Do not stop on error
+$ErrorActionPreference = "Continue"
 
 # Enable debug output
 $DebugPreference = "Continue"
