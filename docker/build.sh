@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 . ./helpers.sh
 # Always use the branch name (i.e. do not accept an optional parameter to use a different name) so naming doesn't get confusing when using run/test.

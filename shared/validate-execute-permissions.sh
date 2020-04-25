@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 # Turned into a function so testing can be silent but on finding files the files can be listed.
 findFilesWithoutExecutionPermission () {

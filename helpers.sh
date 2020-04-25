@@ -1,8 +1,8 @@
 #!/bin/bash
 # Helper functions used in various dev scripts.
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 # This file is set by docker-dev-setup.sh, and is optional to have.
 if [[ -f .env ]]; then

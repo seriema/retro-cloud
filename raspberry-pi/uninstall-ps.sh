@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#raspbian
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 ###################################
 # Delete the PowerShell installation

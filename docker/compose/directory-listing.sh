@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, error if variable is unset, and enable debug output
-set -eux
+# Abort on error, error if variable is unset, error if any pipeline element fails, and print each command.
+set -euox pipefail
 
 echo 'Verify number of roms folders. There is one for each successful emultator installed.'
 # Added when RetroPie-Setup was failing silently and not installing all emulators.

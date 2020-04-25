@@ -130,3 +130,8 @@ Some of the Bash scripts above don't work on Windows (Git Bash) so there are som
     * `docker/start.ps1`
     * `docker/test.ps1`
     > **Note:** Requires File Sharing to be enabled. See the [Docker documentation](https://docs.docker.com/docker-for-windows/#file-sharing).
+    * `.sh` files are required to have execute permission. To do this in git bash for Windows:
+
+        ```bash
+        $ git update-index --chmod=+x [file]
+        ```

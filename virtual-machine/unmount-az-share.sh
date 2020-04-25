@@ -2,8 +2,8 @@
 
 # Do not abort on error as it might be an incomplete installation
 # set -e
-# Error if variable is unset
-set -u
+# Error if variable is unset, and error if any pipeline element fails
+set -uo pipefail
 
 echo 'Unmount the Azure File Share in the VMs shared folder.'
 mntPath="$RETROCLOUD_VM_SHARE"

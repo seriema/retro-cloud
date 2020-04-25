@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://github.com/RetroPie/RetroPie-Setup/wiki/Running-ROMs-from-a-Network-Share#option-1-add-to-autostartsh-preferred-if-using-v40
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 echo 'Install Prerequisites'
 sudo apt-get update

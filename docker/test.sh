@@ -1,8 +1,8 @@
 #!/bin/bash
 # Accepts a tag (preferably the branch name) as an optional parameter used for the Docker image tag name.
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 . ./helpers.sh
 branch=${1:-"$(getBranch)"}

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 # Disable lint: the .retro-cloud.env file is created by create-vm.ps1 so it can't be included for shellcheck (https://github.com/koalaman/shellcheck/wiki/SC1091)
 # shellcheck disable=SC1090

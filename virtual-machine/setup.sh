@@ -2,10 +2,8 @@
 # Script takes optional parameter for branch name or commit hash.
 branch=${1:-master}
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 if [[ -n $(find /home/pi/RetroPie-Setup -maxdepth 1) ]]; then
     echo "Are you running this script on the Raspberry Pi? It should be run from within the VM.";

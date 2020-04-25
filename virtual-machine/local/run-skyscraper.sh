@@ -1,9 +1,7 @@
 #!/bin/bash -i
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 platforms=(
     3do
