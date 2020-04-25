@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://github.com/muldjord/skyscraper#download-compile-and-install
 
-# Abort on error, error if variable is unset, and error if any pipeline element fails
-set -euo pipefail
+# Abort on error, error if variable is unset, error if any pipeline element fails, and print each command.
+set -euox pipefail
 
 echo 'Install Skyscraper (as a Docker image "seriema/retro-cloud:scraper-bin")'
 docker pull seriema/retro-cloud:scraper-bin
