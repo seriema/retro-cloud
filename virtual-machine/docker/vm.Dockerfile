@@ -1,14 +1,19 @@
-FROM ubuntu:18.04
+FROM alpine:latest AS build
 
 # Install Prerequisites (over 500mb, so it takes a while)
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y \
+RUN apk add \
+    --no-cache \
+    --update \
+    --update-cache \
     # Pre-requisites for Skyscraper
     # Note: This is over 500mb!
-    build-essential qt5-default \
+    # Note: alpine is not supported so we have to install some different packages
+    # alpine equivalent of "build-essential"
+    build-base \
+    # alpine equiavalent of "qt5-default"
+    qt5-qtbase qt5-qtbase-dev qtchooser \
     # Needed to download Skyscraper
-    wget sudo
+    bash wget sudo
 
 # Install Skyscraper (takes a while)
 RUN mkdir -p "$HOME/skysource" \
