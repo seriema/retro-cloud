@@ -4,16 +4,12 @@
 # Abort on error, error if variable is unset, and error if any pipeline element fails
 set -euo pipefail
 
-echo 'Install Prerequisites (over 500mb, so it takes a while)'
-sudo apt-get update
-# This is over 500mb!
-sudo apt-get install build-essential qt5-default -y
+echo 'Install Skyscraper (as a Docker image "seriema/retro-cloud:scraper-bin")'
+docker pull seriema/retro-cloud:scraper-bin
+echo 'docker run --rm -it seriema/retro-cloud:scraper-bin' > Skyscraper
+chmod +x Skyscraper
+sudo mv -v Skyscraper /usr/bin/Skyscraper
 
-echo 'Install Skyscraper (takes a while)'
-mkdir -p "$HOME/skysource"
-cd "$HOME/skysource"
-curl -fL https://raw.githubusercontent.com/muldjord/skyscraper/master/update_skyscraper.sh | bash
-cd -
 
 echo 'Configure Skyscraper'
 # ~/.skyscraper is created when Skyscraper runs the first time but we need it now.
