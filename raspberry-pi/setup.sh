@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 # If this env var is set then it's running under automation and will skip the prompt.
 if [[ "${AZURE_SERVICE_PRINCIPAL_SECRET:-missing}" == "missing" ]]; then

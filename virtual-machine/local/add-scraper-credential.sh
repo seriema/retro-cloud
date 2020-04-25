@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 if [[ $# -ne 3 || -z $1 || -z $2 || -z $3 ]]; then
     echo

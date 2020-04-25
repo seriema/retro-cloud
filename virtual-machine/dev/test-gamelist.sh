@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 if diff "$RETROCLOUD_VM_SHARE/.emulationstation/gamelists/nes/gamelist.xml" "$HOME/retro-cloud-setup/dev/test-gamelist.xml"
 then

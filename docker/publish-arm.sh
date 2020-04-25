@@ -4,8 +4,8 @@
 # AMD builds are handled by Docker Hub: seriema/retro-cloud:latest
 #
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 . ./helpers.sh
 
