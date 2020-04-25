@@ -5,7 +5,7 @@ branch=${1:-master}
 # Abort on error, error if variable is unset, and error if any pipeline element fails
 set -euo pipefail
 
-if [[ -n $(find /home/pi/RetroPie-Setup -maxdepth 1) ]]; then
+if [[ -d /home/pi/RetroPie-Setup ]]; then
     echo "Are you running this script on the Raspberry Pi? It should be run from within the VM.";
     echo "SSH to the VM with 'bash -i ~/ssh-vm.sh' and then call this script again.";
     echo "Or run 'bash -i ~/setup-vm.sh' that will do it for you.";
