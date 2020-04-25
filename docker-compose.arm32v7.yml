@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+
+  rpi:
+    image: seriema/retro-cloud:latest-arm32v7
+    environment:
+      - PULSE_SERVER=unix:/run/user/1000/pulse/native
+    volumes:
+      - "/dev/fb0:/dev/fb0"
+      - "/dev/input:/dev/input"
+      - "/dev/shm:/dev/shm"
+      - "/dev/snd:/dev/snd"
+      - "/dev/usb:/dev/usb"
+      - "/dev/vchiq:/dev/vchiq"
+      - "/dev/vcio:/dev/vcio"
+      - "/dev/vcsm:/dev/vcsm"
+      - "/opt/vc:/opt/vc"
+      - "/run/user/1000:/run/user/1000"
+      - "/var/run/dbus/:/var/run/dbus/"

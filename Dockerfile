@@ -149,5 +149,10 @@ USER root
 RUN adduser pi root
 USER pi
 
+# Docker Compose v3 doesn't support group-add so "pi" will be added to groups necessary to run EmulationStation on a real RaspberryPi
+# https://github.com/docker/cli/issues/1318
+RUN sudo adduser pi input \
+    && sudo adduser pi video
+
 # NOTE: run as privileged, otherwise sshfs fails with "fuse: device not found, try 'modprobe fuse' first"
 # $ docker run --privileged -it --rm retro-cloud
