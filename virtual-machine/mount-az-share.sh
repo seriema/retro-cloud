@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#create-a-persistent-mount-point-for-the-azure-file-share-with-etcfstab
 
-# Abort on error, error if variable is unset, and error if any pipeline element fails
-set -euo pipefail
+# Abort on error, error if variable is unset, error if any pipeline element fails, and print each command.
+set -euox pipefail
 
 # The samba credentials file should have been added during VM creation and should not be removed.
 if [[ ! -f "$RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS" ]]; then
