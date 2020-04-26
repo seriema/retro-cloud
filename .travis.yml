@@ -81,7 +81,7 @@ jobs:
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh'
 
       # name: Verify that ROM shows up in Azure File Share
-      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\test-az-share.ps1"'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c 'pwsh -executionpolicy bypass -File "./retro-cloud-setup/dev/test-az-share.ps1"'
 
       # name: Verify scraper output on VM
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"'
@@ -112,7 +112,7 @@ jobs:
       # when: always
 
       # name: Print Azure File Share directory listing
-      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c \'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\list-az-share.ps1"\''
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c \'pwsh -executionpolicy bypass -File "./retro-cloud-setup/dev/list-az-share.ps1"\''
       # when: always
 
       # name: Print VM Skyscraper config
