@@ -29,8 +29,8 @@ jobs:
       # Workflow: bashValidation
       # This must weirdly not have a dash, otherwise an empty job is created
       script:
-      - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
-      - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
+      - ./shared/validate-execute-permissions.sh
+      - ./shared/lint-shellcheck.sh
       name: "bashValidation"
 
     # Workflow: imageValidation
