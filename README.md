@@ -85,7 +85,7 @@ This project is in large part install scripts running on someone's Raspberry Pi 
 1. **The test environment:** A best-effort Docker image to represent a newly installed RetroPie installation, as there is no official Docker image for neither Raspbian (the RaspberryPi OS) nor RetroPie. It can run slimmed down as a user's RetroPie, or with some install scripts pre-run and with the source code available inside the container.
 1. **The install scripts:** Bash and PowerShell scripts that installs all the needed tools and applications to create and connect all Azure resources with the user's RetroPie.
     > Tip: Use `docker/start.sh` while working on the scripts for faster iteration, and `start.sh` to test run them from scratch.
-1. **The functionality:** Part of the install scripts, but focusing on the features available after installation. Such as ROM scraping.
+1. **The functionality:** Part of the install scripts, but focusing on the features available after installation. Such as ROM storage, and the containerized scraper.
 
 * Development
     * `docker/setup.sh` sets up environment variables for automation (same as used in CI) in a `.env` file in the root. Avoid the Azure login prompt by setting up a Service Principle account.
@@ -110,6 +110,9 @@ This project is in large part install scripts running on someone's Raspberry Pi 
             * `RETROCLOUD_AZ_RESOURCE_GROUP`
         1. CircleCI scripting
             * `CIRCLECI_API_USER_TOKEN`
+    * `virtual-machine/docker/build.sh` to create a tiny (90mb) containerized executable of [Skyscraper](https://github.com/muldjord/skyscraper).
+    * `virtual-machine/docker/start.sh` to run `Skyscraper` as if it was installed locally.
+    * `virtual-machine/docker/publish.sh` to publish the docker image to Docker Hub as `seriema/retro-cloud:scraper-bin`. There is only a AMD version as it's meant to be used by the VM.
 * Testing install scripts as a user
     * `start.sh` to run a throwaway Docker container using the latest release image.
     * To test a specific branch:
