@@ -53,7 +53,8 @@ jobs:
     - stage: "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
   ##############################
     # Workflow: scriptValidation
-    - script:
+    # This must weirdly not have a dash, otherwise an empty job is created
+      script:
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
       - |
@@ -134,6 +135,8 @@ jobs:
 
 
     - stage: "Teardown Azure resources"
+    # This must weirdly not have a dash, otherwise an empty job is created
+      script:
 
       # name: Teardown Azure resources
       - docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
