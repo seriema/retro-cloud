@@ -29,6 +29,8 @@ before_install:
         --rm \
         --tty \
         --name "$CONTAINER_NAME" \
+        --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
+        --workdir /home/pi/retro-cloud-source \
         seriema/retro-cloud:latest-amd64
 - docker container start "$CONTAINER_NAME"
 name: "Docker start"
@@ -52,5 +54,10 @@ jobs:
 
     - script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo "You have seen my face. Now you must die."'
+      # koko doko?
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'ls -la'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'whoami'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo $PWD'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'ls -la /home/pi/retro-cloud-source'
       name: "scriptValidation"
 
