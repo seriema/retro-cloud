@@ -129,7 +129,7 @@ jobs:
 
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
-      - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source --workdir /home/pi seriema/retro-cloud:latest-amd64
+      - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source --workdir /home/pi/retro-cloud-source seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
       # Recreate Docker container
       - docker exec "$CONTAINER_NAME" /bin/bash -c "./raspberry-pi/install-ps.sh"
