@@ -1,6 +1,10 @@
 #!/bin/bash
-# Script takes optional parameter for branch name or commit hash.
+# Script takes optional parameters:
+# 1: Branch name or commit hash. Useful for getting any development branch and still test as the user.
+# 2: The prefix to use for the resource group in Azure. It default to the current date to be unique
+#     yet findable. Useful values could be the build number during CI, or the users unique machine name.
 branch=${1:-master}
+rgPrefix=${2:-''}
 
 # Abort on error, error if variable is unset, and error if any pipeline element fails
 set -euo pipefail
@@ -29,6 +33,6 @@ curl -fL -o "dev/run-tests.sh" "https://raw.githubusercontent.com/seriema/retro-
 curl -fL -o "dev/test-az-share.ps1" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/test-az-share.ps1"
 
 echo "SETUP: Run setup.sh"
-bash setup.sh
+bash setup.sh "$rgPrefix"
 
 echo "SETUP: Done!"

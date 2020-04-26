@@ -1,3 +1,9 @@
+# Take a parameter for prefixing the resource group name. It default to the current date to be unique
+# yet findable. Useful values could be the build number during CI, or the users unique machine name.
+param (
+    [string]$rgPrefix = [NullString]::Value
+)
+
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-powershell
 
 # Abort on error
@@ -26,8 +32,11 @@ function ProgressHelper {
 }
 
 # Shared variables
-$prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
-$rg = "$($prefix)retro-cloud"
+# If no prefix was passed as a parameter to the script, default to the current date.
+if ([String]::IsNullOrEmpty($rgPrefix)) {
+    $rgPrefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
+}
+$rg = "$($rgPrefix)__retro-cloud"
 $loc = "EastUS"
 $envVarFile="$HOME/.retro-cloud.env"
 
@@ -139,7 +148,7 @@ $nic | Format-Table
 $currentActivity = "Create the storage account (for scraping cache and boot diagnostics)"
 
 # Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only.
-$storageAccountName = ("$($prefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
+$storageAccountName = ("$($rgPrefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
 
 ProgressHelper $currentActivity "Creating the storage account"
 $storageAccount = New-AzStorageAccount `

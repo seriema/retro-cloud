@@ -1,4 +1,7 @@
 #!/bin/bash
+# Take a parameter for prefixing the Azure resource group name. It default to the current date to be unique
+# yet findable. Useful values could be the build number during CI, or the users unique machine name.
+rgPrefix=${1:-''}
 
 # Abort on error, error if variable is unset, and error if any pipeline element fails
 set -euo pipefail
@@ -19,7 +22,7 @@ echo "SETUP: Install PowerShell"
 bash install-ps.sh
 
 echo "SETUP: Run PowerShell scripts to create the Azure resources"
-pwsh -executionpolicy bypass -File ".\setup-az.ps1"
+pwsh -executionpolicy bypass -File ".\setup-az.ps1" -rgPrefix "$rgPrefix"
 
 echo "SETUP: Mount remote files"
 # Run this in interactive mode, otherwise bash won't load the variables set in ~/.bashrc by the create-vm-share.sh script above.
