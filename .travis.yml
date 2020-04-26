@@ -38,16 +38,7 @@ jobs:
     - script:
       # Start Docker
       # Start validation
-      - |
-          docker run \
-              --cap-add SYS_ADMIN \
-              --device /dev/fuse \
-              --env-file .env \
-              --rm \
-              --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
-              --workdir /home/pi/retro-cloud-source \
-              seriema/retro-cloud:latest-amd64 \
-              /bin/bash -c './docker/compose/run_tests.sh'
+      - ./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'
       name: "imageValidation"
 
   ##############################
