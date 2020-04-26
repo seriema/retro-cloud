@@ -13,6 +13,7 @@ env:
 jobs:
   include:
     - stage: "Start container"
+      # This must weirdly not have a dash, otherwise an empty job is created
       script:
       # Create .env
       - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
@@ -36,6 +37,7 @@ jobs:
       name: "Docker start"
 
     - stage: "Workflows"
+      # This must weirdly not have a dash, otherwise an empty job is created
       script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
@@ -50,6 +52,7 @@ jobs:
       name: "scriptValidation"
 
     - stage: "Stop container"
+      # This must weirdly not have a dash, otherwise an empty job is created
       script:
         # Stop Docker
       - docker stop "$CONTAINER_NAME"
