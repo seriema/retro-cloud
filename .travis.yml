@@ -26,13 +26,15 @@ before_install:
 jobs:
   include:
     - stage: "Workflows"
-      # Workflow: bashValidation
-      # This must weirdly not have a dash, otherwise an empty job is created
+  ############################
+    # Workflow: bashValidation
+    # This must weirdly not have a dash, otherwise an empty job is created
       script:
       - ./shared/validate-execute-permissions.sh
       - ./shared/lint-shellcheck.sh
       name: "bashValidation"
 
+  #############################
     # Workflow: imageValidation
     - script:
       # Start Docker
@@ -54,8 +56,9 @@ jobs:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './docker/compose/run_tests.sh'
       name: "imageValidation"
 
+  ##############################
     # Workflow: scriptValidation
-    - script:
+    - before_script:
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
       - |
@@ -67,17 +70,19 @@ jobs:
               --rm \
               --tty \
               --name "$CONTAINER_NAME" \
-              --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
-              --workdir /home/pi/retro-cloud-source \
+              --workdir /home/pi \
               seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
       # Start validation
 
+
+    - script:
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
-      - docker exec "$CONTAINER_NAME" /bin/bash -c '|
-          curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh"
-          bash download-and-run.sh $TRAVIS_COMMIT
-          rm download-and-run.sh
+      - |
+        docker exec "$CONTAINER_NAME" /bin/bash -c "\
+          curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
+          && bash download-and-run.sh $TRAVIS_COMMIT \
+          && rm download-and-run.sh"
 
       # name: Install Retro-Cloud on VM
       - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT"
@@ -97,6 +102,8 @@ jobs:
       # name: Verify scraper output on VM
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"'
 
+
+    - after_script:
       # name: Print RaspberryPi ~/.retro-cloud.env
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'cat ~/.retro-cloud.env'
       # when: always
