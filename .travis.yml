@@ -59,6 +59,23 @@ jobs:
   ##############################
     # Workflow: scriptValidation
     - script:
+      # Start Docker
+      - docker pull seriema/retro-cloud:latest-amd64
+      - |
+          docker container create \
+              --cap-add SYS_ADMIN \
+              --device /dev/fuse \
+              --env-file .env \
+              --interactive \
+              --rm \
+              --tty \
+              --name "$CONTAINER_NAME" \
+              --workdir /home/pi \
+              seriema/retro-cloud:latest-amd64
+      - docker container start "$CONTAINER_NAME"
+
+
+      # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c "\
@@ -85,25 +102,7 @@ jobs:
       # - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"'
 
 
-    - before_script:
-      # Start Docker
-      - docker pull seriema/retro-cloud:latest-amd64
-      - |
-          docker container create \
-              --cap-add SYS_ADMIN \
-              --device /dev/fuse \
-              --env-file .env \
-              --interactive \
-              --rm \
-              --tty \
-              --name "$CONTAINER_NAME" \
-              --workdir /home/pi \
-              seriema/retro-cloud:latest-amd64
-      - docker container start "$CONTAINER_NAME"
-      # Start validation
-
-
-    - after_script:
+    # - after_script:
       # # name: Print RaspberryPi ~/.retro-cloud.env
       # - docker exec "$CONTAINER_NAME" /bin/bash -c 'cat ~/.retro-cloud.env'
       # # when: always
