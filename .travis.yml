@@ -4,11 +4,19 @@ os: linux
 dist: xenial
 
 services:
-    - docker
+- docker
 
 env:
-    global:
-        - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+  global:
+  - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+
+#
+# I would prefer to have bashValidation, imageValidation, and scriptValidation running in parallel
+# as they are not blocking and builds take long enough, but I haven't found a good way in Travis
+# that also is visually easy to follow in the web interface. Having everything regarding
+# scriptValidation in one job hides every step inside a giant console log which is impossible to
+# track down what step went wrong.
+#
 
 # This is in global context and runs for every stage that doesn't override it.
 before_install:
@@ -25,7 +33,7 @@ before_install:
 
 jobs:
   include:
-    - stage: "Workflows"
+    - stage: "Pre-checks"
   ############################
     # Workflow: bashValidation
     # This must weirdly not have a dash, otherwise an empty job is created
@@ -41,6 +49,8 @@ jobs:
       - ./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'
       name: "imageValidation"
 
+
+    - stage: "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
   ##############################
     # Workflow: scriptValidation
     - script:
@@ -119,6 +129,11 @@ jobs:
       # # name: Print VM Skyscraper config
       # - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"'
       # # when: always
+
+      name: "scriptValidation"
+
+
+    - stage: "Teardown Azure resources"
 
       # name: Teardown Azure resources
       - docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
