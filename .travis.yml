@@ -18,22 +18,6 @@ before_install:
 - echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
 - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
 - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
-# Start Docker
-- docker pull seriema/retro-cloud:latest-amd64
-- |
-    docker container create \
-        --cap-add SYS_ADMIN \
-        --device /dev/fuse \
-        --env-file .env \
-        --interactive \
-        --rm \
-        --tty \
-        --name "$CONTAINER_NAME" \
-        --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
-        --workdir /home/pi/retro-cloud-source \
-        seriema/retro-cloud:latest-amd64
-- docker container start "$CONTAINER_NAME"
-name: "Docker start"
 
 # I won't be stopping the container. I need to learn more about Travis to know when it would be a
 # good time (after everything is run, even if steps failed), but it also adds time to my build.
@@ -42,16 +26,53 @@ name: "Docker start"
 jobs:
   include:
     - stage: "Workflows"
+      # Workflow: bashValidation
       # This must weirdly not have a dash, otherwise an empty job is created
       script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/validate-execute-permissions.sh'
       - docker exec "$CONTAINER_NAME" /bin/bash -c './shared/lint-shellcheck.sh'
       name: "bashValidation"
 
+    # Workflow: imageValidation
+    - before_install:
+      # Start Docker
+      - docker pull seriema/retro-cloud:latest-amd64
+      - |
+          docker container create \
+              --cap-add SYS_ADMIN \
+              --device /dev/fuse \
+              --env-file .env \
+              --interactive \
+              --rm \
+              --tty \
+              --name "$CONTAINER_NAME" \
+              --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
+              --workdir /home/pi/retro-cloud-source \
+              seriema/retro-cloud:latest-amd64
+      - docker container start "$CONTAINER_NAME"
+      name: "Docker start"
     - script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c './docker/compose/run_tests.sh'
       name: "imageValidation"
 
+    # Workflow: scriptValidation
+    - before_install:
+      # Start Docker
+      - docker pull seriema/retro-cloud:latest-amd64
+      - |
+          docker container create \
+              --cap-add SYS_ADMIN \
+              --device /dev/fuse \
+              --env-file .env \
+              --interactive \
+              --rm \
+              --tty \
+              --name "$CONTAINER_NAME" \
+              --volume "$TRAVIS_BUILD_DIR":/home/pi/retro-cloud-source \
+              --workdir /home/pi/retro-cloud-source \
+              seriema/retro-cloud:latest-amd64
+      - docker container start "$CONTAINER_NAME"
+      name: "Docker start"
     - script:
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo "You have seen my face. Now you must die."'
       # koko doko?
