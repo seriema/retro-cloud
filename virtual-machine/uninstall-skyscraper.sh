@@ -5,10 +5,12 @@
 set -euo pipefail
 
 echo 'Uninstalling Skyscraper'
-cd "$HOME/skysource"
-sudo make uninstall
-cd -
-rm -Rf "$HOME/skysource"
+docker image rm seriema/retro-cloud:scraper-bin
+sudo rm /usr/bin/Skyscraper
 rm -Rf "$HOME/.skyscraper"
+
+echo 'Uninstalling Docker, including images, containers, etc'
+sudo apt-get purge docker-ce docker-ce-cli containerd.io
+sudo rm -rf /var/lib/docker
 
 echo 'Done!'

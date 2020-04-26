@@ -4,7 +4,16 @@
 # Abort on error, error if variable is unset, error if any pipeline element fails, and print each command.
 set -euox pipefail
 
-echo 'Install Skyscraper (as a Docker image "seriema/retro-cloud:scraper-bin")'
+echo 'Install Docker'
+# https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker "$USER"
+rm get-docker.sh
+# https://stackoverflow.com/a/48957722/703921
+newgrp docker
+
+echo 'Setup Skyscraper as a Docker container using "seriema/retro-cloud:scraper-bin"'
 docker pull seriema/retro-cloud:scraper-bin
 echo 'docker run --rm -it seriema/retro-cloud:scraper-bin' > Skyscraper
 chmod +x Skyscraper
