@@ -78,8 +78,7 @@ jobs:
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
       - |
-        docker exec "$CONTAINER_NAME" /bin/bash -c "\
-          curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
+        docker exec "$CONTAINER_NAME" /bin/bash -c "curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
           && bash download-and-run.sh $TRAVIS_COMMIT \
           && rm download-and-run.sh"
 
