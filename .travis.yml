@@ -33,15 +33,14 @@ before_install:
 
 jobs:
   include:
+  #############################################################################
     - stage: "Pre-checks"
-  ############################
     # Workflow: bashValidation
     # This must weirdly not have a dash, otherwise an empty job is created
       script:
       - ./lint.sh
       name: "bashValidation"
 
-  #############################
     # Workflow: imageValidation
     - script:
       # Start Docker
@@ -50,24 +49,14 @@ jobs:
       name: "imageValidation"
 
 
+  #############################################################################
     - stage: "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
-  ##############################
     # Workflow: scriptValidation
     # This must weirdly not have a dash, otherwise an empty job is created
       script:
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
-      - |
-          docker container create \
-              --cap-add SYS_ADMIN \
-              --device /dev/fuse \
-              --env-file .env \
-              --interactive \
-              --rm \
-              --tty \
-              --name "$CONTAINER_NAME" \
-              --workdir /home/pi \
-              seriema/retro-cloud:latest-amd64
+      - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
 
 
@@ -137,6 +126,13 @@ jobs:
     - stage: "Teardown Azure resources"
     # This must weirdly not have a dash, otherwise an empty job is created
       script:
+
+      # Start Docker
+      - docker pull seriema/retro-cloud:latest-amd64
+      - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64
+      - docker container start "$CONTAINER_NAME"
+      # Recreate Docker container
+      - docker exec "$CONTAINER_NAME" /bin/bash -c "./raspberry-pi/dev/recreate-env-vars.sh '${CONTAINER_NAME}__retro-cloud'"
 
       # name: Teardown Azure resources
       - docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
