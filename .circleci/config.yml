@@ -114,9 +114,7 @@ jobs:
     machine:
       image: ubuntu-1604:201903-01
     steps:
-    - checkout
     - run: ls -la
-    - run: ./start.sh
 
 workflows:
   version: 2
