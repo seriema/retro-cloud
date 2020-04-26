@@ -34,7 +34,7 @@ jobs:
       name: "bashValidation"
 
     # Workflow: imageValidation
-    - before_install:
+    - script:
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
       - |
@@ -50,13 +50,12 @@ jobs:
               --workdir /home/pi/retro-cloud-source \
               seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
-      name: "Docker start"
-    - script:
+      # Start validation
       - docker exec "$CONTAINER_NAME" /bin/bash -c './docker/compose/run_tests.sh'
       name: "imageValidation"
 
     # Workflow: scriptValidation
-    - before_install:
+    - script:
       # Start Docker
       - docker pull seriema/retro-cloud:latest-amd64
       - |
@@ -72,8 +71,7 @@ jobs:
               --workdir /home/pi/retro-cloud-source \
               seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
-      name: "Docker start"
-    - script:
+      # Start validation
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo "You have seen my face. Now you must die."'
       # koko doko?
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'ls -la'
