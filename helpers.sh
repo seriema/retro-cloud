@@ -18,6 +18,7 @@ getBranch()
 
 getArch()
 {
+    # The names are taken from https://github.com/docker-library/official-images#architectures-other-than-amd64
     case "$(uname -m)" in
         # Assume Windows running Linux containers
         x86_64) echo "amd64" ;;

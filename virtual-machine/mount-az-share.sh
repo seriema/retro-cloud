@@ -12,7 +12,7 @@ fi
 echo 'Install Prerequisites'
 
 sudo apt-get update
-sudo apt-get install cifs-utils
+sudo apt-get install -y cifs-utils
 
 
 echo 'Mount the Azure File Share in the VMs shared folder'
