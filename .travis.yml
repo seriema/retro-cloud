@@ -10,32 +10,35 @@ env:
     global:
         - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
 
+# This is in global context and runs for every stage that doesn't override it.
+before_install:
+# Create .env
+- echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
+- echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
+- echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
+- echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
+- echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
+# Start Docker
+- docker pull seriema/retro-cloud:latest-amd64
+- |
+    docker container create \
+        --cap-add SYS_ADMIN \
+        --device /dev/fuse \
+        --env-file .env \
+        --interactive \
+        --rm \
+        --tty \
+        --name "$CONTAINER_NAME" \
+        seriema/retro-cloud:latest-amd64
+- docker container start "$CONTAINER_NAME"
+name: "Docker start"
+
+# I won't be stopping the container. I need to learn more about Travis to know when it would be a
+# good time (after everything is run, even if steps failed), but it also adds time to my build.
+# Seems pointless as Travis will shut down the VM that's running the container anyway.
+
 jobs:
   include:
-    - stage: "Start container"
-      # This must weirdly not have a dash, otherwise an empty job is created
-      script:
-      # Create .env
-      - echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" | tee -a .env
-      - echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" | tee -a .env
-      - echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" | tee -a .env
-      - echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" | tee -a .env
-      - echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" | tee -a .env
-      # Start Docker
-      - docker pull seriema/retro-cloud:latest-amd64
-      - |
-          docker container create \
-              --cap-add SYS_ADMIN \
-              --device /dev/fuse \
-              --env-file .env \
-              --interactive \
-              --rm \
-              --tty \
-              --name "$CONTAINER_NAME" \
-              seriema/retro-cloud:latest-amd64
-      - docker container start "$CONTAINER_NAME"
-      name: "Docker start"
-
     - stage: "Workflows"
       # This must weirdly not have a dash, otherwise an empty job is created
       script:
@@ -48,12 +51,6 @@ jobs:
       name: "imageValidation"
 
     - script:
-      - docker exec "$CONTAINER_NAME" /bin/bash -c './script-validation'
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'echo "You have seen my face. Now you must die."'
       name: "scriptValidation"
 
-    - stage: "Stop container"
-      # This must weirdly not have a dash, otherwise an empty job is created
-      script:
-        # Stop Docker
-      - docker stop "$CONTAINER_NAME"
-      name: "Docker stop"
