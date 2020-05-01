@@ -69,7 +69,7 @@ jobs:
           local heading=$2
           travis_fold start "$name"
           echo -en "\033[0K${heading}\n"
-          /bin/echo -n "$name" > "$TMP"
+          echo -n "$name" > "$TMP"
         }
 
         travis_fold_end() {
