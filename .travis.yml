@@ -123,6 +123,7 @@ jobs:
       - |
         FOLD_START test "Run all tests"
         docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
+        THIS SHOULD BE FAILING! because it's not downloading any file (the URL is wrong). Why isn't it failing? Is it Docker that eats the exit code??
         FOLD_END
 
     # - after_script:
