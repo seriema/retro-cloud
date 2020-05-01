@@ -122,7 +122,7 @@ jobs:
       # name: Verify that ROM shows up in Azure File Share
       - |
         FOLD_START test_az_share "Verify that ROM shows up in Azure File Share"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c 'pwsh -executionpolicy bypass -File "./retro-cloud-setup/dev/test-az-share.ps1"'
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c \'pwsh -executionpolicy bypass -File "./retro-cloud-setup/dev/test-az-share.ps1"\''
         FOLD_END
 
       # name: Verify scraper output on VM
