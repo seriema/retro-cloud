@@ -34,19 +34,19 @@ before_install:
 jobs:
   include:
   #############################################################################
-    # - stage: "Pre-checks"
-    # # Workflow: bashValidation
-    # # This must weirdly not have a dash, otherwise an empty job is created
-    #   script:
-    #   - ./lint.sh
-    #   name: "bashValidation"
+    - stage: "Pre-checks"
+    # Workflow: bashValidation
+    # This must weirdly not have a dash, otherwise an empty job is created
+      script:
+      - ./lint.sh
+      name: "bashValidation"
 
-    # # Workflow: imageValidation
-    # - script:
-    #   # Start Docker
-    #   # Start validation
-    #   - ./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'
-    #   name: "imageValidation"
+    # Workflow: imageValidation
+    - script:
+      # Start Docker
+      # Start validation
+      - ./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'
+      name: "imageValidation"
 
 
   #############################################################################
