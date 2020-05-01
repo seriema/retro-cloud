@@ -46,51 +46,12 @@ jobs:
         command: bash -i run-scraper.sh
 
     - run:
-        name: Verify that ROM shows up in Azure File Share
-        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\test-az-share.ps1"'
+        name: Test all environments
+        command: bash -i retro-cloud-setup/dev/run-tests.sh
 
     - run:
-        name: Verify scraper output on VM
-        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"
-
-    - run:
-        name: Print RaspberryPi ~/.retro-cloud.env
-        command: cat ~/.retro-cloud.env
-        when: always
-
-    - run:
-        name: Print VM ~/.retro-cloud.env
-        command: bash -i ssh-vm.sh 'cat "$HOME/.retro-cloud.env"'
-        when: always
-
-    - run:
-        name: Print RaspberryPi ~/.bashrc
-        command: cat ~/.bashrc
-        when: always
-
-    - run:
-        name: Print VM ~/.bashrc
-        command: bash -i ssh-vm.sh 'cat "$HOME/.bashrc"'
-        when: always
-
-    - run:
-        name: Print RaspberryPi ~/ directory listing
-        command: bash -i retro-cloud-setup/dev/list-home.sh
-        when: always
-
-    - run:
-        name: Print VM ~/ directory listing
-        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/list-home.sh"
-        when: always
-
-    - run:
-        name: Print Azure File Share directory listing
-        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\list-az-share.ps1"'
-        when: always
-
-    - run:
-        name: Print VM Skyscraper config
-        command: bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"
+        name: Print all environments
+        command: bash -i retro-cloud-setup/dev/print-all.sh
         when: always
 
     - run:
