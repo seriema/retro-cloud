@@ -34,7 +34,7 @@ before_install:
 jobs:
   include:
   #############################################################################
-    - stage: "Pre-checks"
+    - stage: "Workflows"
     # Workflow: bashValidation
     # This must weirdly not have a dash, otherwise an empty job is created
       script:
@@ -50,10 +50,9 @@ jobs:
 
 
   #############################################################################
-    - stage: "Run everything"
     # Workflow: scriptValidation
     # This must weirdly not have a dash, otherwise an empty job is created
-      script:
+    - script:
       # Convenience scripts for Travis fold. Based on these scripts:
       # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
       # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
