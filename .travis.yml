@@ -133,59 +133,10 @@ jobs:
         FOLD_END
 
     # - after_script:
-      # name: Print RaspberryPi ~/.retro-cloud.env
+      # name: Print all environments
       - |
-        FOLD_START rpi_print_retro_cloud_env "Print RaspberryPi ~/.retro-cloud.env"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'cat ~/.retro-cloud.env'
-        FOLD_END
-      # when: always
-
-      # name: Print VM ~/.retro-cloud.env
-      - |
-        FOLD_START vm_print_cloud_env "Print VM ~/.retro-cloud.env"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh \'cat "$HOME/.retro-cloud.env"\''
-        FOLD_END
-      # when: always
-
-      # name: Print RaspberryPi ~/.bashrc
-      - |
-        FOLD_START rpi_print_bashrc "Print RaspberryPi ~/.bashrc"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'cat ~/.bashrc'
-        FOLD_END
-      # when: always
-
-      # name: Print VM ~/.bashrc
-      - |
-        FOLD_START vm_print_bashrc "Print VM ~/.bashrc"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh \'cat "$HOME/.bashrc"\''
-        FOLD_END
-      # when: always
-
-      # name: Print RaspberryPi ~/ directory listing
-      - |
-        FOLD_START rpi_print_list_home "Print RaspberryPi ~/ directory listing"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/list-home.sh'
-        FOLD_END
-      # when: always
-
-      # name: Print VM ~/ directory listing
-      - |
-        FOLD_START vm_print_list_home "Print VM ~/ directory listing"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/list-home.sh"'
-        FOLD_END
-      # when: always
-
-      # name: Print Azure File Share directory listing
-      - |
-        FOLD_START az_print_share "Print Azure File Share directory listing"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c \'pwsh -executionpolicy bypass -File "./retro-cloud-setup/dev/list-az-share.ps1"\''
-        FOLD_END
-      # when: always
-
-      # name: Print VM Skyscraper config
-      - |
-        FOLD_START vm_print_config "Print VM Skyscraper config"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"'
+        FOLD_START print "Print all environments"
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh'
         FOLD_END
       # when: always
 
