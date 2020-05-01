@@ -58,6 +58,8 @@ jobs:
       # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
       # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
       - |
+        TMP=/tmp/.travis_fold_name
+
         travis_fold() {
           local action=$1
           local name=$2
