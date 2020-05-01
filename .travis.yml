@@ -119,16 +119,10 @@ jobs:
         docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh'
         FOLD_END
 
-      # name: Verify that ROM shows up in Azure File Share
+      # name: Run all tests
       - |
-        FOLD_START test_az_share "Verify that ROM shows up in Azure File Share"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i -c "pwsh -executionpolicy bypass -File ./retro-cloud-setup/dev/test-az-share.ps1"'
-        FOLD_END
-
-      # name: Verify scraper output on VM
-      - |
-        FOLD_START test_gamelist "Verify scraper output on VM"
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"'
+        FOLD_START test "Run all tests"
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
         FOLD_END
 
     # - after_script:
