@@ -26,7 +26,7 @@ jobs:
         name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
         command: |
             curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/download-and-run.sh"
-            bash download-and-run.sh $CIRCLE_SHA1
+            bash download-and-run.sh "$CIRCLE_SHA1" "CircleCI-$CIRCLE_BUILD_NUM"
             rm download-and-run.sh
 
     - run:
@@ -56,7 +56,7 @@ jobs:
 
     - run:
         name: Teardown Azure resources
-        command: cd retro-cloud-setup && bash teardown.sh
+        command: cd retro-cloud-setup && bash teardown.sh "CircleCI-$CIRCLE_BUILD_NUM"
         when: always
 
   imageValidation:
