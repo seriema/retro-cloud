@@ -54,11 +54,34 @@ jobs:
     # Workflow: scriptValidation
     # This must weirdly not have a dash, otherwise an empty job is created
       script:
+      # Convenience scripts for Travis fold. Based on these scripts:
+      # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
+      # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
+      - |
+        travis_fold() {
+          local action=$1
+          local name=$2
+          echo -en "travis_fold:${action}:${name}\r"
+        }
+
+        travis_fold_start() {
+          local name=$1
+          local heading=$2
+          travis_fold start "$name"
+          echo -en "\033[0K${heading}\n"
+          /bin/echo -n "$name" > $TMP
+        }
+
+        travis_fold_end() {
+          travis_fold end `cat ${TMP}`
+        }
+
       # Start Docker
+      - travis_fold_start START_DOCKER "Start Docker"
       - docker pull seriema/retro-cloud:latest-amd64
       - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64
       - docker container start "$CONTAINER_NAME"
-
+      - travis_fold_end
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
