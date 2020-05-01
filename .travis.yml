@@ -69,11 +69,11 @@ jobs:
           local heading=$2
           travis_fold start "$name"
           echo -en "\033[0K${heading}\n"
-          /bin/echo -n "$name" > $TMP
+          /bin/echo -n "$name" > "$TMP"
         }
 
         travis_fold_end() {
-          travis_fold end `cat ${TMP}`
+          travis_fold end "$(cat "${TMP}")"
         }
 
       # Start Docker
