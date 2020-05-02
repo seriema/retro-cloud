@@ -90,8 +90,8 @@ jobs:
       - FOLD_START docker_start "Start Docker"
       - |
         docker pull seriema/retro-cloud:latest-amd64 \
-        && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
-        && docker container start "$CONTAINER_NAME"
+          && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
+          && docker container start "$CONTAINER_NAME"
         FOLD_END
 
       # Start validation
