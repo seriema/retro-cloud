@@ -62,7 +62,7 @@ jobs:
         travis_fold() {
           local action=$1
           local name=$2
-          echo -en "travis_fold:${action}:${name}"
+          echo -e "travis_fold:${action}:${name}"
         }
 
         FOLD_START() {
@@ -70,7 +70,7 @@ jobs:
           local heading=$2
           travis_fold start "$name"
           # Gray background, with Yellow text, and a lot of space (tabs) to create an extended background
-          echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+          echo -e "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
           /bin/echo -n "$name" > "$tmpFoldName"
           travis_time_start
         }
@@ -84,7 +84,7 @@ jobs:
           # If there was an error, output it after the fold so it's visible
           if [ $exitCode -ne 0 ]; then
             # Gray background, with Red text, and a lot of space (tabs) to create an extended background
-            echo -en "\e[40;31m  $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+            echo -e "\e[40;31m  $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
             return "$exitCode"
           fi
         }
