@@ -87,13 +87,9 @@ jobs:
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
-      - |
-        FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
-        docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c "
-          curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
-          && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME \
-          && rm download-and-run.sh"
-        FOLD_END
+      - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
+      - docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c "curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME && rm download-and-run.sh"
+      - FOLD_END
 
       # name: Install Retro-Cloud on VM
       - |
