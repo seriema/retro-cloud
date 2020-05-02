@@ -87,14 +87,14 @@ jobs:
         }
 
       # Start Docker
-      - FOLD_START docker_start "Start Docker"
+      - (set +x; FOLD_START docker_start "Start Docker")
       - |
         docker pull seriema/retro-cloud:latest-amd64 && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 && docker container start "$CONTAINER_NAME"
         FOLD_END
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
-      - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
+      - (set +x; FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)")
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
           curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
@@ -103,7 +103,7 @@ jobs:
           ; FOLD_END
 
       # name: Install Retro-Cloud on VM
-      - FOLD_START vm_setup "Install Retro-Cloud on VM"
+      - set +x; FOLD_START vm_setup "Install Retro-Cloud on VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT" ; FOLD_END
 
       # ame: Copy a freeware ROM to VM
