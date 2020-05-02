@@ -82,7 +82,7 @@ jobs:
           # If there was an error, output it after the fold so it's visible
           if [ $exitCode -ne 0 ]; then
             # Gray background, with Red text, and a lot of space (tabs) to create an extended background
-            echo -en "\e[40;31m $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+            echo -en "\e[40;31m  $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
           fi
         }
 
@@ -108,7 +108,7 @@ jobs:
       - FOLD_START vm_setup "Install Retro-Cloud on VM"
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT"
-      - FOLD_END
+        FOLD_END
 
       # ame: Copy a freeware ROM to VM
       - FOLD_START copy_rom "Copy a freeware ROM to VM"
