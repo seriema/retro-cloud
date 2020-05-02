@@ -82,7 +82,7 @@ jobs:
           local name=$(cat "${tmpFoldName}")
           local heading=$(cat "${tmpFoldHeading}")
           travis_time_finish
-          echo -en "travis_fold:${action}:${name}\r\033[0K${heading}\n"
+          echo -e "travis_fold:${action}:${name}"
 
           # If there was an error, output it after the fold so it's visible
           if [ $exitCode -ne 0 ]; then
