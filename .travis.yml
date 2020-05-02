@@ -21,11 +21,13 @@ env:
 # This is in global context and runs for every stage that doesn't override it.
 before_install:
 # Create .env
-- echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" > .env
-- echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" >> .env
-- echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" >> .env
-- echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" >> .env
-- echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" >> .env
+- |
+  # Create an .env file to use with Docker
+  echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" > .env
+  echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" >> .env
+  echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" >> .env
+  echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" >> .env
+  echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" >> .env
 
 # I won't be stopping the container. I need to learn more about Travis to know when it would be a
 # good time (after everything is run, even if steps failed), but it also adds time to my build.
@@ -104,7 +106,8 @@ jobs:
 
       before_script:
       - |
-        # Convenience scripts for Travis fold. Based on these scripts:
+        # Load convenience scripts for Travis fold
+        # Based on these scripts:
         # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
         # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
         tmpFoldName=/tmp/.travis_fold_name
