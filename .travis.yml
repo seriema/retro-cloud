@@ -81,12 +81,7 @@ jobs:
           travis_time_finish
           travis_fold end "$name"
 
-          # If there was an error, output it after the fold so it's visible
-          if [ $exitCode -ne 0 ]; then
-            # Gray background, with Red text, and a lot of space (tabs) to create an extended background
-            echo -en "\e[40;31m  $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
-            return "$exitCode"
-          fi
+          return "$exitCode"
         }
 
       # Start Docker
