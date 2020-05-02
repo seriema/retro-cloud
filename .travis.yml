@@ -89,71 +89,55 @@ jobs:
       # Start Docker
       - FOLD_START docker_start "Start Docker"
       - |
-        (
-          docker pull seriema/retro-cloud:latest-amd64 && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 && docker container start "$CONTAINER_NAME"
-          FOLD_END
-        )
+        docker pull seriema/retro-cloud:latest-amd64 && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 && docker container start "$CONTAINER_NAME"
+        FOLD_END
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
       - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
-            curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
-            && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME \
-            && rm download-and-run.sh"
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
+          curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
+          && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME \
+          && rm download-and-run.sh"
+        FOLD_END
 
       # name: Install Retro-Cloud on VM
       - FOLD_START vm_setup "Install Retro-Cloud on VM"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT"
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT"
+        FOLD_END
 
       # ame: Copy a freeware ROM to VM
       - FOLD_START copy_rom "Copy a freeware ROM to VM"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"'
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"'
+        FOLD_END
 
       # name: Add Screenscraper.fr credentials to VM
       - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'"
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'"
+        FOLD_END
 
       # name: Run scraper on VM
       - FOLD_START run_scraper "Run scraper on VM"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh'
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh'
+        FOLD_END
 
       # name: Run all tests
       - FOLD_START test "Run all tests"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
+        FOLD_END
 
       after_script:
       # name: Print all environments
       - FOLD_START print "Print all environments"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh'
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh'
+        FOLD_END
       # when: always
 
     # - stage: "Teardown Azure resources"
@@ -163,10 +147,8 @@ jobs:
       # name: Teardown Azure resources
       - FOLD_START az_teardown "Teardown Azure resources"
       - |
-        (
-          docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
-          FOLD_END
-        )
+        docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
+        FOLD_END
       # when: always
 
       name: "scriptValidation"
