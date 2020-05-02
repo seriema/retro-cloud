@@ -131,7 +131,7 @@ jobs:
       # name: Run all tests
       - FOLD_START test "Run all tests"
       - |
-        docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh' || echo "docker is exiting with '$?'"
+        docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
         FOLD_END
 
     # - after_script:
