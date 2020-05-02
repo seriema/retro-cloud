@@ -59,12 +59,6 @@ jobs:
         tmpFoldName=/tmp/.travis_fold_name
         tmpFoldHeading=/tmp/.travis_fold_heading
 
-        travis_fold() {
-          local action=$1
-          local name=$2
-          echo -e "travis_fold:${action}:${name}"
-        }
-
         FOLD_START() {
           local action=start
           local name=$1
