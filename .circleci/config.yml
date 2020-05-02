@@ -26,7 +26,7 @@ jobs:
         name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
         command: |
             curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${CIRCLE_SHA1}/raspberry-pi/download-and-run.sh"
-            bash download-and-run.sh $CIRCLE_SHA1
+            bash download-and-run.sh "$CIRCLE_SHA1" "CircleCI-$CIRCLE_BUILD_NUM"
             rm download-and-run.sh
 
     - run:
@@ -46,56 +46,17 @@ jobs:
         command: bash -i run-scraper.sh
 
     - run:
-        name: Verify that ROM shows up in Azure File Share
-        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\test-az-share.ps1"'
+        name: Test all environments
+        command: bash -i retro-cloud-setup/dev/run-tests.sh
 
     - run:
-        name: Verify scraper output on VM
-        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-gamelist.sh"
-
-    - run:
-        name: Print RaspberryPi ~/.retro-cloud.env
-        command: cat ~/.retro-cloud.env
-        when: always
-
-    - run:
-        name: Print VM ~/.retro-cloud.env
-        command: bash -i ssh-vm.sh 'cat "$HOME/.retro-cloud.env"'
-        when: always
-
-    - run:
-        name: Print RaspberryPi ~/.bashrc
-        command: cat ~/.bashrc
-        when: always
-
-    - run:
-        name: Print VM ~/.bashrc
-        command: bash -i ssh-vm.sh 'cat "$HOME/.bashrc"'
-        when: always
-
-    - run:
-        name: Print RaspberryPi ~/ directory listing
-        command: bash -i retro-cloud-setup/dev/list-home.sh
-        when: always
-
-    - run:
-        name: Print VM ~/ directory listing
-        command: bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/list-home.sh"
-        when: always
-
-    - run:
-        name: Print Azure File Share directory listing
-        command: bash -i -c 'pwsh -executionpolicy bypass -File ".\retro-cloud-setup\dev\list-az-share.ps1"'
-        when: always
-
-    - run:
-        name: Print VM Skyscraper config
-        command: bash -i ssh-vm.sh "cat ~/.skyscraper/config.ini"
+        name: Print all environments
+        command: bash -i retro-cloud-setup/dev/print-all.sh
         when: always
 
     - run:
         name: Teardown Azure resources
-        command: cd retro-cloud-setup && bash teardown.sh
+        command: cd retro-cloud-setup && bash teardown.sh "CircleCI-$CIRCLE_BUILD_NUM"
         when: always
 
   imageValidation:
