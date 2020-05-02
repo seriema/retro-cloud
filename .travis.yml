@@ -83,8 +83,8 @@ jobs:
           if [ $exitCode -ne 0 ]; then
             # Gray background, with Red text, and a lot of space (tabs) to create an extended background
             echo -en "\e[40;31m  $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+            exit "$exitCode"
           fi
-          exit "$exitCode"
         }
 
       # Start Docker
