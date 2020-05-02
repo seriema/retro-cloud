@@ -71,6 +71,12 @@ jobs:
           travis_fold start "$name"
           # Blue background, with Black text, and a lot of space (tabs) to make an extended background
           echo -en "\e[44;30m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+          echo
+          echo -en "\e[40;34m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+          echo
+          echo -en "\e[40;36m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+          echo
+          echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
           echo -n "$name" > "$TMP"
         }
 
