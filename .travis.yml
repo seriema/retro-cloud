@@ -57,7 +57,7 @@ jobs:
       # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
       # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
       - |
-        TMP=/tmp/.travis_fold_name
+        TMP_FOLD_NAME=/tmp/.travis_fold_name
 
         travis_fold() {
           local action=$1
@@ -71,11 +71,18 @@ jobs:
           travis_fold start "$name"
           # Gray background, with Yellow text, and a lot of space (tabs) to make an extended background
           echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
-          echo -n "$name" > "$TMP"
+          echo -n "$name" > "$TMP_FOLD_NAME"
         }
 
         FOLD_END() {
-          travis_fold end "$(cat "${TMP}")"
+          local exitCode=$?
+          travis_fold end "$(cat "${TMP_FOLD_NAME}")"
+
+          # If there was an error, output it after the fold so it's visible
+          if [ $exitCode -ne 0 ]; then
+            # Gray background, with Red text, and a lot of space (tabs) to make an extended background
+            echo -en "\e[40;31m  Exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+          fi
         }
 
       # Start Docker
