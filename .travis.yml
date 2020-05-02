@@ -76,21 +76,23 @@ jobs:
 
         FOLD_END() {
           local exitCode=$?
-          travis_fold end "$(cat "${tmpFoldName}")"
+          local name=$(cat "${tmpFoldName}")
+          travis_fold end "$name"
 
           # If there was an error, output it after the fold so it's visible
           if [ $exitCode -ne 0 ]; then
             # Gray background, with Red text, and a lot of space (tabs) to create an extended background
-            echo -en "\e[40;31m  Exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+            echo -en "\e[40;31m $name exited with $exitCode  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
           fi
         }
 
       # Start Docker
       - FOLD_START docker_start "Start Docker"
-      - docker pull seriema/retro-cloud:latest-amd64
-      - docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64
-      - docker container start "$CONTAINER_NAME"
-      - FOLD_END
+      - |
+        docker pull seriema/retro-cloud:latest-amd64 \
+        && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
+        && docker container start "$CONTAINER_NAME"
+        FOLD_END
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
