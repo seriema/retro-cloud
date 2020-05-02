@@ -53,91 +53,62 @@ jobs:
     # Workflow: scriptValidation
     # This must weirdly not have a dash, otherwise an empty job is created
     - script:
-      # Convenience scripts for Travis fold. Based on these scripts:
-      # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
-      # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
-      - |
-        tmpFoldName=/tmp/.travis_fold_name
-
-        travis_fold() {
-          local action=$1
-          local name=$2
-          echo -en "travis_fold:${action}:${name}\r"
-        }
-
-        FOLD_START() {
-          local name=$1
-          local heading=$2
-          travis_fold start "$name"
-          # Gray background, with Yellow text, and a lot of space (tabs) to create an extended background
-          echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
-          echo -n "$name" > "$tmpFoldName"
-          travis_time_start
-        }
-
-        FOLD_END() {
-          local exitCode=$?
-          local name=$(cat "${tmpFoldName}")
-          travis_time_finish
-          travis_fold end "$name"
-
-          return "$exitCode"
-        }
-
-      # Start Docker
-      - FOLD_START docker_start "Start Docker"
+       # Start Docker
+      - travis_fold:start:docker_start
       - |
         docker pull seriema/retro-cloud:latest-amd64 \
           && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
           && docker container start "$CONTAINER_NAME"
-        FOLD_END
+      - travis_fold:end:docker_start
 
       # Start validation
       # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
-      - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
+      - travis_fold:start:rpi_setup
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
           curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
           && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME \
           && rm download-and-run.sh"
-        FOLD_END
+      - travis_fold:end:rpi_setup
+
 
       # name: Install Retro-Cloud on VM
-      - FOLD_START vm_setup "Install Retro-Cloud on VM"
+      - travis_fold:start:vm_setup
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT"
-        FOLD_END
+      - travis_fold:end:vm_setup
 
       # ame: Copy a freeware ROM to VM
-      - FOLD_START copy_rom "Copy a freeware ROM to VM"
+      - travis_fold:start:copy_rom
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"'
-        FOLD_END
+      - travis_fold:end:copy_rom
+
 
       # name: Add Screenscraper.fr credentials to VM
-      - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
+      - travis_fold:start:screenscraper
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'"
-        FOLD_END
+      - travis_fold:end:screenscraper
 
       # name: Run scraper on VM
-      - FOLD_START run_scraper "Run scraper on VM"
+      - travis_fold:start:run_scraper
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh'
-        FOLD_END
+      - travis_fold:end:run_scraper
 
       # name: Run all tests
-      - FOLD_START test "Run all tests"
+      - travis_fold:start:test
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh'
-        FOLD_END
+      - travis_fold:end:test
 
       after_script:
       # name: Print all environments
-      - FOLD_START print "Print all environments"
+      - travis_fold:start:print
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh'
-        FOLD_END
+      - travis_fold:end:print
       # when: always
 
     # - stage: "Teardown Azure resources"
@@ -145,10 +116,10 @@ jobs:
       # script:
 
       # name: Teardown Azure resources
-      - FOLD_START az_teardown "Teardown Azure resources"
+      - travis_fold:start:az_teardown
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'"
-        FOLD_END
+      - travis_fold:end:az_teardown
       # when: always
 
       name: "scriptValidation"
