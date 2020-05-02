@@ -71,7 +71,7 @@ jobs:
           travis_fold start "$name"
           # Gray background, with Yellow text, and a lot of space (tabs) to create an extended background
           echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
-          echo -n "$name" > "$tmpFoldName"
+          /bin/echo -n "$name" > "$tmpFoldName"
           travis_time_start
         }
 
