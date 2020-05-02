@@ -69,7 +69,8 @@ jobs:
           local name=$1
           local heading=$2
           travis_fold start "$name"
-          echo -en "\e[44m  ${heading}  \n"
+          # Blue background, with Black text
+          echo -en "\e[44m[30m  ${heading}  \n"
           echo -n "$name" > "$TMP"
         }
 
