@@ -116,7 +116,7 @@ jobs:
       - FOLD_START test "Run all tests"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'retro-cloud-setup/dev/run-tests.sh' ; FOLD_END
 
-      after_script:
+      # after_script:
       # name: Print all environments
       - FOLD_START print "Print all environments"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh' ; FOLD_END
