@@ -69,7 +69,7 @@ jobs:
           local name=$1
           local heading=$2
           travis_fold start "$name"
-          echo -en "\033[0K${heading}\n"
+          echo -en "\e[44m  ${heading}  \n"
           echo -n "$name" > "$TMP"
         }
 
