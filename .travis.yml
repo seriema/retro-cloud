@@ -72,11 +72,13 @@ jobs:
           # Gray background, with Yellow text, and a lot of space (tabs) to create an extended background
           echo -en "\e[40;33m  ${heading}  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
           echo -n "$name" > "$tmpFoldName"
+          travis_time_start
         }
 
         FOLD_END() {
           local exitCode=$?
           local name=$(cat "${tmpFoldName}")
+          travis_time_finish
           travis_fold end "$name"
 
           # If there was an error, output it after the fold so it's visible
