@@ -53,13 +53,29 @@ jobs:
     # Workflow: scriptValidation
     # This must weirdly not have a dash, otherwise an empty job is created
     - script:
-      # Travis Fold script (not sure why "${TRAVIS_BUILD_DIR}/.ci/travis-fold.sh" doesn't work)
-      - ls -la "${TRAVIS_BUILD_DIR}"
-      - ls -la "${TRAVIS_BUILD_DIR}/.ci"
+      # Convenience scripts for Travis fold. Based on these scripts:
+      # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
+      # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
       - |
-        curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/.ci/travis-fold.sh"
-        chmod +x travis-fold.sh
-        sudo . ./travis-fold.sh
+        TMP=/tmp/.travis_fold_name
+
+        travis_fold() {
+          local action=$1
+          local name=$2
+          echo -en "travis_fold:${action}:${name}\r"
+        }
+
+        FOLD_START() {
+          local name=$1
+          local heading=$2
+          travis_fold start "$name"
+          echo -en "\033[0K${heading}\n"
+          echo -n "$name" > "$TMP"
+        }
+
+        FOLD_END() {
+          travis_fold end "$(cat "${TMP}")"
+        }
 
       # Start Docker
       - |
