@@ -10,18 +10,6 @@ env:
   global:
   - CONTAINER_NAME="Travis-$TRAVIS_BUILD_NUMBER"
 
-#
-# I would prefer to have bashValidation, imageValidation, and scriptValidation running in parallel
-# as they are not blocking and builds take long enough, but I haven't found a good way in Travis
-# that also is visually easy to follow in the web interface. Having everything regarding
-# scriptValidation in one job hides every step inside a giant console log which is impossible to
-# track down what step went wrong.
-#
-
-# I won't be stopping the container. I need to learn more about Travis to know when it would be a
-# good time (after everything is run, even if steps failed), but it also adds time to my build.
-# Seems pointless as Travis will shut down the VM that's running the container anyway.
-
 jobs:
   include:
   #############################################################################
@@ -48,8 +36,9 @@ jobs:
           && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
           && docker container start "$CONTAINER_NAME" \
           ; FOLD_END
+      # We won't be stopping the container. Seems pointless as Travis will shut down the VM that's running the container anyway.
 
-      # name: Install Retro-Cloud on RaspberryPi (Setup Azure resources)
+      # Install Retro-Cloud on RaspberryPi (Setup Azure resources)
       - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
       - |
         docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
@@ -58,40 +47,33 @@ jobs:
           && rm download-and-run.sh" \
           ; FOLD_END
 
-      # name: Install Retro-Cloud on VM
+      # Install Retro-Cloud on VM
       - FOLD_START vm_setup "Install Retro-Cloud on VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT" ; FOLD_END
 
-      # ame: Copy a freeware ROM to VM
+      # Copy a freeware ROM to VM
       - FOLD_START copy_rom "Copy a freeware ROM to VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"' ; FOLD_END
 
-      # name: Add Screenscraper.fr credentials to VM
+      # Add Screenscraper.fr credentials to VM
       - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'" ; FOLD_END
 
-      # name: Run scraper on VM
+      # Run scraper on VM
       - FOLD_START run_scraper "Run scraper on VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh' ; FOLD_END
 
-      # name: Run all tests
+      # Run all tests
       - FOLD_START test "Run all tests"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash retro-cloud-setup/dev/run-tests.sh' ; FOLD_END
 
-      # after_script:
-      # name: Print all environments
+      # Print all environments
       - FOLD_START print "Print all environments"
       - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh' ; FOLD_END
-      # when: always
 
-    # - stage: "Teardown Azure resources"
-    # This must weirdly not have a dash, otherwise an empty job is created
-      # script:
-
-      # name: Teardown Azure resources
+      # Teardown Azure resources
       - FOLD_START az_teardown "Teardown Azure resources"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'" ; FOLD_END
-      # when: always
 
       before_script:
       - |
@@ -101,8 +83,9 @@ jobs:
         echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" >> .env
         echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" >> .env
         echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" >> .env
+
       - |
-        # Load convenience scripts for Travis fold
+        # Load convenience functions for Travis fold
         # Based on these scripts:
         # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
         # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
