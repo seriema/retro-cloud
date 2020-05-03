@@ -17,6 +17,10 @@ echo '##########################################################################
 echo '##########  Raspberry Pi  ####################################################################################################################################'
 
 echo
+echo 'PRINT: RaspberryPi ~/RetroPie all files  #####################################################################################################################'
+ls -la "$HOME/RetroPie" || print_fail
+
+echo
 echo 'PRINT: RaspberryPi ~/.retro-cloud.env  #######################################################################################################################'
 cat "$HOME/.retro-cloud.env" || print_fail
 
@@ -26,7 +30,11 @@ cat "$HOME/.bashrc" || print_fail
 
 echo
 echo 'PRINT: RaspberryPi ~/ directory listing  #####################################################################################################################'
-bash -i retro-cloud-setup/dev/list-home.sh || print_fail
+bash -i retro-cloud-setup/dev/list-path.sh || print_fail
+
+echo
+echo 'PRINT: RaspberryPi /mnt (VM mount) directory listing  ########################################################################################################'
+bash -i retro-cloud-setup/dev/list-path.sh "$RETROCLOUD_RPI_MOUNT_POINT" || print_fail
 
 echo
 echo '##############################################################################################################################################################'
@@ -52,7 +60,7 @@ echo 'PRINT: VM ~/.bashrc  #####################################################
 
 echo
 echo 'PRINT: VM ~/ directory listing  ##############################################################################################################################'
-./ssh-vm.sh 'bash -i retro-cloud-setup/dev/list-home.sh' || print_fail
+./ssh-vm.sh 'bash -i retro-cloud-setup/dev/list-path.sh' || print_fail
 
 echo
 echo 'PRINT: VM Skyscraper config  #################################################################################################################################'
