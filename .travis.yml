@@ -8,7 +8,7 @@ services:
 
 env:
   global:
-  - CONTAINER_NAME="Build-$TRAVIS_BUILD_NUMBER"
+  - CONTAINER_NAME="Travis-$TRAVIS_BUILD_NUMBER"
 
 #
 # I would prefer to have bashValidation, imageValidation, and scriptValidation running in parallel
