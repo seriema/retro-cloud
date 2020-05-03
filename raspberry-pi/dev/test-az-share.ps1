@@ -6,11 +6,12 @@ $ErrorActionPreference = "Stop"
 $storageAccountKey=((Get-AzStorageAccountKey -ResourceGroupName $Env:RETROCLOUD_AZ_RESOURCE_GROUP -Name $Env:RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME) | Where-Object {$_.KeyName -eq "key1"}).Value
 $ctx = New-AzStorageContext -StorageAccountName $env:RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME -StorageAccountKey $storageAccountKey
 
-# Attempt to download the file. The cmdlet will return an error if the file doesn't exist.
+$target = "RetroPie/roms/nes/elite.zip"
+"Attempt to download '$target'. The cmdlet will return an error if the file doesn't exist."
 Get-AzStorageFileContent `
     -Context $ctx `
     -ShareName $env:RETROCLOUD_AZ_FILE_SHARE_NAME `
-    -Path "RetroPie/roms/nes/elite.zip" `
+    -Path $target `
     -Verbose
 
 # It didn't fail and error out, so it successed.
