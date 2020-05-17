@@ -34,14 +34,14 @@ else
     echo '... WARNING! Could not mount VM. You need to restart before continuing. It could also be a problem with your privilegies.' 1>&2
 fi
 
-echo 'Backup gamelists as ~/.emulationstation/gamelists.bak'
-mv -v "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.bak"
+echo 'Backup gamelists as ~/.emulationstation/gamelists.local'
+mv -v "${HOME}/.emulationstation/gamelists" "${HOME}/.emulationstation/gamelists.local"
 
-echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.bak'
-mv -v "${HOME}/.emulationstation/downloaded_media" "${HOME}/.emulationstation/downloaded_media.bak" || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
+echo 'Backup downloaded media as ~/.emulationstation/downloaded_media.local'
+mv -v "${HOME}/.emulationstation/downloaded_media" "${HOME}/.emulationstation/downloaded_media.local" || echo 'Directory unavailable. Assuming a fresh install where EmulationStation has not run yet.'
 
-echo 'Backup ROMs as ~/RetroPie/roms.bak'
-mv -v "${HOME}/RetroPie/roms" "${HOME}/RetroPie/roms.bak"
+echo 'Backup ROMs as ~/RetroPie/roms.local'
+mv -v "${HOME}/RetroPie/roms" "${HOME}/RetroPie/roms.local"
 
 echo 'Symlink the mounted folders to look like a RetroPie installation'
 gamelists="$mntPath/.emulationstation/gamelists"

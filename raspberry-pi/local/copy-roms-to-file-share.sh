@@ -13,7 +13,7 @@ rsync \
     --progress \
     --recursive \
     -vv \
-    "$HOME/RetroPie/roms.bak/" "$RETROCLOUD_RPI_MOUNT_POINT/RetroPie/roms/"
+    "$HOME/RetroPie/roms.local/" "$RETROCLOUD_RPI_MOUNT_POINT/RetroPie/roms/"
 
 echo 'Done!'
 echo "ROMs copied to $RETROCLOUD_RPI_MOUNT_POINT/RetroPie/roms"

@@ -46,7 +46,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
-    * If you already had ROMs on the Raspberry Pi: They're now in `roms.bak` and can be copied over:
+    * If you already had ROMs on the Raspberry Pi: They're now in `~/RetroPie/roms.local` and can be copied over:
 
         ```bash
         $ bash -i copy-roms-to-file-share.sh
