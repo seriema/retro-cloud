@@ -3,7 +3,7 @@
   <game>
     <path>/home/pi/RetroPie/roms/nes/elite.zip</path>
     <name>Elite</name>
-    <cover />
+    <thumbnail />
     <image>/home/pi/.emulationstation/downloaded_media/nes/screenshots/elite.png</image>
     <marquee>/home/pi/.emulationstation/downloaded_media/nes/marquees/elite.png</marquee>
     <video />
