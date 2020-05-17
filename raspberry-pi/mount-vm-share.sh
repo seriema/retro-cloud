@@ -14,7 +14,8 @@ echo 'Create a folder for the mount point'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and mount-az-share.sh.
 mntPath="/mnt/$RETROCLOUD_AZ_RESOURCE_GROUP"
 sudo mkdir -p "$mntPath"
-sudo chmod 777 "$mntPath"
+sudo chmod +w "$mntPath"
+sudo chown pi:pi "$mntPath"
 
 echo 'Create a persistent mount point in autostart.sh'
 # If these variables aren't available, make sure this script is running in interactive mode (https://stackoverflow.com/a/43660876) and create-vm.ps1.
