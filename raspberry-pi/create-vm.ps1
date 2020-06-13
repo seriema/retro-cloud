@@ -169,7 +169,7 @@ $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
 $fileShare | Format-Table
-$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
+$smbPath = $fileShare.CloudFileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
 
 ###################################
 $currentActivity = "Create the virtual machine"
