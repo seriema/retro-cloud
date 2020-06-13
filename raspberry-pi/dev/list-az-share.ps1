@@ -4,15 +4,15 @@ $ErrorActionPreference = "Stop"
 Function GetFiles($parent)
 {
     $cloud = $parent | Get-AzStorageFile
-    $directories = $cloud | Where-Object {$_.GetType().Name -eq "CloudFileDirectory"}
-    $files = $cloud | Where-Object {$_.GetType().Name -eq "CloudFile"}
+    $directories = $cloud | Where-Object {$_.GetType().Name -eq "AzureStorageFileDirectory"}
+    $files = $cloud | Where-Object {$_.GetType().Name -eq "AzureStorageFile"}
 
     foreach ($directory in $directories) {
         GetFiles($directory)
     }
 
     foreach ($file in $files) {
-        $file.Uri.LocalPath
+        $file.CloudFile.Uri.LocalPath
     }
 }
 
