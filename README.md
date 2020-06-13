@@ -49,7 +49,7 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     * If you already had ROMs on the Raspberry Pi: They're now in `roms.bak` and can be copied over:
 
         ```bash
-        $ cp -R RetroPie/roms.bak/. RetroPie/roms/
+        $ bash -i copy-roms-to-file-share.sh
         ```
 
     * If you have ROMs on a desktop: Use [Azure Storage Explorer](https://azure.microsoft.com/en-us/features/storage-explorer/) and copy them to `Storage Accounts/[numbers]storage/Files Shares/retro-cloud/RetroPie/roms`
