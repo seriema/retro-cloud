@@ -53,7 +53,6 @@ ln -s "$roms" "$HOME/RetroPie"
 envVarFile="$HOME/.retro-cloud.env"
 echo "Add folder paths as environment variables in $envVarFile"
 echo "# RETRO-CLOUD: The environment variables below are from raspberry-pi/mount-vm-share.sh" | sudo tee -a "$envVarFile" > /dev/null
-echo "# RETRO-CLOUD: These are mostly useful for troubleshooting." | sudo tee -a "$envVarFile" > /dev/null
 echo "export RETROCLOUD_RPI_MOUNT_POINT=$mntPath" | sudo tee -a "$envVarFile" > /dev/null
 
 echo 'Done!'

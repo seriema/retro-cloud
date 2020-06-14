@@ -39,6 +39,10 @@ jobs:
           ; FOLD_END
       # We won't be stopping the container. Seems pointless as Travis will shut down the VM that's running the container anyway.
 
+      # Mimic a user's RetroPie by including some ROMs etc
+      - FOLD_START rpi_user "Mimic a user's RetroPie by including some ROMs etc"
+      - docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c "curl -fL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/dev/download-freeware-roms.sh' | bash" ; FOLD_END
+
       # Install Retro-Cloud on RaspberryPi (Setup Azure resources)
       - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
       - |
@@ -52,11 +56,11 @@ jobs:
       - FOLD_START vm_setup "Install Retro-Cloud on VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT" ; FOLD_END
 
-      # Copy a freeware ROM to VM
-      - FOLD_START copy_rom "Copy a freeware ROM to VM"
-      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"' ; FOLD_END
+      # Copy user's ROMs to Retro-Cloud
+      - FOLD_START copy_rom "Copy user's ROMs to Retro-Cloud"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i copy-roms-to-file-share.sh' ; FOLD_END
 
-      # Add Screenscraper.fr credentials to VM
+      # Add user's Screenscraper.fr credentials to VM
       - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'" ; FOLD_END
 
