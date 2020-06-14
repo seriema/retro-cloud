@@ -1,12 +1,19 @@
 #!/bin/bash
-# Accepts a tag (preferably the branch name) as an optional parameter used for the Docker image tag name.
+# Accepts two optional parameters:
+# 1: The tag name, preferably the branch name, used as a Docker image tag name (i.e. seriema/retro-cloud:[tag]).
+#    Default: current branch.
+# 2: The repository name, useful when wanting to test an image from Docker Hub (i.e. [repository]:[tag]).
+#    Default: "rc".
+# Both omitted will use "rc:[branch]", i.e. "rc:develop".
+# On CI it can be useful to call this script as "./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'"
 
 # Abort on error, error if variable is unset, and error if any pipeline element fails
 set -euo pipefail
 
 . ./helpers.sh
 branch=${1:-"$(getBranch)"}
-tag="rc:$branch"
+repo=${2:-"rc"}
+tag="${repo}:$branch"
 logfile="$(createLog docker test)"
 
 docker run \
