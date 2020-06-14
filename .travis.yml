@@ -56,10 +56,6 @@ jobs:
       - FOLD_START vm_setup "Install Retro-Cloud on VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT" ; FOLD_END
 
-      # Copy user's ROMs to Retro-Cloud
-      - FOLD_START copy_rom "Copy user's ROMs to Retro-Cloud"
-      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i copy-roms-to-file-share.sh' ; FOLD_END
-
       # Add user's Screenscraper.fr credentials to VM
       - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
       - docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'" ; FOLD_END
