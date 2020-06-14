@@ -26,6 +26,7 @@ curl -fL -o "local/run-scraper.sh" "https://raw.githubusercontent.com/seriema/re
 curl -fL -o "local/setup-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/setup-vm.sh"
 curl -fL -o "local/ssh-vm.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/local/ssh-vm.sh"
 mkdir -p "dev"
+curl -fL -o "dev/download-freeware-roms.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/download-freeware-roms.sh"
 curl -fL -o "dev/list-az-share.ps1" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/list-az-share.ps1"
 curl -fL -o "dev/print-all.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/dev/print-all.sh"
 curl -fL -o "dev/list-path.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/shared/list-path.sh"
