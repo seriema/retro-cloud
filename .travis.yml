@@ -1,0 +1,128 @@
+version: ~> 1.0 # Opt in to beta Build Config Validation https://docs.travis-ci.com/user/build-config-validation#beta-opt-in
+language: shell # "Setting the language key to bash, sh or shell is equivalent to language: minimal." (https://docs.travis-ci.com/user/languages/minimal-and-generic/#aliases)
+os: linux
+dist: xenial
+
+services:
+- docker
+
+env:
+  global:
+  - CONTAINER_NAME="Travis-$TRAVIS_BUILD_NUMBER"
+
+jobs:
+  include:
+    - stage: "Workflows"
+  #############################################################################
+    # Workflow: bashValidation
+    # This must weirdly not have a dash, otherwise an empty job is created
+      script:
+      - ./lint.sh
+      name: "bashValidation"
+
+  #############################################################################
+    # Workflow: imageValidation
+    - script:
+      - ./docker/test.sh 'latest-amd64' 'seriema/retro-cloud'
+      name: "imageValidation"
+
+
+  #############################################################################
+    # Workflow: scriptValidation
+    - script:
+      # Start Docker
+      - FOLD_START docker_start "Start Docker"
+      - |
+        docker pull seriema/retro-cloud:latest-amd64 \
+          && docker container create --cap-add SYS_ADMIN --device /dev/fuse --env-file .env --interactive --rm --tty --name "$CONTAINER_NAME" --workdir /home/pi seriema/retro-cloud:latest-amd64 \
+          && docker container start "$CONTAINER_NAME" \
+          ; FOLD_END
+      # We won't be stopping the container. Seems pointless as Travis will shut down the VM that's running the container anyway.
+
+      # Install Retro-Cloud on RaspberryPi (Setup Azure resources)
+      - FOLD_START rpi_setup "Install Retro-Cloud on RaspberryPi (Setup Azure resources)"
+      - |
+        docker exec "$CONTAINER_NAME" /bin/bash -euo pipefail -c " \
+          curl -fOL 'https://raw.githubusercontent.com/seriema/retro-cloud/${TRAVIS_COMMIT}/raspberry-pi/download-and-run.sh' \
+          && bash download-and-run.sh $TRAVIS_COMMIT $CONTAINER_NAME \
+          && rm download-and-run.sh" \
+          ; FOLD_END
+
+      # Install Retro-Cloud on VM
+      - FOLD_START vm_setup "Install Retro-Cloud on VM"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c "bash -i setup-vm.sh $TRAVIS_COMMIT" ; FOLD_END
+
+      # Copy a freeware ROM to VM
+      - FOLD_START copy_rom "Copy a freeware ROM to VM"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i ssh-vm.sh "bash -i retro-cloud-setup/dev/test-copy-rom.sh"' ; FOLD_END
+
+      # Add Screenscraper.fr credentials to VM
+      - FOLD_START screenscraper "Add Screenscraper.fr credentials to VM"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c "./add-scraper-credential.sh screenscraper '$SCREENSCRAPER_USER' '$SCREENSCRAPER_KEY'" ; FOLD_END
+
+      # Run scraper on VM
+      - FOLD_START run_scraper "Run scraper on VM"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i run-scraper.sh' ; FOLD_END
+
+      # Run all tests
+      - FOLD_START test "Run all tests"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/run-tests.sh' ; FOLD_END
+
+      # Print all environments
+      - FOLD_START print "Print all environments"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c 'bash -i retro-cloud-setup/dev/print-all.sh' ; FOLD_END
+
+      # Teardown Azure resources
+      - FOLD_START az_teardown "Teardown Azure resources"
+      - docker exec "$CONTAINER_NAME" /bin/bash -c "cd retro-cloud-setup && bash teardown.sh '$CONTAINER_NAME'" ; FOLD_END
+
+      before_script:
+      - |
+        # Create an .env file to use with Docker
+        echo "AZURE_TENANT_ID=$AZURE_TENANT_ID" > .env
+        echo "AZURE_SERVICE_PRINCIPAL_USER=$AZURE_SERVICE_PRINCIPAL_USER" >> .env
+        echo "AZURE_SERVICE_PRINCIPAL_SECRET=$AZURE_SERVICE_PRINCIPAL_SECRET" >> .env
+        echo "SCREENSCRAPER_USER=$SCREENSCRAPER_USER" >> .env
+        echo "SCREENSCRAPER_KEY=$SCREENSCRAPER_KEY" >> .env
+
+      - |
+        # Load convenience functions for Travis fold
+        # Based on these scripts:
+        # * https://github.com/spotify/ios-ci/blob/master/bin/travis_fold
+        # * https://www.koszek.com/blog/2016/07/25/dealing-with-large-jobs-on-travis/
+        tmpFoldName=/tmp/.travis_fold_name
+        tmpFoldHeading=/tmp/.travis_fold_heading
+
+        FOLD_START() {
+          local action=start
+          local name=$1
+          # Add a lot of space (tabs) to heading to extend the background color
+          local heading="  $2  \t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"
+
+          # Gray bg, Yellow fg, and use \r to overwrite the "travis_fold:action:name" as it's just annoying
+          echo -en "travis_fold:${action}:${name}\r\e[40;33m${heading}\n"
+
+          # Save the current scope, so we can call FOLD_END without passing them again
+          /bin/echo -n "$name" > "$tmpFoldName"
+          /bin/echo -n "$heading" > "$tmpFoldHeading"
+
+          # This puts the "FOLD_START" timer inside the fold which looks better than without this line (then the timer is outside)
+          travis_time_start
+        }
+
+        FOLD_END() {
+          local exitCode=$?
+          local action=end
+          local name=$(cat "${tmpFoldName}")
+          local heading=$(cat "${tmpFoldHeading}")
+
+          travis_time_finish
+
+          # Black bg, Grey fg, and use \r to overwrite the "travis_fold:action:name" as it's just annoying
+          echo -en "travis_fold:${action}:${name}\r\e[100;30m${heading}\n"
+
+          # Return the exit code otherwise the step won't fail if there was a failure
+          return "$exitCode"
+        }
+
+      name: "scriptValidation"
