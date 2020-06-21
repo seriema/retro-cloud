@@ -24,4 +24,16 @@ else
     echo "$newSetting" >> "$settingsFile"
 fi
 
+# Store saves separate from ROMs
+# https://retropie.org.uk/docs/Running-ROMs-from-a-Network-Share/#saving-games
+echo 'CONFIGURE: RetroArch'
+retroarchFile="/opt/retropie/configs/all/retroarch.cfg"
+saveFileSettingOld='# savefile_directory ='
+saveFileSettingNew="savefile_directory = $RETROCLOUD_RPI_MOUNT_POINT/RetroPie/saves"
+sed -i -e "s+$saveFileSettingOld+$saveFileSettingNew+g" "$retroarchFile"
+
+saveStateSettingOld='# savestate_directory ='
+saveStateSettingNew="savestate_directory = $RETROCLOUD_RPI_MOUNT_POINT/RetroPie/saves"
+sed -i -e "s+$saveStateSettingOld+$saveStateSettingNew+g" "$retroarchFile"
+
 echo 'CONFIGURE: Done.'
