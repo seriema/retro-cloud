@@ -29,6 +29,9 @@ echo "SETUP: Mount remote files"
 # https://stackoverflow.com/a/43660876
 bash -i mount-vm-share.sh
 
+echo "SETUP: Configure RaspberryPi"
+bash -i configure.sh
+
 echo "SETUP: Copy run scripts to user root"
 cp -v local/add-scraper-credential.sh "$HOME/add-scraper-credential.sh"
 cp -v local/copy-roms-to-file-share.sh "$HOME/copy-roms-to-file-share.sh"

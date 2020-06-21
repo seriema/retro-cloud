@@ -12,6 +12,7 @@ set -euo pipefail
 echo "SETUP: Download scripts to ~/retro-cloud-setup"
 mkdir -p "$HOME/retro-cloud-setup"
 cd "$HOME/retro-cloud-setup"
+curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/configure.sh"
 curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/create-vm.ps1"
 curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/install-az-module.ps1"
 curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/raspberry-pi/install-ps.sh"
