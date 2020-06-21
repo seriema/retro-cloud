@@ -1,7 +1,7 @@
 #
 # CREATE A Fake Raspbian IMAGE
 #
-FROM debian:stretch AS raspberrypi
+FROM debian:buster AS raspberrypi
 
 # Mentioned in https://hub.docker.com/_/debian and seen in https://github.com/laseryuan/docker-apps/blob/db3c154ebe/retropie/Dockerfile.templ#L13
 ENV LANG C.UTF-8
@@ -33,8 +33,8 @@ RUN if [ "$(uname -m)" = 'armv7l' ]; then \
         #
         # 2. Add the sources and their public keys
         # https://raspberrypi.stackexchange.com/questions/78427/what-repository-to-add-for-apt-to-find-raspberrypi-kernel
-        && echo "deb http://raspbian.raspberrypi.org/raspbian/ stretch main contrib non-free rpi" >> /etc/apt/sources.list \
-        && echo "deb http://archive.raspberrypi.org/debian/ stretch main ui" >> /etc/apt/sources.list.d/raspi.list \
+        && echo "deb http://raspbian.raspberrypi.org/raspbian/ buster main contrib non-free rpi" >> /etc/apt/sources.list \
+        && echo "deb http://archive.raspberrypi.org/debian/ buster main ui" >> /etc/apt/sources.list.d/raspi.list \
         && curl -fL http://archive.raspberrypi.org/debian/raspberrypi.gpg.key | apt-key add - \
         # https://www.raspbian.org/RaspbianRepository
         && curl -fL http://archive.raspbian.org/raspbian.public.key | apt-key add - \
@@ -53,18 +53,8 @@ RUN if [ "$(uname -m)" = 'armv7l' ]; then \
         ; \
     fi
 RUN if [ "$(uname -m)" = 'x86_64' ]; then \
-        # Note: The N64 emulator mupen64plus is used on amd64 but requires a newer version of cmake (3.9+) than
-        # is available (3.7.2) on debian:stretch, so it will be installed separately.
         apt-get update && apt-get install -y \
         adduser adwaita-icon-theme apt aspell aspell-en at-spi2-core base-files base-passwd bash binutils bison bsdmainutils bsdutils build-essential bzip2 ca-certificates coreutils cpp cron dash dbus dbus-user-session dconf-gsettings-backend dconf-service debconf debianutils desktop-file-utils dialog dictionaries-common diffutils dirmngr distro-info-data dmsetup dosfstools dpkg dpkg-dev e2fsprogs eject emacsen-common enchant fakeroot feh file findutils flex fontconfig fontconfig-config fonts-dejavu-core fonts-freefont-ttf freeglut3 fuse g++ gcc gdisk git glib-networking glib-networking-common glib-networking-services gnome-terminal gnome-terminal-data gnupg gpg grep groff-base gsettings-desktop-schemas gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-pulseaudio gstreamer1.0-x gtk-update-icon-cache gvfs gvfs-common gvfs-daemons gvfs-libs gzip hicolor-icon-theme hostname hunspell-en-us i965-va-driver init-system-helpers iso-codes krb5-locales less libasound2-dev libavcodec-dev libavdevice-dev libavformat-dev libboost-filesystem-dev libcurl4-openssl-dev libfreeimage-dev libfreetype6-dev libglew-dev libpulse-dev libsamplerate0-dev libsdl2-dev libspeexdsp-dev libudev-dev libusb-1.0-0-dev libvlccore-dev libvlc-dev libvulkan-dev libxkbcommon-dev m4 make man-db manpages manpages-dev mawk mc mc-data mesa-common-dev mesa-va-drivers mesa-vdpau-drivers meson mime-support mount multiarch-support nasm ncurses-base ncurses-bin netbase ninja-build notification-daemon ntfs-3g openssh-client openssl parted passwd patch perl pinentry-curses pkg-config policykit-1 powermgmt-base procps publicsuffix python python2.7 python3 python-apt-common python-minimal python-pyudev python-six python-talloc qt5-gtk-platformtheme qttranslations5-l10n rapidjson-dev readline-common samba-libs sed sensible-utils shared-mime-info software-properties-common sshfs sudo systemd systemd-sysv sysvinit-utils tar ucf udev udisks2 unattended-upgrades unzip util-linux va-driver-all vdpau-driver-all vlc vlc-bin vlc-data vlc-l10n vlc-plugin-base vlc-plugin-notify vlc-plugin-qt vlc-plugin-samba vlc-plugin-skins2 vlc-plugin-video-output vlc-plugin-video-splitter vlc-plugin-visualization wget x11-common xauth xdg-user-dirs xdg-utils xkb-data xmlstarlet xorg-sgml-doctools xtrans-dev xz-utils yelp yelp-xsl yudit-common zlib1g zlib1g-dev \
-        ; \
-        # Install cmake 3.9+ (which depends on libarchive13): https://backports.debian.org/
-        echo "deb http://deb.debian.org/debian stretch-backports-sloppy main" | sudo tee -a /etc/apt/sources.list >/dev/null \
-        && sudo apt-get update \
-        && sudo apt-get -t stretch-backports-sloppy install -y libarchive13 \
-        && echo "deb http://deb.debian.org/debian stretch-backports main" | sudo tee -a /etc/apt/sources.list >/dev/null \
-        && sudo apt-get update \
-        && sudo apt-get -t stretch-backports install -y cmake \
         ; \
     fi
 
