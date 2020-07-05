@@ -99,9 +99,12 @@ RUN git clone https://github.com/RetroPie/RetroPie-Setup.git
 # Enter the folder with the setup script
 WORKDIR /home/pi/RetroPie-Setup
 
-# Checkout a specific version to avoid sudden upgrades that break the image
-# 4.5.17 + error code fix https://github.com/RetroPie/RetroPie-Setup/commit/50e8300
-RUN git checkout 50e8300
+# Emergency use only: Checkout a specific version to avoid sudden upgrades that break the image
+# It doesn't work after a few releases as it's not supported: https://retropie.org.uk/forum/topic/26754/installing-a-specific-version-of-retropie
+# Example 1 commit: 4.5.17 + error code fix https://github.com/RetroPie/RetroPie-Setup/commit/50e8300
+# RUN git checkout 50e8300
+# Example 2 tag: 4.6.0 https://github.com/RetroPie/RetroPie-Setup/releases/tag/4.6
+# RUN git checkout tags/4.6
 
 # Install RetroPie
 # WARNING! Rebuilding this cache layer takes a very long time! Don't modify it often.
