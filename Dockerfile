@@ -116,6 +116,8 @@ WORKDIR /home/pi
 # Mimic RetroPie: Create fake file structure.
     # autostart.sh is available after a reboot.
 RUN touch /opt/retropie/configs/all/autostart.sh \
+    # es_settings.cfg is available after a first run of EmulationStation.
+    && echo '<bool name="ParseGamelistOnly" value="true" />' > /home/pi/.emulationstation/es_settings.cfg \
     # downloaded_media is available after a first run of EmulationStation.
     && mkdir -p /home/pi/.emulationstation/downloaded_media \
     && sudo chmod g+w /home/pi/.emulationstation/downloaded_media
