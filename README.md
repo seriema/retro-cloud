@@ -12,9 +12,6 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
     $ curl -fsSL https://raw.githubusercontent.com/seriema/retro-cloud/master/raspberry-pi/download-and-run.sh | bash
     # Or:
     $ curl -fsSL https://tiny.cc/retro-cloud-setup | bash
-
-    # Or the latest development version:
-    $ curl -fsSL https://tiny.cc/rc-rpi | bash
     ```
 
     > **NOTE!** You will be prompted to log into your Azure account. The script pauses with the message:
@@ -40,9 +37,6 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
         $ curl -fsSL https://raw.githubusercontent.com/seriema/retro-cloud/master/virtual-machine/setup.sh | bash
         # Or:
         $ curl -fsSL https://tiny.cc/retro-cloud-setup-vm | bash
-
-        # Or the latest development version:
-        $ curl -fsSL https://tiny.cc/rc-vm | bash
         ```
 
 1. Copy ROMs to Azure File Share. Alternatives:
@@ -70,7 +64,6 @@ An expensive and over-engineered approach to storing ROMs and their metadata whi
 ### File structure
 
 ![filestructure-diagram](diagrams/filestructure.svg)
-
 
 ### Prerequisites
 
@@ -122,7 +115,7 @@ This project is in large part install scripts running on someone's Raspberry Pi 
 * Continous Integration with CircleCI
     * `.circleci/build-all-commits.sh` to queue a build for every commit between current branch and develop. Meant to be used before creating a PR or merging to develop so that each commit is validated.
 
-### Notes on Windows
+#### Notes on Windows
 
 Some of the Bash scripts above don't work on Windows (Git Bash) so there are some PowerShell equivalents. They aren't guaranteed to be as powerfull as the Bash scripts.
 
@@ -135,3 +128,42 @@ Some of the Bash scripts above don't work on Windows (Git Bash) so there are som
         ```bash
         $ git update-index --chmod=+x [file]
         ```
+
+### Release checklist
+
+> Use a real Raspberry Pi with Docker to test with.
+
+1. Checkout `develop`
+1. Create a release branch `release/1.X.Y`
+1. Push, to start CI tests
+1. Run `start.sh` to start the Docker container
+1. Get the release version of the install script and run it with the created release branch `:
+
+    ```bash
+    $ curl -fsSLO https://tiny.cc/rc-rpi
+    $ bash rc-rpi release/1.X.Y
+    ```
+
+1. Setup the VM
+
+    ```bash
+    $ bash -i setup-vm.sh release/1.X.Y
+    ```
+
+1. Test download a ROM, scrape it, and validate that it shows up in Azure:
+
+    ```bash
+    $ bash -i retro-cloud-setup/dev/download-freeware-roms.sh
+    $ bash -i run-scraper.sh
+    $ bash -i retro-cloud-setup/dev/run-tests.sh
+    ```
+
+1. Run the ROM
+1. If everything works so far (including greed CI build), continue creating the release
+1. Checkout `master`
+    1. `git merge release/1.X.Y --no-ff`
+    1. `git push`
+1. Checkout `develop`
+    1. `git merge master --no-ff`
+    1. `git push`
+1. Create [a new release on Github](https://github.com/seriema/retro-cloud/releases/new) and tag the latest master commit with `v1.X.Y`
