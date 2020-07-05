@@ -9,3 +9,13 @@ indent_size = 4
 
 [*.md]
 trim_trailing_whitespace = false
+
+# Always use 2 spaces for YAML files
+# https://github.com/editorconfig/editorconfig/issues/329
+[*.yml]
+indent_style = space
+indent_size = 2
+
+# Editorconfig hadn't affected the PS scripts, so instead of reformatting...
+[*.ps1]
+indent_size = 2

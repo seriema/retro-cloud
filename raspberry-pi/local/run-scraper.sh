@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 bash -i ssh-vm.sh "./run-skyscraper.sh"

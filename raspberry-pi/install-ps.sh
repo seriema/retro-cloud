@@ -1,8 +1,8 @@
 #!/bin/bash
 # https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell-core-on-linux?view=powershell-7#installation---binary-archives
 
-# Abort on error, and error if variable is unset
-set -eu
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 target="/opt/microsoft/powershell/7"
 
@@ -17,7 +17,7 @@ fi
 ###################################
 # Download and extract PowerShell
 
-if [ $(uname -m) == 'x86_64' ]; then
+if [[ $(uname -m) == 'x86_64' ]]; then
     # Only used during development in a Azure VM or Docker, both based on Ubuntu.
     arch=x64
 else
@@ -26,7 +26,7 @@ else
 fi
 
 # Grab the latest tar.gz
-curl -OL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
+curl -fOL "https://github.com/PowerShell/PowerShell/releases/download/v7.0.0/powershell-7.0.0-linux-$arch.tar.gz"
 
 # Make folder to put powershell
 sudo mkdir -p "$target"

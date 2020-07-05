@@ -1,3 +1,9 @@
+# Take a parameter for prefixing the resource group name. It default to the current date to be unique
+# yet findable. Useful values could be the build number during CI, or the users unique machine name.
+param (
+    [string]$rgPrefix = [NullString]::Value
+)
+
 # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-powershell
 
 # Abort on error
@@ -26,9 +32,13 @@ function ProgressHelper {
 }
 
 # Shared variables
-$prefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
-$rg = "$($prefix)retro-cloud"
+# If no prefix was passed as a parameter to the script, default to the current date.
+if ([String]::IsNullOrEmpty($rgPrefix)) {
+    $rgPrefix = Get-Date -Format "yyyy-MM-dd__HH.mm.ss__"
+}
+$rg = "$($rgPrefix)__retro-cloud"
 $loc = "EastUS"
+$envVarFile="$HOME/.retro-cloud.env"
 
 ####################################
 $currentActivity = "Prerequisites"
@@ -44,6 +54,11 @@ if (!$sshPublicKey) {
     Write-Error "SSH public key is empty";
 }
 $sshPublicKey | Format-Table
+
+ProgressHelper $currentActivity "Saving the Azure Resource Group name locally in $envVarFile in case of failure during setup"
+Add-Content "$envVarFile" '# RETRO-CLOUD: The environment variables below are from raspberry-pi/create-vm.ps1'
+Add-Content "$envVarFile" '# These are mostly useful for troubleshooting.'
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
 
 ####################################
 $currentActivity = "Initializing"
@@ -133,7 +148,7 @@ $nic | Format-Table
 $currentActivity = "Create the storage account (for scraping cache and boot diagnostics)"
 
 # Storage account name must be between 3 and 24 characters in length and use numbers and lower-case letters only.
-$storageAccountName = ("$($prefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
+$storageAccountName = ("$($rgPrefix)storage" -replace '[^A-Za-z0-9]+', '').ToLower()
 
 ProgressHelper $currentActivity "Creating the storage account"
 $storageAccount = New-AzStorageAccount `
@@ -148,13 +163,13 @@ $storageAccountKey = ($storageAccount.Context.ConnectionString -split ";" | Sele
 $storageAccountKey | Format-Table
 
 # TODO: Use the same share for ROMs for now.
-ProgressHelper $currentActivity "Creating the file share"
+ProgressHelper $currentActivity "Creating the Azure File Share"
 $fileShareName = "retro-cloud"
 $fileShare = New-AzStorageShare `
    -Name $fileShareName  `
    -Context $storageAccount.Context
 $fileShare | Format-Table
-$smbPath = $fileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
+$smbPath = $fileShare.CloudFileShare.Uri.AbsoluteUri.split(":")[1] #Remove the "https" part of the url so the path is as "//storageAccountName.file.core.windows.net/fileShareName"
 
 ###################################
 $currentActivity = "Create the virtual machine"
@@ -164,12 +179,20 @@ $username = "pi"
 $securePassword = ConvertTo-SecureString ' ' -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
 
-ProgressHelper $currentActivity "Creating the virtual machine configuration"
+if ($Env:CI) {
+    $vmSizeMessage="a fast and expensive VM for Continous Integration"
+    $vmSize="Standard_F1s"
+} else {
+    $vmSizeMessage="a cheap VM for the user to save money (can be upscaled in the Azure Portal)"
+    $vmSize="Standard_B1s"
+}
+
+ProgressHelper $currentActivity "Creating the virtual machine configuration with $vmSizeMessage"
 $vmName = "VM"
 $vmConfig = `
   New-AzVMConfig `
     -VMName $vmName `
-    -VMSize "Standard_B2s" | `
+    -VMSize $vmSize | `
   Set-AzVMOperatingSystem `
     -Linux `
     -ComputerName $vmName `
@@ -201,6 +224,9 @@ New-AzVM `
   -VM $vmConfig `
 | Format-Table
 
+###################################
+$currentActivity = "Setup the virtual machine"
+
 ProgressHelper $currentActivity "Waiting for the VM to boot up"
 # TODO: There has to be a better way. Perhaps Azure Boot Diagnostics?
 $sshStatus = $null
@@ -226,30 +252,49 @@ ProgressHelper $currentActivity "Creating a folder to be shared with the Raspber
 $sharePath="/home/$username/retro-cloud-share"
 ssh "$($username)@$ip" "mkdir -p $sharePath"
 
+ProgressHelper $currentActivity "Creating a credential file to store the username and password for the Azure File Share"
+# This is part of mounting a file share on Linux, that is done by virtual-machine/mount-az-share.sh,
+# but by doing it here we only need to pass the storage account key once and avoid it being stored in
+# the environment variables with the other resource values (which we pass around and print for debugging).
+# https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-linux#create-a-persistent-mount-point-for-the-azure-file-share-with-etcfstab
+
+$smbCredentialFile="/etc/smbcredentials/$storageAccountName.cred"
+ssh "${username}@${ip}" "sudo mkdir -p /etc/smbcredentials"
+ssh "${username}@${ip}" "echo 'username=$storageAccountName' | sudo tee $smbCredentialFile > /dev/null"
+ssh "${username}@${ip}" "echo 'password=$storageAccountKey' | sudo tee -a $smbCredentialFile > /dev/null"
+# Change permissions on the credential file so only root can read or modify the password file
+ssh "${username}@${ip}" "sudo chmod 600 $smbCredentialFile"
+
 ###################################
 $currentActivity = "Persist resource values"
 
-ProgressHelper $currentActivity "Saving configuration variables locally (~/.bashrc)"
-Add-Content "$HOME/.bashrc" ""
-Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.'
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_IP=$ip"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_USER=$username"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_VM_SHARE=$sharePath"
-Add-Content "$HOME/.bashrc" '# RETRO-CLOUD: These are mostly useful for troubleshooting.'
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_RESOURCE_GROUP=$rg"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
-Add-Content "$HOME/.bashrc" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+$envVarFile="$HOME/.retro-cloud.env"
+ProgressHelper $currentActivity "Saving configuration variables locally in $envVarFile"
 
-ProgressHelper $currentActivity "Passing configuration variables to VM ($username@${ip}:/home/$username/.bashrc)"
-ssh "$($username)@$ip" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo '# RETRO-CLOUD: The environment variables below were set by the retro-cloud setup script.' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY=$storageAccountKey' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath' | sudo tee -a ~/.bashrc > /dev/null"
-ssh "$($username)@$ip" "echo 'export RETROCLOUD_VM_SHARE=$sharePath' | sudo tee -a ~/.bashrc > /dev/null"
+Add-Content "$envVarFile" '# These are needed by the RetroPie.'
+Add-Content "$envVarFile" "export RETROCLOUD_VM_IP=$ip"
+Add-Content "$envVarFile" "export RETROCLOUD_VM_USER=$username"
+Add-Content "$envVarFile" '# These are needed by both the RetroPie and VM.'
+Add-Content "$envVarFile" "export RETROCLOUD_VM_SHARE=$sharePath"
+Add-Content "$envVarFile" '# These are needed by the VM.'
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME=$storageAccountName"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS=$smbCredentialFile"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_NAME=$fileShareName"
+Add-Content "$envVarFile" "export RETROCLOUD_AZ_FILE_SHARE_URL=$smbPath"
+
+ProgressHelper $currentActivity "Add $envVarFile to be loaded by ~/.bashrc"
+Add-Content "$HOME/.bashrc" ""
+Add-Content "$HOME/.bashrc" "# RETRO-CLOUD CONFIG START"
+Add-Content "$HOME/.bashrc" ". $envVarFile"
+Add-Content "$HOME/.bashrc" "# RETRO-CLOUD CONFIG END"
+
+$vmEnvVarFile="/home/$username/.retro-cloud.env"
+ProgressHelper $currentActivity "Passing configuration variables to VM (${username}@${ip}:${vmEnvVarFile})"
+scp "$envVarFile" "${username}@${ip}:${vmEnvVarFile}"
+ssh "${username}@${ip}" "echo '' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '# RETRO-CLOUD CONFIG START' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '. $vmEnvVarFile' | sudo tee -a ~/.bashrc > /dev/null"
+ssh "${username}@${ip}" "echo '# RETRO-CLOUD CONFIG END' | sudo tee -a ~/.bashrc > /dev/null"
 
 ProgressHelper "Done" " "
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Abort on error, error if variable is unset, and enable debug output
-set -eux
+# Abort on error, error if variable is unset, error if any pipeline element fails, and print each command.
+set -euox pipefail
 
 echo 'Verify access permissions of different directories'
 # Added when the user was created as root so the user didn't have regular access to $HOME.
@@ -17,9 +17,9 @@ echo 'Verify access permissions of different directories'
 
 echo 'Verify group memberships'
 # Added when replacing 'useradd' with 'adduser' to verify that the user gets a group with the same name.
-[[ $(groups | grep pi) ]]
+groups | grep -q pi
 # Added when replacing 'useradd' with 'adduser' to verify that the user is still given sudo rights.
-[[ $(groups | grep sudo) ]]
+groups | grep -q sudo
 
 echo 'Verify that the image default user is "pi"'
 # Added when not setting "USER pi" as the last user in the Dockerfile.

@@ -1,24 +1,22 @@
 #!/bin/bash
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Do not abort on error as it might be an incomplete installation
+# set -e
+# Error if variable is unset, and error if any pipeline element fails
+set -uo pipefail
 
-mntPath="/mnt/$RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME/$RETROCLOUD_AZ_STORAGE_ACCOUNT_KEY"
-smbCredentialFile="/etc/smbcredentials/$RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME.cred"
-emulationstation="$HOME/.emulationstation"
+echo 'Unmount the Azure File Share in the VMs shared folder.'
+mntPath="$RETROCLOUD_VM_SHARE"
+sudo umount "$mntPath"
+sudo rm -r -f "$mntPath"
 
-sudo rm -r -f "$mntPath/output"
-rm -r -f "$emulationstation"
+# Do not delete it because it can't be recreated from within the VM
+# echo 'Delete the credential file that stores the username and password for the file share.'
+# sudo rm -f $RETROCLOUD_AZ_FILE_SHARE_CREDENTIALS
 
-sudo umount $mntPath 2> /dev/null
-
-sudo rm -f $smbCredentialFile
-
-sudo rm -r -f $mntPath
-
+echo 'Remove the persistent mount point entry for the Azure file share in /etc/fstab'
 sudo sed -i.bak "/RETRO-CLOUD/d" /etc/fstab
+# Search for the account name because it doesn't include any strange characters that can break sed
 sudo sed -i.bak "/$RETROCLOUD_AZ_STORAGE_ACCOUNT_NAME/d" /etc/fstab
 
 echo 'Done!'

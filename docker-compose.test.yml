@@ -1,5 +1,6 @@
 sut:
-    build: .
+    # Re-use the image built from Docker Hub Autotest: https://forums.docker.com/t/auto-test-rebuilds-image/68481/6
+    image: seriema/retro-cloud:${CACHE_TAG}
     working_dir: /home/pi/retro-cloud-test
     volumes:
         - ./docker/compose:/home/pi/retro-cloud-test/docker/compose

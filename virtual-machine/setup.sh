@@ -2,31 +2,34 @@
 # Script takes optional parameter for branch name or commit hash.
 branch=${1:-master}
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
-if [[ ! -z $(find /home/pi/RetroPie-Setup -maxdepth 1) ]]; then
+if [[ -d /home/pi/RetroPie-Setup ]]; then
     echo "Are you running this script on the Raspberry Pi? It should be run from within the VM.";
-    echo "SSH to the VM with `bash -i ~/ssh-vm.sh` and then call this script again.";
-    echo "Or run `bash -i ~/setup-vm.sh` that will do it for you.";
+    echo "SSH to the VM with 'bash -i ~/ssh-vm.sh' and then call this script again.";
+    echo "Or run 'bash -i ~/setup-vm.sh' that will do it for you.";
     exit 1
 fi
 
 echo "SETUP: Download scripts to ~/retro-cloud-setup"
 mkdir -p "$HOME/retro-cloud-setup"
 cd "$HOME/retro-cloud-setup"
-curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
-curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
-curl -OL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
+curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/install-skyscraper.sh"
+curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/create-vm-share.sh"
+curl -fOL "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/mount-az-share.sh"
 # TODO: This should be installed from the install-skyscraper script instead but the branch name in the URL needs to stay in sync here.
 mkdir .skyscraper
-curl -L -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
+curl -fL -o ".skyscraper/config.ini" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/.skyscraper/config.ini"
 mkdir "local"
-curl -L -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
+curl -fL -o "local/add-scraper-credential.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/add-scraper-credential.sh"
+curl -fL -o "local/run-skyscraper.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/local/run-skyscraper.sh"
 mkdir "dev"
-curl -L -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
+curl -fL -o "dev/list-path.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/shared/list-path.sh"
+curl -fL -o "dev/test-copy-rom.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-copy-rom.sh"
+curl -fL -o "dev/test-gamelist-screenscraper-failed.xml" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist-screenscraper-failed.xml"
+curl -fL -o "dev/test-gamelist.sh" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist.sh"
+curl -fL -o "dev/test-gamelist.xml" "https://raw.githubusercontent.com/seriema/retro-cloud/$branch/virtual-machine/dev/test-gamelist.xml"
 
 echo "SETUP: Mount Azure File Share"
 bash mount-az-share.sh

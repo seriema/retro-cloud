@@ -1,10 +1,8 @@
 #!/bin/bash
 # https://github.com/muldjord/skyscraper#updating-skyscraper
 
-# Abort on error
-set -e
-# Error if variable is unset
-set -u
+# Abort on error, error if variable is unset, and error if any pipeline element fails
+set -euo pipefail
 
 echo 'Updating Skyscraper'
 cd "$HOME/skysource"
